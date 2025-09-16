@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  publish:
+    name: Build and Deploy
+    runs-on: [ubuntu-latest]
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        node-version: ["22.x"]
+    steps:
+      - name: "Checkout ${{ github.ref_name }} branch"
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Use pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Update npm
+        run: npm i -g npm@10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build app
+        run: "pnpm run build"
+        env:
+          VITE_BASE: "https://cdn.jsdelivr.net/gh/${{ github.repository }}@release-${{ github.sha }}"
+
+      - name: Ensure static branch exists
+        run: |
+          current_branch=$(git symbolic-ref --short HEAD)
+          if git show-ref --verify --quiet refs/remotes/origin/static; then
+            echo "✅ Branch 'static' exists"
+          else
+            echo "⚡ Creating 'static' branch"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git checkout --orphan static
+            git reset --hard
+            git commit --allow-empty -m "chore: initial commit for static branch"
+            git push origin static
+            git checkout static
+          fi
+
+      - name: Deploy to static branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: static
+          allow_empty_commit: true
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "Deploy static assets from release branch"
+          tag_name: "release-${{ github.sha }}"
+          tag_message: "Deployment for ${{ github.sha }}"
