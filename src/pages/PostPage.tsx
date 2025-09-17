@@ -1,4 +1,4 @@
-import { HomeIcon } from 'lucide-react';
+import { BookOpenTextIcon, HomeIcon, LibraryBigIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import RootLayout from '@/layouts/RootLayout';
@@ -13,7 +13,7 @@ export default function PostPage({ data }: Props) {
 
   return (
     <RootLayout data={data}>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-5">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -25,16 +25,22 @@ export default function PostPage({ data }: Props) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink>Posts</BreadcrumbLink>
+              <BreadcrumbLink className="flex items-center gap-x-2">
+                <LibraryBigIcon className="size-4 shrink-0" /> Posts
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{data.post?.title}</BreadcrumbPage>
+              <BreadcrumbPage className="flex items-center gap-x-2">
+                <BookOpenTextIcon className="size-4 shrink-0" />
+                {data.post?.title}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-xl font-semibold">{post.title}</h1>
-        <article dangerouslySetInnerHTML={{ __html: post.content }} />
+
+        <h1 className="text-3xl font-semibold">{post.title}</h1>
+        <article className="prose" dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
     </RootLayout>
   );

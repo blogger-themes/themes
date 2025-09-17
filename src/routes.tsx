@@ -54,7 +54,7 @@ function Component() {
   return <NotFound data={data} />;
 }
 
-export function ErrorBoundary() {
+function ErrorBoundary() {
   const error = useRouteError();
 
   return <ErrorPage error={error} />;

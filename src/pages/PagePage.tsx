@@ -1,4 +1,4 @@
-import { HomeIcon } from 'lucide-react';
+import { BookTextIcon, FileTextIcon, HomeIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import RootLayout from '@/layouts/RootLayout';
@@ -25,17 +25,22 @@ export default function PagePage({ data }: Props) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink>Pages</BreadcrumbLink>
+              <BreadcrumbLink className="flex items-center gap-x-2">
+                <BookTextIcon className="size-4 shrink-0" /> Pages
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{data.page?.title}</BreadcrumbPage>
+              <BreadcrumbPage className="flex items-center gap-x-2">
+                <FileTextIcon className="size-4 shrink-0" />
+                {data.page?.title}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <h1 className="text-xl font-semibold">{page.title}</h1>
-        <article dangerouslySetInnerHTML={{ __html: page.content }} />
+        <h1 className="text-3xl font-semibold">{page.title}</h1>
+        <article className="prose" dangerouslySetInnerHTML={{ __html: page.content }} />
       </div>
     </RootLayout>
   );
