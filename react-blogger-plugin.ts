@@ -73,10 +73,10 @@ function getViteHead(input: string, bcomment = false) {
   return input.match(/<!--vite:head:begin-->([\s\S]*?)<!--vite:head:end-->/)?.[1] ?? null;
 }
 
-function replaceHost(input: string, oldHost: string, newHost: string, newProto?: string) {
+function replaceHost(input: string, oldHost: string, newHost: string, newProtocol?: string) {
   return input.replace(
     new RegExp(`(https?:)?(\\/\\/|\\\\/\\\\/)${escapeRegex(oldHost)}`, 'g'),
-    (_, proto, slash) => `${proto ? (newProto ?? proto) : ''}${slash ?? ''}${newHost}`,
+    (_, protocol, slash) => `${protocol ? (newProtocol ?? protocol) : ''}${slash ?? ''}${newHost}`,
   );
 }
 
@@ -136,20 +136,19 @@ function useServerMiddleware(
       });
 
       if (proxyResponse) {
-        const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
-        const proto =
-          (req.headers['x-forwarded-proto'] as string) || (req.socket && 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http');
+        const requestProtocol = `${(req.headers['x-forwarded-proto'] as string) || (req.socket && 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http')}:`;
+        const requestHost = (req.headers['x-forwarded-host'] as string) || req.headers.host;
 
         res.statusCode = proxyResponse.status;
         res.statusMessage = proxyResponse.statusText;
 
         proxyResponse.headers.forEach((value, key) => {
           if (key === 'location') {
-            const redirectUrl = new URL(value, host ? host + req.originalUrl : proxyUrl.href);
-            if ((host && redirectUrl.host === host) || redirectUrl.host === proxyUrl.host) {
-              if (host && proto) {
-                redirectUrl.host = host;
-                redirectUrl.protocol = `${proto}:`;
+            const redirectUrl = new URL(value, requestHost ? `${requestProtocol}//${requestHost}${req.originalUrl}` : proxyUrl.href);
+            if ((requestHost && redirectUrl.host === requestHost) || redirectUrl.host === proxyUrl.host) {
+              if (requestHost && requestProtocol) {
+                redirectUrl.host = requestHost;
+                redirectUrl.protocol = requestProtocol;
               }
               const viewParam = redirectUrl.searchParams.get('view')?.replaceAll('-ViteDevelopment', '').replaceAll('-VitePreview', '');
               if (viewParam) {
@@ -171,8 +170,8 @@ function useServerMiddleware(
         if (contentType?.startsWith('text/html')) {
           let templateContent = await proxyResponse.text();
 
-          if (host && proto) {
-            templateContent = replaceHost(templateContent, proxyUrl.host, host, `${proto}:`);
+          if (requestHost && requestProtocol) {
+            templateContent = replaceHost(templateContent, proxyUrl.host, requestHost, requestProtocol);
           }
 
           if (!isPreview && 'transformIndexHtml' in server) {
@@ -190,10 +189,10 @@ function useServerMiddleware(
 
             res.end(template);
           }
-        } else if (host && proto && contentType && /^(text\/)|(application\/(.*\+)?(xml|json))/.test(contentType)) {
+        } else if (requestHost && requestProtocol && contentType && /^(text\/)|(application\/(.*\+)?(xml|json))/.test(contentType)) {
           const content = await proxyResponse.text();
 
-          res.end(replaceHost(content, proxyUrl.host, host, `${proto}:`));
+          res.end(replaceHost(content, proxyUrl.host, requestHost, requestProtocol));
         } else {
           res.end(new Uint8Array(await proxyResponse.arrayBuffer()));
         }
