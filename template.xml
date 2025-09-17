@@ -272,7 +272,7 @@
     <!--vite:head:begin--><!--vite:head:end-->
 
     <b:else/>
-    <b:comment><!--vite:head:begin--></b:comment><link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-B0MqAHj_.css' rel='stylesheet'/><script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-CTF2W6hb.js' type='module'></script><b:comment><!--vite:head:end--></b:comment>
+    <b:comment><!--vite:head:begin--></b:comment><link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-DU259gBF.css' rel='stylesheet'/><script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-DjQo8aLk.js' type='module'></script><b:comment><!--vite:head:end--></b:comment>
   </b:if>
 
   <b:if cond='false'><b:skin><![CDATA[]]></b:skin></b:if>
