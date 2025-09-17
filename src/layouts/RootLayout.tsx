@@ -1,7 +1,7 @@
 import { LoaderCircle } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
-import { useNavigation } from 'react-router';
+import { ScrollRestoration, useNavigation } from 'react-router';
 import { Toaster } from '@/components/ui/sonner';
 
 export interface Props {
@@ -25,8 +25,14 @@ export default function RootLayout({ children }: Props) {
   return (
     <ThemeProvider attribute="class">
       {children}
+      <Toaster
+        richColors
+        style={{
+          fontFamily: 'var(--font-sans)',
+        }}
+      />
       <NavigationLoader />
-      <Toaster richColors />
+      <ScrollRestoration />
     </ThemeProvider>
   );
 }
