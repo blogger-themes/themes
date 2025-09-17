@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Plugin, PreviewServer, ResolvedConfig, ViteDevServer } from 'vite';
+import type { MinimalPluginContextWithoutEnvironment, Plugin, PreviewServer, ResolvedConfig, ViteDevServer } from 'vite';
 import z from 'zod';
 
 const ReactBloggerPluginOptionsSchema = z
@@ -27,6 +27,28 @@ function createPluginContext(userOptions: ReactBloggerPluginOptions): PluginCont
     template: undefined as unknown as string,
     options: ReactBloggerPluginOptionsSchema.parse(userOptions),
   };
+}
+
+function escapeHtml(input: string) {
+  if (input === '') return '';
+  return input.replace(/[&<>"'`]/g, (ch) => {
+    switch (ch) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&#39;';
+      case '`':
+        return '&#96;';
+      default:
+        return ch;
+    }
+  });
 }
 
 function escapeRegex(str: string) {
@@ -57,63 +79,203 @@ function replaceHost(input: string, oldHost: string, newHost: string, newProto?:
   );
 }
 
-function useServerMiddleware(server: ViteDevServer | PreviewServer, ctx: PluginContext, isPreview = !('transformIndexHtml' in server)) {
-  server.middlewares.use(async (req, res, next) => {
-    if (!req.url || !req.originalUrl) {
-      next();
-      return;
-    }
-
-    const devBlogUrl = new URL(req.originalUrl, ctx.options.devBlog);
-    const viewParam = devBlogUrl.searchParams.get('view');
-
-    devBlogUrl.searchParams.set('view', `-Vite${isPreview ? 'Preview' : 'Development'}${viewParam?.startsWith('-') ? viewParam : ''}`);
-
-    const devBlogResponse = await fetch(devBlogUrl);
-
-    res.statusCode = devBlogResponse.status;
-
-    devBlogResponse.headers.forEach((value, key) => {
-      if (['content-type', 'x-robots-tag', 'date'].includes(key)) {
-        res.setHeader(key, value);
-      }
+function useServerMiddleware(
+  server: ViteDevServer | PreviewServer,
+  ctx: PluginContext,
+  _this: MinimalPluginContextWithoutEnvironment,
+  isPreview = !('transformIndexHtml' in server),
+) {
+  return () => {
+    server.httpServer?.once('listening', () => {
+      setTimeout(() => {
+        _this.info(`Unhandled requests will be proxied to ${ctx.options.devBlog}`);
+      }, 0);
     });
 
-    const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
-    const proto =
-      (req.headers['x-forwarded-proto'] as string) || (req.socket && 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http');
-    const contentType = devBlogResponse.headers.get('content-type');
-
-    if (contentType?.startsWith('text/html')) {
-      let templateContent = await devBlogResponse.text();
-
-      if (host && proto) {
-        templateContent = replaceHost(templateContent, devBlogUrl.hostname, host, `${proto}:`);
+    server.middlewares.use(async (req, res, next) => {
+      if (!req.url || !req.originalUrl) {
+        next();
+        return;
       }
 
-      if (!isPreview && 'transformIndexHtml' in server) {
-        const htmlTags: string[] = [];
+      const start = Date.now();
 
-        htmlTags.push(`<script src='/${path.relative(ctx.viteConfig.root, ctx.entry)}' type='module'></script>`);
+      const devBlogUrl = new URL(req.originalUrl, ctx.options.devBlog);
+      const viewParam = devBlogUrl.searchParams.get('view');
 
-        const template = await server.transformIndexHtml(req.originalUrl, replaceViteHead(templateContent, htmlTags.join('')));
+      devBlogUrl.searchParams.set('view', `-Vite${isPreview ? 'Preview' : 'Development'}${viewParam?.startsWith('-') ? viewParam : ''}`);
 
-        res.end(template);
+      const devBlogResponse = await fetch(devBlogUrl).catch((e) => {
+        if (e instanceof Error) {
+          _this.warn({
+            message: `${e.name}: ${e.message}`,
+            cause: e.cause,
+            stack: e.stack,
+          });
+        } else {
+          _this.warn('Fetch failed');
+        }
+        return null;
+      });
+
+      if (devBlogResponse) {
+        res.statusCode = devBlogResponse.status;
+        res.statusMessage = devBlogResponse.statusText;
+
+        devBlogResponse.headers.forEach((value, key) => {
+          if (['content-type', 'x-robots-tag', 'date'].includes(key)) {
+            res.setHeader(key, value);
+          }
+        });
+
+        const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
+        const proto =
+          (req.headers['x-forwarded-proto'] as string) || (req.socket && 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http');
+        const contentType = devBlogResponse.headers.get('content-type');
+
+        if (contentType?.startsWith('text/html')) {
+          let templateContent = await devBlogResponse.text();
+
+          if (host && proto) {
+            templateContent = replaceHost(templateContent, devBlogUrl.hostname, host, `${proto}:`);
+          }
+
+          if (!isPreview && 'transformIndexHtml' in server) {
+            const htmlTags: string[] = [];
+
+            htmlTags.push(`<script src='/${path.relative(ctx.viteConfig.root, ctx.entry)}' type='module'></script>`);
+
+            const template = await server.transformIndexHtml(req.originalUrl, replaceViteHead(templateContent, htmlTags.join('')));
+
+            res.end(template);
+          } else {
+            const htmlTagsStr = getViteHead(fs.readFileSync(path.resolve(ctx.viteConfig.build.outDir, 'template.xml'), 'utf8'), true);
+
+            const template = replaceViteHead(templateContent, htmlTagsStr ?? '');
+
+            res.end(template);
+          }
+        } else if (host && proto && contentType && /^(text\/)|(application\/(.*\+)?(xml|json))/.test(contentType)) {
+          const content = await devBlogResponse.text();
+
+          res.end(replaceHost(content, devBlogUrl.hostname, host, `${proto}:`));
+        } else {
+          res.end(new Uint8Array(await devBlogResponse.arrayBuffer()));
+        }
       } else {
-        const htmlTagsStr = getViteHead(fs.readFileSync(path.resolve(ctx.viteConfig.build.outDir, 'template.xml'), 'utf8'), true);
+        res.statusCode = 500;
+        res.statusMessage = 'Internal Server Error';
 
-        const template = replaceViteHead(templateContent, htmlTagsStr ?? '');
+        res.setHeader('Content-Type', 'text/html');
 
-        res.end(template);
-      }
-    } else if (host && proto && contentType && /^(text\/)|(application\/(.*\+)?(xml|json))/.test(contentType)) {
-      const content = await devBlogResponse.text();
+        res.end(`<!DOCTYPE html>
+<html>
 
-      res.end(replaceHost(content, devBlogUrl.hostname, host, `${proto}:`));
-    } else {
-      res.end(new Uint8Array(await devBlogResponse.arrayBuffer()));
+<head>
+  <meta charset='UTF-8'/>
+  <meta content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes' name='viewport'/>
+  <title>500 Internal Server Error</title>
+  <link rel='icon' href='data:,' />
+  <style>
+    *, ::before, ::after {
+      box-sizing: border-box;
     }
-  });
+    body {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    }
+    .card {
+      padding: 24px;
+      background-color: #ffffff;
+      border: 1px solid #e5e5e5;
+      max-width: 448px;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .card-title {
+      font-weight: 600;
+    }
+    .card-description {
+      font-size: 14px;
+      opacity: 0.85;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+    }
+    .button {
+      display: inline-flex;
+      white-space: nowrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+      background-color: #171717;
+      outline: none;
+      border: none;
+      color: #ffffff;
+      border-radius: 8px;
+      min-height: 36px;
+    }
+    .button:hover {
+      opacity: 0.9;
+    }
+    .button svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .card-footer .button {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='card'>
+    <div class='card-content'>
+      <div class='card-title'>500 Internal Server Error</div>
+      <div class='card-description'>Failed to fetch: ${escapeHtml(devBlogUrl.href)}</div>
+    </div>
+    <div class='card-footer'>
+      <button class='button' type='button'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>
+        Reload
+      </button>
+    </div>
+  </div>
+  <script>
+    const button = document.getElementsByTagName('button')[0];
+    button.addEventListener('click', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+
+</html>`);
+      }
+
+      const duration = Date.now() - start;
+
+      _this.info(`${req.method} ${req.originalUrl} -> ${res.statusCode} ${res.statusMessage} (${duration}ms)`);
+    });
+  };
 }
 
 export default function reactBloggerPlugin(userOptions: ReactBloggerPluginOptions) {
@@ -220,14 +382,10 @@ export default function reactBloggerPlugin(userOptions: ReactBloggerPluginOption
       }
     },
     configureServer(server) {
-      return () => {
-        useServerMiddleware(server, ctx, false);
-      };
+      return useServerMiddleware(server, ctx, this, false);
     },
     configurePreviewServer(server) {
-      return () => {
-        useServerMiddleware(server, ctx, true);
-      };
+      return useServerMiddleware(server, ctx, this, true);
     },
   } satisfies Plugin;
 }
