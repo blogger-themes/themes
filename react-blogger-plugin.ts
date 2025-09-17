@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { Readable } from 'node:stream';
 import type { MinimalPluginContextWithoutEnvironment, Plugin, PreviewServer, ResolvedConfig, ViteDevServer } from 'vite';
 import z from 'zod';
 
@@ -7,7 +8,7 @@ const ReactBloggerPluginOptionsSchema = z
   .object({
     entry: z.string().optional(),
     template: z.string().optional(),
-    devBlog: z.url(),
+    proxyBlog: z.url(),
   })
   .strict();
 
@@ -88,7 +89,7 @@ function useServerMiddleware(
   return () => {
     server.httpServer?.once('listening', () => {
       setTimeout(() => {
-        _this.info(`Unhandled requests will be proxied to ${ctx.options.devBlog}`);
+        _this.info(`Unhandled requests will be proxied to ${ctx.options.proxyBlog}`);
       }, 0);
     });
 
@@ -100,12 +101,28 @@ function useServerMiddleware(
 
       const start = Date.now();
 
-      const devBlogUrl = new URL(req.originalUrl, ctx.options.devBlog);
-      const viewParam = devBlogUrl.searchParams.get('view');
+      const proxyUrl = new URL(req.originalUrl, ctx.options.proxyBlog);
+      const viewParam = proxyUrl.searchParams.get('view');
 
-      devBlogUrl.searchParams.set('view', `-Vite${isPreview ? 'Preview' : 'Development'}${viewParam?.startsWith('-') ? viewParam : ''}`);
+      proxyUrl.searchParams.set('view', `-Vite${isPreview ? 'Preview' : 'Development'}${viewParam?.startsWith('-') ? viewParam : ''}`);
 
-      const devBlogResponse = await fetch(devBlogUrl).catch((e) => {
+      const proxyHeaders = new Headers();
+      for (const [name, value] of Object.entries(req.headers)) {
+        if (Array.isArray(value)) {
+          for (const v of value) {
+            proxyHeaders.append(name, v);
+          }
+        } else {
+          proxyHeaders.set(name, value ?? '');
+        }
+      }
+
+      const proxyResponse = await fetch(proxyUrl, {
+        method: req.method,
+        headers: proxyHeaders,
+        body: ['GET', 'HEAD'].includes(req.method ?? '') ? undefined : Readable.toWeb(req),
+        redirect: 'manual',
+      }).catch((e) => {
         if (e instanceof Error) {
           _this.warn({
             message: `${e.name}: ${e.message}`,
@@ -118,26 +135,44 @@ function useServerMiddleware(
         return null;
       });
 
-      if (devBlogResponse) {
-        res.statusCode = devBlogResponse.status;
-        res.statusMessage = devBlogResponse.statusText;
+      if (proxyResponse) {
+        const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
+        const proto =
+          (req.headers['x-forwarded-proto'] as string) || (req.socket && 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http');
 
-        devBlogResponse.headers.forEach((value, key) => {
-          if (['content-type', 'x-robots-tag', 'date'].includes(key)) {
+        res.statusCode = proxyResponse.status;
+        res.statusMessage = proxyResponse.statusText;
+
+        proxyResponse.headers.forEach((value, key) => {
+          if (key === 'location') {
+            const redirectUrl = new URL(value, host ? host + req.originalUrl : proxyUrl.href);
+            if ((host && redirectUrl.host === host) || redirectUrl.host === proxyUrl.host) {
+              if (host && proto) {
+                redirectUrl.host = host;
+                redirectUrl.protocol = `${proto}:`;
+              }
+              const viewParam = redirectUrl.searchParams.get('view')?.replaceAll('-ViteDevelopment', '').replaceAll('-VitePreview', '');
+              if (viewParam) {
+                redirectUrl.searchParams.set('view', viewParam);
+              } else {
+                redirectUrl.searchParams.delete('view');
+              }
+              res.setHeader(key, redirectUrl.pathname + redirectUrl.search + redirectUrl.hash);
+            } else {
+              res.setHeader(key, redirectUrl.href);
+            }
+          } else if (['content-type', 'x-robots-tag', 'date', 'location'].includes(key)) {
             res.setHeader(key, value);
           }
         });
 
-        const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
-        const proto =
-          (req.headers['x-forwarded-proto'] as string) || (req.socket && 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http');
-        const contentType = devBlogResponse.headers.get('content-type');
+        const contentType = proxyResponse.headers.get('content-type');
 
         if (contentType?.startsWith('text/html')) {
-          let templateContent = await devBlogResponse.text();
+          let templateContent = await proxyResponse.text();
 
           if (host && proto) {
-            templateContent = replaceHost(templateContent, devBlogUrl.hostname, host, `${proto}:`);
+            templateContent = replaceHost(templateContent, proxyUrl.host, host, `${proto}:`);
           }
 
           if (!isPreview && 'transformIndexHtml' in server) {
@@ -156,11 +191,11 @@ function useServerMiddleware(
             res.end(template);
           }
         } else if (host && proto && contentType && /^(text\/)|(application\/(.*\+)?(xml|json))/.test(contentType)) {
-          const content = await devBlogResponse.text();
+          const content = await proxyResponse.text();
 
-          res.end(replaceHost(content, devBlogUrl.hostname, host, `${proto}:`));
+          res.end(replaceHost(content, proxyUrl.host, host, `${proto}:`));
         } else {
-          res.end(new Uint8Array(await devBlogResponse.arrayBuffer()));
+          res.end(new Uint8Array(await proxyResponse.arrayBuffer()));
         }
       } else {
         res.statusCode = 500;
@@ -251,7 +286,7 @@ function useServerMiddleware(
   <div class='card'>
     <div class='card-content'>
       <div class='card-title'>500 Internal Server Error</div>
-      <div class='card-description'>Failed to fetch: ${escapeHtml(devBlogUrl.href)}</div>
+      <div class='card-description'>Failed to fetch: ${escapeHtml(proxyUrl.href)}</div>
     </div>
     <div class='card-footer'>
       <button class='button' type='button'>

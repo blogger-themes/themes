@@ -16,7 +16,7 @@ export default defineConfig({
     react(),
     devtoolsJson(),
     reactBloggerPlugin({
-      devBlog: 'https://react-template-preview.blogspot.com',
+      proxyBlog: 'https://react-template-preview.blogspot.com',
     }),
     tailwindcss(),
   ],
