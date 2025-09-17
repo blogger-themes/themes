@@ -68,7 +68,7 @@ jobs:
           commit_message: "Deploy static assets from development branch"
 
   purge:
-    name: Purge JsDelivr
+    name: Purge JsDelivr files
     needs: [publish]
     runs-on: [ubuntu-latest]
     steps:
@@ -83,7 +83,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl
 
-      - name: Send Purge Requests to jsDelivr for all assets
+      - name: Send Purge Requests to JsDelivr for changed files
         run: |
           if git rev-parse HEAD^ >/dev/null 2>&1; then
               changed_files=$(git diff --name-only HEAD^ HEAD)

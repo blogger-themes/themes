@@ -14,7 +14,7 @@
   },
   "[javascript]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
     "editor.formatOnSave": true,

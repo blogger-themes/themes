@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: biome does't support tailwind v4 syntax yet */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/inclusive-sans";

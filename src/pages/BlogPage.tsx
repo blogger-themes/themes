@@ -1,16 +1,20 @@
-import { Link } from 'react-router';
-import RootLayout from '@/layouts/RootLayout';
+import { LibraryBigIcon } from 'lucide-react';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import PageLayout from '@/layouts/PageLayout';
 import type { BloggerData } from '@/utils/blogger-data';
 
 export interface Props {
   data: BloggerData;
 }
 
-export default function Blog({ data }: Props) {
+export default function BlogPage({ data }: Props) {
   return (
-    <RootLayout data={data}>
-      <div>Currently in Blog</div>
-      <Link to="/">Navigate to Home</Link>
-    </RootLayout>
+    <PageLayout data={data}>
+      <div className="flex flex-col gap-5">
+        <Breadcrumbs items={[{ label: 'Blog', icon: LibraryBigIcon }]} />
+
+        <div>Blog Page</div>
+      </div>
+    </PageLayout>
   );
 }

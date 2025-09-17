@@ -6,6 +6,8 @@ export interface Locale {
   underscoreDelimited: string;
 }
 
+export type LanguageDirection = 'ltr' | 'rtl';
+
 export interface Blog {
   title: string;
   blogId: string;
@@ -15,7 +17,7 @@ export interface Blog {
   canonicalHomepageUrl: string;
   view: string | null;
   encoding: string;
-  languageDirection: 'ltr' | 'rtl';
+  languageDirection: LanguageDirection;
   metaDescription: string | null;
   isPrivate: boolean;
   isPrivateBlog: boolean;
@@ -40,19 +42,22 @@ export interface Blog {
   pageImage?: string;
 }
 
-export type Search = {
+export interface BaseSearch {
   message: string;
   messageHtml: string;
-} & (
-  | {
-      type: 'query';
-      query: string;
-    }
-  | {
-      type: 'label';
-      label: string;
-    }
-);
+}
+
+export interface QuerySearch extends BaseSearch {
+  type: 'query';
+  query: string;
+}
+
+export interface LabelSearch extends BaseSearch {
+  type: 'label';
+  label: string;
+}
+
+export type Search = QuerySearch | LabelSearch;
 
 export interface View {
   type: string;
@@ -68,6 +73,7 @@ export interface View {
   isError: boolean;
   isSearch: boolean;
   isLabelSearch: boolean;
+  isBlog: boolean;
   isMultipleItems: boolean;
   isMobile: boolean;
   postId?: string;
@@ -117,7 +123,7 @@ export interface Meta {
   twittercard?: TwitterCard;
 }
 
-export interface Author {
+export interface BlogAuthor {
   id: string;
   name: string;
   about: string | null;
@@ -195,7 +201,17 @@ export interface Featured {
   showAuthor: boolean;
   showSnippet: boolean;
   showThumbnail: boolean;
-  post: PostMinimal;
+  posts: Record<string, PostMinimal | Post>;
+  post: PostMinimal | Post;
+}
+
+export interface Popular {
+  showTitle: boolean;
+  showDate: boolean;
+  showAuthor: boolean;
+  showSnippet: boolean;
+  showThumbnail: boolean;
+  posts: Record<string, PostMinimal | Post>;
 }
 
 export interface BloggerData {
@@ -203,8 +219,8 @@ export interface BloggerData {
   view: View;
   meta: Meta;
   labels: Record<string, number>;
-  authors: Author[];
-  posts: Record<string, PostMinimal>;
+  authors: BlogAuthor[];
+  posts: Record<string, PostMinimal | Post>;
   post?: Post;
   page?: Post;
   contact: Contact;
@@ -212,10 +228,11 @@ export interface BloggerData {
   analytics?: Analytics;
   adsense?: Adsense;
   featured?: Featured;
+  popular?: Popular;
 }
 
 export function parseBloggerData(doc: Document): BloggerData {
-  const [data, labels, authors, posts, contact, stats, featured, metaFavicon, metaImage, metaOpenGraph, metaTwitterCard] = (
+  const [data, labels, authors, posts, contact, stats, featured, popular, metaFavicon, metaImage, metaOpenGraph, metaTwitterCard] = (
     [
       ['data'],
       ['labels', {}],
@@ -224,6 +241,7 @@ export function parseBloggerData(doc: Document): BloggerData {
       ['contact'],
       ['stats'],
       ['featured', null],
+      ['popular', null],
       ['meta:favicon'],
       ['meta:image', null],
       ['meta:opengraph', null],
@@ -264,11 +282,12 @@ export function parseBloggerData(doc: Document): BloggerData {
   }) as [
     BloggerData,
     Record<string, number>,
-    Author[],
-    Record<string, PostMinimal>,
+    BlogAuthor[],
+    Record<string, PostMinimal | Post>,
     Contact,
     { endpoint: string },
     Featured | null,
+    Popular | null,
     Favicon,
     MetaImage | null,
     OpenGraph | null,
@@ -293,7 +312,7 @@ export function parseBloggerData(doc: Document): BloggerData {
   data.labels = labels;
 
   for (let i = 0; i < authors.length; i++) {
-    authors[i].id = `blog_author_${i + 1}`;
+    authors[i].id = `author-${i + 1}`;
   }
   data.authors = authors;
 
@@ -316,7 +335,24 @@ export function parseBloggerData(doc: Document): BloggerData {
   };
 
   if (featured) {
+    for (const id in featured.posts) {
+      if (featured.posts[id] === null) {
+        featured.posts[id] = data.posts[id];
+      }
+      if (!featured.post) {
+        featured.post = featured.posts[id];
+      }
+    }
     data.featured = featured;
+  }
+
+  if (popular) {
+    for (const id in popular.posts) {
+      if (popular.posts[id] === null) {
+        popular.posts[id] = data.posts[id];
+      }
+    }
+    data.popular = popular;
   }
 
   return data;
@@ -333,6 +369,10 @@ export async function fetchBloggerData(url: string | URL, { content = true }: Fe
   const response = await fetch(requestUrl);
   if (!response.headers.get('Content-Type')?.startsWith('text/html')) {
     throw new Error('Response is not html', { cause: response });
+  }
+
+  if (response.status < 200 || response.status > 404) {
+    throw new Error(`Response code ${response.status} (${response.statusText || 'Unknown'})`, { cause: response });
   }
 
   const doc = new DOMParser().parseFromString(await response.text(), 'text/html');

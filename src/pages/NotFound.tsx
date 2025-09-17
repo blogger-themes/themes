@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import RootLayout from '@/layouts/RootLayout';
+import PageLayout from '@/layouts/PageLayout';
 import type { BloggerData } from '@/utils/blogger-data';
 
 export interface Props {
@@ -8,7 +8,7 @@ export interface Props {
 
 export default function NotFound({ data }: Props) {
   return (
-    <RootLayout data={data}>
+    <PageLayout data={data}>
       <div className="text-xl font-semibold">Not Found</div>
       <div>
         The page you are looking for was not found! Go to{' '}
@@ -16,6 +16,6 @@ export default function NotFound({ data }: Props) {
           Home
         </Link>
       </div>
-    </RootLayout>
+    </PageLayout>
   );
 }

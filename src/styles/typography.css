@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: biome does't support tailwind v4 syntax yet */
+
 @reference './global.css';
 
 @layer base {
@@ -27,7 +29,7 @@
 
 @layer components {
   .prose {
-    @apply text-foreground text-base leading-7;
+    @apply text-foreground text-base leading-7 fix-margin;
     @apply [&>link[rel="stylesheet"]+*]:mt-0! [&>link[rel="stylesheet"]+*>*]:mt-0!;
 
     :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -137,14 +139,6 @@
 
     :where(.katex-display):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
       @apply text-foreground/80 my-6 overflow-x-auto overflow-y-hidden py-2 tracking-normal;
-    }
-
-    > :not(:where([class~="not-prose"], [class~="not-prose"] *)):first-child {
-      @apply mt-0;
-    }
-
-    > :not(:where([class~="not-prose"], [class~="not-prose"] *)):last-child {
-      @apply mb-0;
     }
   }
 }

@@ -2,13 +2,9 @@ import { LoaderCircle } from 'lucide-react';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 import { useNavigation } from 'react-router';
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import { Toaster } from '@/components/ui/sonner';
-import type { BloggerData } from '@/utils/blogger-data';
 
 export interface Props {
-  data: BloggerData;
   children: ReactNode;
 }
 
@@ -25,16 +21,12 @@ function NavigationLoader() {
   }
 }
 
-export default function RootLayout({ data, children }: Props) {
+export default function RootLayout({ children }: Props) {
   return (
     <ThemeProvider attribute="class">
-      <Header title={data.blog.title} />
-      <div className="p-5 max-w-5xl mx-auto">
-        <div>{children}</div>
-      </div>
-      <Footer />
+      {children}
       <NavigationLoader />
-      <Toaster />
+      <Toaster richColors />
     </ThemeProvider>
   );
 }

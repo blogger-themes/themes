@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { type LoaderFunction, type RouteObject, useLoaderData, useRouteError } from 'react-router';
+import BlogPage from './pages/BlogPage';
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import LabelSearchPage from './pages/LabelSearchPage';
@@ -19,9 +20,19 @@ const store = {
 const loader = (async ({ request }) => {
   const viewUrl = new URL(store.data.view.url);
   viewUrl.pathname = viewUrl.pathname.replace(/^\/\//, '/');
-  viewUrl.search = '';
 
-  if (request.url !== viewUrl.href) {
+  const requestUrl = new URL(request.url);
+
+  for (const url of [viewUrl, requestUrl]) {
+    url.searchParams.delete('m');
+    if (url.search) {
+      url.search = new URLSearchParams([...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b))).toString();
+    }
+  }
+
+  const shouldFetch = requestUrl.href !== viewUrl.href;
+
+  if (shouldFetch) {
     const newData = await fetchBloggerData(request.url);
     store.data = newData;
   }
@@ -45,10 +56,13 @@ function Component() {
   if (data.view.isPage) {
     return <PagePage data={data} />;
   }
+  if (data.view.isBlog) {
+    return <BlogPage data={data} />;
+  }
   if (data.view.isLabelSearch) {
     return <LabelSearchPage data={data} />;
   }
-  if (data.view.isSearch) {
+  if (data.view.isSearch && data.view.search) {
     return <SearchPage data={data} />;
   }
   return <NotFound data={data} />;
@@ -56,6 +70,10 @@ function Component() {
 
 function ErrorBoundary() {
   const error = useRouteError();
+
+  useEffect(() => {
+    document.title = 'Something went wrong!';
+  });
 
   return <ErrorPage error={error} />;
 }
