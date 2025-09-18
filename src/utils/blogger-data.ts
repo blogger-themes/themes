@@ -118,6 +118,7 @@ export interface TwitterCard {
 export interface Meta {
   title: string;
   favicon: Favicon;
+  keywords?: string[];
   image?: MetaImage;
   opengraph?: OpenGraph;
   twittercard?: TwitterCard;
@@ -232,7 +233,7 @@ export interface BloggerData {
 }
 
 export function parseBloggerData(doc: Document): BloggerData {
-  const [data, labels, authors, posts, contact, stats, featured, popular, metaFavicon, metaImage, metaOpenGraph, metaTwitterCard] = (
+  const [data, labels, authors, posts, contact, stats, featured, popular, metaFavicon, metaKeywords, metaImage, metaOpenGraph, metaTwitterCard] = (
     [
       ['data'],
       ['labels', {}],
@@ -243,6 +244,7 @@ export function parseBloggerData(doc: Document): BloggerData {
       ['featured', null],
       ['popular', null],
       ['meta:favicon'],
+      ['meta:keywords', null],
       ['meta:image', null],
       ['meta:opengraph', null],
       ['meta:twittercard', null],
@@ -289,6 +291,7 @@ export function parseBloggerData(doc: Document): BloggerData {
     Featured | null,
     Popular | null,
     Favicon,
+    string[] | null,
     MetaImage | null,
     OpenGraph | null,
     TwitterCard | null,
@@ -298,6 +301,9 @@ export function parseBloggerData(doc: Document): BloggerData {
     title: doc.title,
     favicon: metaFavicon,
   };
+  if (metaKeywords) {
+    meta.keywords = metaKeywords;
+  }
   if (metaImage) {
     meta.image = metaImage;
   }
@@ -359,12 +365,16 @@ export function parseBloggerData(doc: Document): BloggerData {
 }
 
 export interface FetchBloggerDataOptions {
+  mobile?: boolean;
   content?: boolean;
 }
 
-export async function fetchBloggerData(url: string | URL, { content = true }: FetchBloggerDataOptions = {}) {
+export async function fetchBloggerData(url: string | URL, { mobile = false, content = true }: FetchBloggerDataOptions = {}) {
   const requestUrl = new URL(url);
   requestUrl.searchParams.set('view', `-Json${content ? '' : '-NoPostContent'}`);
+  if (mobile) {
+    requestUrl.searchParams.set('m', '1');
+  }
 
   const response = await fetch(requestUrl);
   if (!response.headers.get('Content-Type')?.startsWith('text/html')) {

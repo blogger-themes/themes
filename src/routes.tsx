@@ -33,7 +33,10 @@ const loader = (async ({ request }) => {
   const shouldFetch = requestUrl.href !== viewUrl.href;
 
   if (shouldFetch) {
-    const newData = await fetchBloggerData(request.url);
+    const newData = await fetchBloggerData(requestUrl, {
+      mobile: store.initial.blog.isMobileRequest,
+    });
+
     store.data = newData;
   }
 
@@ -45,7 +48,7 @@ function Component() {
 
   useEffect(() => {
     document.title = data.meta.title;
-  });
+  }, [data.meta.title]);
 
   if (data.view.isHomepage) {
     return <HomePage data={data} />;
@@ -73,7 +76,7 @@ function ErrorBoundary() {
 
   useEffect(() => {
     document.title = 'Something went wrong!';
-  });
+  }, []);
 
   return <ErrorPage error={error} />;
 }

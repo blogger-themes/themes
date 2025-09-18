@@ -1,5 +1,5 @@
 import { HomeIcon, type LucideProps } from 'lucide-react';
-import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { type ForwardRefExoticComponent, Fragment, type RefAttributes } from 'react';
 import { Link } from 'react-router';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from './ui/breadcrumb';
 
@@ -25,7 +25,7 @@ export default function Breadcrumbs({ items }: Props) {
           </BreadcrumbLink>
         </BreadcrumbItem>
         {items.map((item, index) => (
-          <>
+          <Fragment key={`${item.label}:${item.href ?? ''}`}>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               {index === items.length - 1 ? (
@@ -49,7 +49,7 @@ export default function Breadcrumbs({ items }: Props) {
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
-          </>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
