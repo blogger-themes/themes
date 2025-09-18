@@ -83,18 +83,16 @@
     </b:with>
 
     <b:comment><!--[ Meta rating ]--></b:comment>
-    <b:if cond='data:vars.metatags_rating == &quot;2px&quot;'>
-      <meta expr:content='data:blog.adultContent ? &quot;adult&quot; : &quot;general&quot;' name='rating'/>
-    </b:if>
+    <meta expr:content='data:blog.adultContent ? &quot;adult&quot; : &quot;general&quot;' name='rating'/>
 
     <b:comment><!--[ Meta application ]--></b:comment>
     <meta expr:content='data:blog.title' name='application-name'/>
     <meta expr:content='data:blog.title' name='apple-mobile-web-app-title'/>
     <meta expr:content='yes' name='apple-mobile-web-app-capable'/>
-
-    <b:comment><!--[ Meta generator ]--></b:comment>
-    <meta content='blogger' name='generator'/>
   </b:if>
+
+  <b:comment><!--[ Meta generator ]--></b:comment>
+  <meta content='Blogger' name='generator'/>
 
   <b:comment><!--[ Theme Color ]--></b:comment>
   <b:with value='&quot;#ffffff&quot;' var='color'>
@@ -112,7 +110,7 @@
 
   <b:if cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_head&quot;)'>
     <b:eval expr='&quot;&lt;!--&quot;'/>
-    <b:section cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_head&quot;)' id='theme_section_head' showaddelement='true'>
+    <b:section class='bl-grid-section bl-hide-description' cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_head&quot;)' id='theme_section_head' showaddelement='true'>
       <b:widget id='Image01' locked='true' title='Favicon' type='Image' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='displayUrl'>//blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisldTSPR5qQSsrqZDyfYV81HFSq4Pko5u8xpbzKJ7V05CZAaCkfxG550uqbp2xlCxukxcVL4i2so2XxNri-wqqUO0yuVLLznfFes1rdmg7Ywq8pWE8FXwWQfcyrNiAPlyI3_ngX12x7-KGzAVPfjiTWPMP3HdwelG4pn729xMfH05-hdWVbQyaIsgMkQg/s160/favicon.png</b:widget-setting>
@@ -149,7 +147,31 @@
           <script id='json:meta:favicon' type='application/json'>{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;width&quot;:<b:if cond='data:image.width'><data:image.width/><b:else/>null</b:if>,&quot;height&quot;:<b:if cond='data:image.height'><data:image.height/><b:else/>null</b:if>,&quot;isCustom&quot;:true}</script>
         </b:includable>
       </b:widget>
-      <b:widget id='Image02' locked='true' title='Meta Image' type='Image' version='2' visible='true'>
+      <b:widget cond='!data:view.isError' id='TextList01' locked='true' title='Meta Keywords' type='TextList' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='shownum'/>
+          <b:widget-setting name='item-3'>keyword-2</b:widget-setting>
+          <b:widget-setting name='sorting'>NONE</b:widget-setting>
+          <b:widget-setting name='item-2'>keyword-1</b:widget-setting>
+          <b:widget-setting name='item-1'>[pageName]</b:widget-setting>
+          <b:widget-setting name='item-0'>[title]</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main'>
+          <b:eval expr='&quot;--&gt;&quot;'/>
+          <b:include name='content'/>
+          <b:eval expr='&quot;&lt;!--&quot;'/>
+        </b:includable>
+        <b:includable id='content'>
+          <b:comment><!--[ Meta keywords ]--></b:comment>
+          <b:with value='data:items filter (e =&gt; e == &quot;[pageName]&quot; ? data:blog.pageName != &quot;&quot; : true)' var='items'>
+            <b:if cond='data:items.length &gt; 0'>
+              <b:eval expr='&quot;&lt;meta content=&apos;&quot;'/><b:loop index='i' values='data:items' var='item'><b:switch var='data:item'><b:case value='[title]'/><data:blog.title.escaped/><b:case value='[pageName]'/><data:blog.pageName.escaped/><b:default/><data:item.escaped/></b:switch><b:if cond='data:i &lt; (data:items.length - 1)'>, </b:if></b:loop><b:eval expr='&quot;&apos; name=&apos;keywords&apos;/&gt;&quot;'/>
+              <script id='json:meta:keywords' type='application/json'>[<b:loop index='i' values='data:items' var='item'>&quot;<b:switch var='data:item'><b:case value='[title]'/><data:blog.title.jsonEscaped/><b:case value='[pageName]'/><data:blog.pageName.jsonEscaped/><b:default/><data:item.jsonEscaped/></b:switch>&quot;<b:if cond='data:i &lt; (data:items.length - 1)'>,</b:if></b:loop>]</script>
+            </b:if>
+          </b:with>
+        </b:includable>
+      </b:widget>
+      <b:widget cond='!data:view.isError' id='Image02' locked='true' title='Meta Image' type='Image' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='displayUrl'>//blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXcTftM-dWwVR9KOkc8PzPng9FbMz-KC083W_hWFV2t2LA10-l0BtsfTj3J3WL2TrClC8aohb-H2Qn_W2DylQ7R11V71k2SGozHBnjSNAKLEUbKzLW4ALsYwMEjcEGSCIyfGLQwERqsQRFlnTv0wm8M0CkGroeYzpKJ_ZPC6_diPbuINzcP075OzTcF7I/s1600/meta-image.png</b:widget-setting>
           <b:widget-setting name='displayHeight'>900</b:widget-setting>
@@ -174,7 +196,7 @@
           <script id='json:meta:image' type='application/json'>{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;width&quot;:<b:if cond='data:image.width'><data:image.width/><b:else/>null</b:if>,&quot;height&quot;:<b:if cond='data:image.height'><data:image.height/><b:else/>null</b:if>}</script>
         </b:includable>
       </b:widget>
-      <b:widget id='Image03' locked='true' title='Open Graph' type='Image' version='2' visible='true'>
+      <b:widget cond='!data:view.isError' id='Image03' locked='true' title='Open Graph' type='Image' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='displayUrl'>//blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXxFjLFkLM3eZsKgzpO8R-f3pQPsb-ica2dzqZ-TpJw-fhOsZMG3fUs6UzvcualJbzE9xoUPtqIAI68pQcy9E2IXSFt8SxYEpcaIln78PEZzj1S-iiDp4aJtwNdkImyH5oEtzuzKUxetnUMMjaJWhi6BTLBkNxQX8tUzsL3Q2hqQq_hBF7_w6z5yUYxws/s1600/open-graph-image.png</b:widget-setting>
           <b:widget-setting name='displayHeight'>900</b:widget-setting>
@@ -214,7 +236,7 @@
           <script id='json:meta:opengraph' type='application/json'>{&quot;locale&quot;:&quot;<data:locale.jsonEscaped/>&quot;,&quot;siteName&quot;:&quot;<data:siteName.jsonEscaped/>&quot;,&quot;title&quot;:&quot;<data:title.jsonEscaped/>&quot;,&quot;url&quot;:&quot;<data:url.jsonEscaped/>&quot;,&quot;type&quot;:&quot;<data:type.jsonEscaped/>&quot;,&quot;description&quot;:&quot;<data:description.jsonEscaped/>&quot;,&quot;image&quot;:{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;width&quot;:<b:if cond='data:image.width'><data:image.width/><b:else/>null</b:if>,&quot;height&quot;:<b:if cond='data:image.height'><data:image.height/><b:else/>null</b:if>,&quot;alt&quot;:&quot;<data:title.jsonEscaped/>&quot;}}</script>
         </b:includable>
       </b:widget>
-      <b:widget id='Image04' locked='true' title='Twitter Card' type='Image' version='2' visible='true'>
+      <b:widget cond='!data:view.isError' id='Image04' locked='true' title='Twitter Card' type='Image' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='displayUrl'>//blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg31MuIa565c6YDVhaRleYhJeby_kBMwkr0CTcf27hP0n3b71IPnvFtkVhSIveXiBSMZ56AzX_-s5PqayrsuY7LYwJiX1P2u0acO1kiCjIuPzQ0e3uSsqATTI_2zlbHaJ48e_oZvwwZgBhTjpHJnnKiXeWF2Pwco8UHeZoP-M7bLskRArbe9Td_Ve_B1iI/s1600/twitter-card-image.png</b:widget-setting>
           <b:widget-setting name='displayHeight'>900</b:widget-setting>
@@ -252,14 +274,6 @@
           <script id='json:meta:twittercard' type='application/json'>{&quot;title&quot;:&quot;<data:title.jsonEscaped/>&quot;,&quot;url&quot;:&quot;<data:url.jsonEscaped/>&quot;,&quot;description&quot;:&quot;<data:description.jsonEscaped/>&quot;,&quot;card&quot;:&quot;<data:card.jsonEscaped/>&quot;,&quot;image&quot;:{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;width&quot;:<b:if cond='data:image.width'><data:image.width/><b:else/>null</b:if>,&quot;height&quot;:<b:if cond='data:image.height'><data:image.height/><b:else/>null</b:if>,&quot;alt&quot;:&quot;<data:title.jsonEscaped/>&quot;}}</script>
         </b:includable>
       </b:widget>
-      <b:widget id='TextList01' locked='true' title='Meta Keywords' type='TextList' version='2' visible='true'>
-        <b:includable id='main'>
-          <b:eval expr='&quot;--&gt;&quot;'/>
-          <b:include name='content'/>
-          <b:eval expr='&quot;&lt;!--&quot;'/>
-        </b:includable>
-        <b:includable id='content'/>
-      </b:widget>
     </b:section>
     <b:eval expr='&quot;--&gt;&quot;'/>
   </b:if>
@@ -272,10 +286,52 @@
     <!--vite:head:begin--><!--vite:head:end-->
 
     <b:else/>
-    <b:comment><!--vite:head:begin--></b:comment><link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-DU259gBF.css' rel='stylesheet'/><script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-DjQo8aLk.js' type='module'></script><b:comment><!--vite:head:end--></b:comment>
+    <b:comment><!--vite:head:begin--></b:comment><link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-Cn3jD4tC.css' rel='stylesheet'/><script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-3Sgxjisp.js' type='module'></script><b:comment><!--vite:head:end--></b:comment>
   </b:if>
 
   <b:if cond='false'><b:skin><![CDATA[]]></b:skin></b:if>
+
+  <b:comment><!--[ Layout CSS ]--></b:comment>
+  <b:if cond='data:view.isLayoutMode'><b:template-skin><![CDATA[
+/* Override defaults */
+body#layout::-webkit-scrollbar{-webkit-appearance:none;width:8px;height:8px}
+body#layout::-webkit-scrollbar-track{background:#f9f9f9}
+body#layout::-webkit-scrollbar-thumb{background:#d1d1d1;border-radius:2px}
+body#layout::-webkit-scrollbar-thumb:hover{background:#9E9E9E}
+body#layout::-webkit-scrollbar-thumb:active{background:#848484}
+body#layout{position:relative;background-color:#fff!important;font-family:Roboto,sans-serif;margin:0 auto!important;padding:16px 8px 0!important;border:0!important;text-align:left!important;max-width:1080px!important}
+body#layout div.layout-title{font-size:15px!important;white-space:nowrap;overflow:hidden}
+body#layout div.section{background-color:#fef5ea!important;border-radius:10px!important;border-color:#e4c7a6;margin:0 8px 16px 8px}
+body#layout div.section h4{font-size:15px!important;font-weight:normal!important;margin-left:0;text-align:center;background:#fff;color:#784141;margin:0 0 10px 0;padding:8px;border-radius:10px;border:1px solid #e4c7a6}
+body#layout div.widget div.widget-content{background-color:transparent!important;box-shadow:none!important;border-radius:inherit}
+body#layout div.Blog div.widget-content{height:auto!important}
+body#layout div.widget div.widget-wrap2{border-radius:10px;background-color:#f97777!important}
+body#layout div.widget div.widget-wrap3{border-radius:inherit;background-color:#fff!important}
+body#layout div.widget.draggable-widget div.widget-wrap3{border-top-left-radius:4px;border-bottom-left-radius:4px}
+body#layout div.layout-widget-description{font-size:13px!important;line-height:1.6em;opacity:0.8}
+body#layout div.add_widget{display:block;padding:0;border:none;border-radius:0}
+body#layout div.add-icon{display:none}
+body#layout div.add_widget a{font-size:14px !important;margin:auto;text-decoration:none;color:#b64b4b;border-radius:8px;padding:8px;text-align:center;border:1.6px dashed #b64b4b}
+body#layout div.add_widget a::after{content:'( + )';margin-left:4px}
+body#layout div.add_widget a:hover{color:#784141;border-color:#784141}
+body#layout .visibility .editlink.icon{height:24px!important;width:24px!important;border:1px solid #b8b8b8!important;border-radius:30%!important;background-size:70%!important}
+body#layout .visibility .editlink.icon:hover{background-color:#e7e0ec!important}
+
+/* Custom functions */
+body#layout .section.bl-grid-section{padding-left:8px;padding-right:8px}
+body#layout .section.bl-grid-section:after{content:'';display:table;clear:both}
+body#layout .section.bl-grid-section h4,body#layout .section.bl-grid-section .add_widget{margin-right:8px;margin-left:8px}
+body#layout .section.bl-grid-section .widget{width:50%;float:left;margin:8px 0 0 0}
+body#layout .section.bl-grid-section .widget .widget-wrap1{padding:4px 8px}
+body#layout .section.bl-grid-section .layout-widget-description{white-space:nowrap;overflow:hidden}
+body#layout .section.bl-grid-section .dropregion{width:50%!important;float:left;clear:right;margin:0!important;border:0!important;height:0!important;}
+body#layout .section.bl-grid-section .draggable-widget.el_active{margin-bottom:0!important}
+body#layout .section.bl-hide-title{padding-top:8px}
+body#layout .section.bl-hide-description .layout-widget-description,
+body#layout .widget.bl-hide-description .layout-widget-description,
+body#layout .section.bl-hide-title h4,
+body#layout .bl-hide-element{display:none!important}
+]]></b:template-skin></b:if>
 
   <b:comment><!--[ </head> ]--></b:comment>
 <b:eval expr='&quot;&lt;/head&gt;&quot;'/>
@@ -297,226 +353,235 @@
 
   <div class='loader-container'><svg class='loader-icon-container' height='31.25' preserveAspectRatio='xMidYMid meet' viewBox='0 0 50 31.25' width='50' x='0px' y='0px'><path class='loader-icon-track' d='M0.625 21.5 h10.25 l3.75 -5.875 l7.375 15 l9.75 -30 l7.375 20.875 v0 h10.25' fill='none' pathlength='100' stroke-width='4'/><path class='loader-icon-car' d='M0.625 21.5 h10.25 l3.75 -5.875 l7.375 15 l9.75 -30 l7.375 20.875 v0 h10.25' fill='none' pathlength='100' stroke-width='4'/></svg></div>
 
-  <b:section id='theme_section_main' showaddelement='true'>
-    <b:widget id='FeaturedPost01' locked='true' title='Featured post' type='FeaturedPost' version='2' visible='true'>
-      <b:widget-settings>
-        <b:widget-setting name='showSnippet'>true</b:widget-setting>
-        <b:widget-setting name='showPostTitle'>true</b:widget-setting>
-        <b:widget-setting name='postId'>0</b:widget-setting>
-        <b:widget-setting name='showFirstImage'>true</b:widget-setting>
-        <b:widget-setting name='useMostRecentPost'>true</b:widget-setting>
-      </b:widget-settings>
-      <b:includable id='main' var='this'><script id='json:featured' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
-      <b:includable id='blogThisShare'/>
-      <b:includable id='bylineByName'/>
-      <b:includable id='bylineRegion'/>
-      <b:includable id='commentsLink'/>
-      <b:includable id='commentsLinkIframe'/>
-      <b:includable id='emailPostIcon'/>
-      <b:includable id='facebookShare'/>
-      <b:includable id='footerBylines'/>
-      <b:includable id='googlePlusShare'/>
-      <b:includable id='headerByline'/>
-      <b:includable id='linkShare'/>
-      <b:includable id='otherSharingButton'/>
-      <b:includable id='platformShare'/>
-      <b:includable id='postAuthor'/>
-      <b:includable id='postCommentsLink'/>
-      <b:includable id='postJumpLink'/>
-      <b:includable id='postLabels'/>
-      <b:includable id='postLocation'/>
-      <b:includable id='postReactions'/>
-      <b:includable id='postShareButtons'/>
-      <b:includable id='postTimestamp'/>
-      <b:includable id='sharingButton'/>
-      <b:includable id='sharingButtonContent'/>
-      <b:includable id='sharingButtons'/>
-      <b:includable id='sharingButtonsMenu'/>
-      <b:includable id='sharingPlatformIcon'/>
-      <b:includable id='snippetedPostByline'/>
-      <b:includable id='snippetedPostContent'/>
-      <b:includable id='snippetedPostThumbnail'/>
-      <b:includable id='snippetedPostTitle'/>
-      <b:includable id='snippetedPosts'/>
-    </b:widget>
-    <b:widget id='PopularPosts01' locked='true' title='' type='PopularPosts' version='2' visible='true'>
-      <b:widget-settings>
-        <b:widget-setting name='numItemsToShow'>10</b:widget-setting>
-        <b:widget-setting name='showThumbnails'>true</b:widget-setting>
-        <b:widget-setting name='showSnippets'>true</b:widget-setting>
-        <b:widget-setting name='timeRange'>LAST_YEAR</b:widget-setting>
-      </b:widget-settings>
-      <b:includable id='main' var='this'><script id='json:popular' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
-      <b:includable id='blogThisShare'/>
-      <b:includable id='bylineByName'/>
-      <b:includable id='bylineRegion'/>
-      <b:includable id='commentsLink'/>
-      <b:includable id='commentsLinkIframe'/>
-      <b:includable id='emailPostIcon'/>
-      <b:includable id='facebookShare'/>
-      <b:includable id='footerBylines'/>
-      <b:includable id='googlePlusShare'/>
-      <b:includable id='headerByline'/>
-      <b:includable id='linkShare'/>
-      <b:includable id='otherSharingButton'/>
-      <b:includable id='platformShare'/>
-      <b:includable id='postAuthor'/>
-      <b:includable id='postCommentsLink'/>
-      <b:includable id='postJumpLink'/>
-      <b:includable id='postLabels'/>
-      <b:includable id='postLocation'/>
-      <b:includable id='postReactions'/>
-      <b:includable id='postShareButtons'/>
-      <b:includable id='postTimestamp'/>
-      <b:includable id='sharingButton'/>
-      <b:includable id='sharingButtonContent'/>
-      <b:includable id='sharingButtons'/>
-      <b:includable id='sharingButtonsMenu'/>
-      <b:includable id='sharingPlatformIcon'/>
-      <b:includable id='snippetedPostByline'/>
-      <b:includable id='snippetedPostContent'/>
-      <b:includable id='snippetedPostThumbnail'/>
-      <b:includable id='snippetedPostTitle'/>
-      <b:includable id='snippetedPosts'/>
-    </b:widget>
-    <b:widget id='Blog01' locked='true' title='Blog Posts' type='Blog' version='2' visible='true'>
-      <b:widget-settings>
-        <b:widget-setting name='showDateHeader'>false</b:widget-setting>
-        <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
-        <b:widget-setting name='showShareButtons'>false</b:widget-setting>
-        <b:widget-setting name='showCommentLink'>true</b:widget-setting>
-        <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-        <b:widget-setting name='showAuthor'>true</b:widget-setting>
-        <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
-        <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
-        <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
-        <b:widget-setting name='reactionsLabel'/>
-        <b:widget-setting name='showAuthorProfile'>true</b:widget-setting>
-        <b:widget-setting name='style.layout'>1x1</b:widget-setting>
-        <b:widget-setting name='showLabels'>true</b:widget-setting>
-        <b:widget-setting name='showLocation'>true</b:widget-setting>
-        <b:widget-setting name='showTimestamp'>true</b:widget-setting>
-        <b:widget-setting name='postsPerAd'>1</b:widget-setting>
-        <b:widget-setting name='showBacklinks'>false</b:widget-setting>
-        <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
-        <b:widget-setting name='showInlineAds'>false</b:widget-setting>
-        <b:widget-setting name='showReactions'>false</b:widget-setting>
-      </b:widget-settings>
-      <b:includable id='main' var='this'><script id='json:data' type='application/json'><b:include name='json:data'/></script><script id='json:posts' type='application/json'>{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:include data='data:post' name='json:post'/><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}</script></b:includable>
-      <b:includable id='aboutPostAuthor'/>
-      <b:includable id='addComments'/>
-      <b:includable id='blogThisShare'/>
-      <b:includable id='bylineByName'/>
-      <b:includable id='bylineRegion'/>
-      <b:includable id='commentAuthorAvatar'/>
-      <b:includable id='commentDeleteIcon'/>
-      <b:includable id='commentForm'/>
-      <b:includable id='commentFormIframeSrc'/>
-      <b:includable id='commentItem'/>
-      <b:includable id='commentList'/>
-      <b:includable id='commentPicker'/>
-      <b:includable id='comments'/>
-      <b:includable id='commentsLink'/>
-      <b:includable id='commentsLinkIframe'/>
-      <b:includable id='commentsTitle'/>
-      <b:includable id='defaultAdUnit'/>
-      <b:includable id='emailPostIcon'/>
-      <b:includable id='facebookShare'/>
-      <b:includable id='feedLinks'/>
-      <b:includable id='feedLinksBody'/>
-      <b:includable id='footerBylines'/>
-      <b:includable id='googlePlusShare'/>
-      <b:includable id='headerByline'/>
-      <b:includable id='homePageLink'/>
-      <b:includable id='iframeComments'/>
-      <b:includable id='inlineAd'/>
-      <b:includable id='linkShare'/>
-      <b:includable id='nextPageLink'/>
-      <b:includable id='otherSharingButton'/>
-      <b:includable id='platformShare'/>
-      <b:includable id='post'/>
-      <b:includable id='postAuthor'/>
-      <b:includable id='postBody'/>
-      <b:includable id='postBodySnippet'/>
-      <b:includable id='postCommentsAndAd'/>
-      <b:includable id='postCommentsLink'/>
-      <b:includable id='postFooter'/>
-      <b:includable id='postFooterAuthorProfile'/>
-      <b:includable id='postHeader'/>
-      <b:includable id='postJumpLink'/>
-      <b:includable id='postLabels'/>
-      <b:includable id='postLocation'/>
-      <b:includable id='postMeta'/>
-      <b:includable id='postMetadataJSONImage'/>
-      <b:includable id='postMetadataJSONPublisher'/>
-      <b:includable id='postPagination'/>
-      <b:includable id='postReactions'/>
-      <b:includable id='postShareButtons'/>
-      <b:includable id='postTimestamp'/>
-      <b:includable id='postTitle'/>
-      <b:includable id='previousPageLink'/>
-      <b:includable id='sharingButton'/>
-      <b:includable id='sharingButtonContent'/>
-      <b:includable id='sharingButtons'/>
-      <b:includable id='sharingButtonsMenu'/>
-      <b:includable id='sharingPlatformIcon'/>
-      <b:includable id='threadedCommentForm'/>
-      <b:includable id='threadedCommentJs'/>
-      <b:includable id='threadedComments'/>
-      <b:includable id='tooltipCss'/>
-    </b:widget>
-    <b:widget id='Label01' locked='true' title='Labels' type='Label' version='2' visible='true'>
-      <b:widget-settings>
-        <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
-        <b:widget-setting name='display'>LIST</b:widget-setting>
-        <b:widget-setting name='selectedLabelsList'/>
-        <b:widget-setting name='showType'>ALL</b:widget-setting>
-        <b:widget-setting name='showFreqNumbers'>true</b:widget-setting>
-      </b:widget-settings>
-      <b:includable id='main' var='this'><script id='json:labels' type='application/json'>{<b:loop index='i' values='data:labels' var='label'>&quot;<data:label.name.jsonEscaped/>&quot;:<data:label.count/><b:if cond='data:i &lt; (data:labels.length - 1)'>,</b:if></b:loop>}</script></b:includable>
-      <b:includable id='cloud'/>
-      <b:includable id='content'/>
-      <b:includable id='list'/>
-    </b:widget>
-    <b:widget id='Profile01' locked='true' title='Authors' type='Profile' version='2' visible='true'>
-      <b:widget-settings>
-        <b:widget-setting name='showaboutme'>true</b:widget-setting>
-        <b:widget-setting name='showlocation'>true</b:widget-setting>
-      </b:widget-settings>
-      <b:includable id='main' var='this'><script id='json:authors' type='application/json'>[<b:if cond='data:team'><b:loop index='i' values='data:authors' var='author'>{&quot;name&quot;:&quot;<data:author.display-name.jsonEscaped/>&quot;,&quot;about&quot;:null,&quot;location&quot;:null,&quot;image&quot;:<b:if cond='data:author.authorPhoto.image'>&quot;<data:author.authorPhoto.image.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;url&quot;:<b:if cond='data:author.userUrl'>&quot;<data:author.userUrl.jsonEscaped/>&quot;<b:else/>null</b:if>}<b:if cond='data:i &lt; (data:authors.length - 1)'>,</b:if></b:loop><b:else/>{&quot;name&quot;:&quot;<data:displayname.jsonEscaped/>&quot;,&quot;about&quot;:<b:if cond='data:showaboutme and data:aboutme != &quot;&quot;'>&quot;<data:aboutme.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;location&quot;:<b:if cond='data:showlocation and data:location != &quot;&quot;'>&quot;<data:location.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;image&quot;:<b:if cond='data:authorPhoto.image'>&quot;<data:authorPhoto.image.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;url&quot;:<b:if cond='data:userUrl'>&quot;<data:userUrl.jsonEscaped/>&quot;<b:else/>null</b:if>}</b:if>]</script></b:includable>
-      <b:includable id='authorProfileImage'/>
-      <b:includable id='content'/>
-      <b:includable id='defaultProfileImage'/>
-      <b:includable id='profileImage'/>
-      <b:includable id='teamProfile'/>
-      <b:includable id='teamProfileLink'/>
-      <b:includable id='userLocation'/>
-      <b:includable id='userProfile'/>
-      <b:includable id='userProfileData'/>
-      <b:includable id='userProfileImage'/>
-      <b:includable id='userProfileInfo'/>
-      <b:includable id='userProfileText'/>
-      <b:includable id='viewProfileLink'/>
-    </b:widget>
-    <b:widget id='ContactForm01' locked='true' title='Contact Form' type='ContactForm' version='2' visible='true'>
-      <b:includable id='main'><script id='json:contact' type='application/json'>{&quot;token&quot;:&quot;<data:contactFormToken.jsonEscaped/>&quot;,&quot;endpoint&quot;:&quot;<data:submitUrl.jsonEscaped/>&quot;}</script></b:includable>
-      <b:includable id='content'/>
-    </b:widget>
-    <b:widget id='Stats01' locked='true' title='Pageviews last month' type='Stats' version='2' visible='true'>
-      <b:widget-settings>
-        <b:widget-setting name='showGraphicalCounter'>false</b:widget-setting>
-        <b:widget-setting name='showAnimatedCounter'>false</b:widget-setting>
-        <b:widget-setting name='showSparkline'>true</b:widget-setting>
-        <b:widget-setting name='sparklineStyle'>BLACK_TRANSPARENT</b:widget-setting>
-        <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
-      </b:widget-settings>
-      <b:includable id='main'><script id='json:stats' type='application/json'>{&quot;endpoint&quot;:&quot;<data:statsUrl.jsonEscaped/>&quot;}</script></b:includable>
-      <b:includable id='content'/>
-    </b:widget>
-  </b:section>
+  <div aria-hidden='true' class='hidden notranslate' hidden=''>
+    <b:comment><!--[ Theme main section ]--></b:comment>
+    <b:section id='theme_section_main' showaddelement='true'>
+      <b:widget id='FeaturedPost01' locked='true' title='Featured post' type='FeaturedPost' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='showSnippet'>true</b:widget-setting>
+          <b:widget-setting name='showPostTitle'>true</b:widget-setting>
+          <b:widget-setting name='postId'>0</b:widget-setting>
+          <b:widget-setting name='showFirstImage'>true</b:widget-setting>
+          <b:widget-setting name='useMostRecentPost'>true</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:featured' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
+        <b:includable id='blogThisShare'/>
+        <b:includable id='bylineByName'/>
+        <b:includable id='bylineRegion'/>
+        <b:includable id='commentsLink'/>
+        <b:includable id='commentsLinkIframe'/>
+        <b:includable id='emailPostIcon'/>
+        <b:includable id='facebookShare'/>
+        <b:includable id='footerBylines'/>
+        <b:includable id='googlePlusShare'/>
+        <b:includable id='headerByline'/>
+        <b:includable id='linkShare'/>
+        <b:includable id='otherSharingButton'/>
+        <b:includable id='platformShare'/>
+        <b:includable id='postAuthor'/>
+        <b:includable id='postCommentsLink'/>
+        <b:includable id='postJumpLink'/>
+        <b:includable id='postLabels'/>
+        <b:includable id='postLocation'/>
+        <b:includable id='postReactions'/>
+        <b:includable id='postShareButtons'/>
+        <b:includable id='postTimestamp'/>
+        <b:includable id='sharingButton'/>
+        <b:includable id='sharingButtonContent'/>
+        <b:includable id='sharingButtons'/>
+        <b:includable id='sharingButtonsMenu'/>
+        <b:includable id='sharingPlatformIcon'/>
+        <b:includable id='snippetedPostByline'/>
+        <b:includable id='snippetedPostContent'/>
+        <b:includable id='snippetedPostThumbnail'/>
+        <b:includable id='snippetedPostTitle'/>
+        <b:includable id='snippetedPosts'/>
+      </b:widget>
+      <b:widget id='PopularPosts01' locked='true' title='' type='PopularPosts' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='numItemsToShow'>10</b:widget-setting>
+          <b:widget-setting name='showThumbnails'>true</b:widget-setting>
+          <b:widget-setting name='showSnippets'>true</b:widget-setting>
+          <b:widget-setting name='timeRange'>LAST_YEAR</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:popular' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
+        <b:includable id='blogThisShare'/>
+        <b:includable id='bylineByName'/>
+        <b:includable id='bylineRegion'/>
+        <b:includable id='commentsLink'/>
+        <b:includable id='commentsLinkIframe'/>
+        <b:includable id='emailPostIcon'/>
+        <b:includable id='facebookShare'/>
+        <b:includable id='footerBylines'/>
+        <b:includable id='googlePlusShare'/>
+        <b:includable id='headerByline'/>
+        <b:includable id='linkShare'/>
+        <b:includable id='otherSharingButton'/>
+        <b:includable id='platformShare'/>
+        <b:includable id='postAuthor'/>
+        <b:includable id='postCommentsLink'/>
+        <b:includable id='postJumpLink'/>
+        <b:includable id='postLabels'/>
+        <b:includable id='postLocation'/>
+        <b:includable id='postReactions'/>
+        <b:includable id='postShareButtons'/>
+        <b:includable id='postTimestamp'/>
+        <b:includable id='sharingButton'/>
+        <b:includable id='sharingButtonContent'/>
+        <b:includable id='sharingButtons'/>
+        <b:includable id='sharingButtonsMenu'/>
+        <b:includable id='sharingPlatformIcon'/>
+        <b:includable id='snippetedPostByline'/>
+        <b:includable id='snippetedPostContent'/>
+        <b:includable id='snippetedPostThumbnail'/>
+        <b:includable id='snippetedPostTitle'/>
+        <b:includable id='snippetedPosts'/>
+      </b:widget>
+      <b:widget id='Blog01' locked='true' title='Blog Posts' type='Blog' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+          <b:widget-setting name='style.textcolor'>#ffffff</b:widget-setting>
+          <b:widget-setting name='showShareButtons'>false</b:widget-setting>
+          <b:widget-setting name='showCommentLink'>true</b:widget-setting>
+          <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
+          <b:widget-setting name='showAuthor'>true</b:widget-setting>
+          <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
+          <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
+          <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
+          <b:widget-setting name='reactionsLabel'/>
+          <b:widget-setting name='showAuthorProfile'>true</b:widget-setting>
+          <b:widget-setting name='style.layout'>1x1</b:widget-setting>
+          <b:widget-setting name='showLabels'>true</b:widget-setting>
+          <b:widget-setting name='showLocation'>true</b:widget-setting>
+          <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+          <b:widget-setting name='postsPerAd'>1</b:widget-setting>
+          <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+          <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
+          <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+          <b:widget-setting name='showReactions'>false</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:data' type='application/json'><b:include name='json:data'/></script><script id='json:posts' type='application/json'>{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:include data='data:post' name='json:post'/><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}</script></b:includable>
+        <b:includable id='aboutPostAuthor'/>
+        <b:includable id='addComments'/>
+        <b:includable id='blogThisShare'/>
+        <b:includable id='bylineByName'/>
+        <b:includable id='bylineRegion'/>
+        <b:includable id='commentAuthorAvatar'/>
+        <b:includable id='commentDeleteIcon'/>
+        <b:includable id='commentForm'/>
+        <b:includable id='commentFormIframeSrc'/>
+        <b:includable id='commentItem'/>
+        <b:includable id='commentList'/>
+        <b:includable id='commentPicker'/>
+        <b:includable id='comments'/>
+        <b:includable id='commentsLink'/>
+        <b:includable id='commentsLinkIframe'/>
+        <b:includable id='commentsTitle'/>
+        <b:includable id='defaultAdUnit'/>
+        <b:includable id='emailPostIcon'/>
+        <b:includable id='facebookShare'/>
+        <b:includable id='feedLinks'/>
+        <b:includable id='feedLinksBody'/>
+        <b:includable id='footerBylines'/>
+        <b:includable id='googlePlusShare'/>
+        <b:includable id='headerByline'/>
+        <b:includable id='homePageLink'/>
+        <b:includable id='iframeComments'/>
+        <b:includable id='inlineAd'/>
+        <b:includable id='linkShare'/>
+        <b:includable id='nextPageLink'/>
+        <b:includable id='otherSharingButton'/>
+        <b:includable id='platformShare'/>
+        <b:includable id='post'/>
+        <b:includable id='postAuthor'/>
+        <b:includable id='postBody'/>
+        <b:includable id='postBodySnippet'/>
+        <b:includable id='postCommentsAndAd'/>
+        <b:includable id='postCommentsLink'/>
+        <b:includable id='postFooter'/>
+        <b:includable id='postFooterAuthorProfile'/>
+        <b:includable id='postHeader'/>
+        <b:includable id='postJumpLink'/>
+        <b:includable id='postLabels'/>
+        <b:includable id='postLocation'/>
+        <b:includable id='postMeta'/>
+        <b:includable id='postMetadataJSONImage'/>
+        <b:includable id='postMetadataJSONPublisher'/>
+        <b:includable id='postPagination'/>
+        <b:includable id='postReactions'/>
+        <b:includable id='postShareButtons'/>
+        <b:includable id='postTimestamp'/>
+        <b:includable id='postTitle'/>
+        <b:includable id='previousPageLink'/>
+        <b:includable id='sharingButton'/>
+        <b:includable id='sharingButtonContent'/>
+        <b:includable id='sharingButtons'/>
+        <b:includable id='sharingButtonsMenu'/>
+        <b:includable id='sharingPlatformIcon'/>
+        <b:includable id='threadedCommentForm'/>
+        <b:includable id='threadedCommentJs'/>
+        <b:includable id='threadedComments'/>
+        <b:includable id='tooltipCss'/>
+      </b:widget>
+    </b:section>
+
+    <b:comment><!--[ Theme hidden section ]--></b:comment>
+    <b:section class='bl-hide-element' id='theme_section_hidden' showaddelement='true'>
+      <b:widget id='Label01' locked='true' title='Labels' type='Label' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
+          <b:widget-setting name='display'>LIST</b:widget-setting>
+          <b:widget-setting name='selectedLabelsList'/>
+          <b:widget-setting name='showType'>ALL</b:widget-setting>
+          <b:widget-setting name='showFreqNumbers'>true</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:labels' type='application/json'>{<b:loop index='i' values='data:labels' var='label'>&quot;<data:label.name.jsonEscaped/>&quot;:<data:label.count/><b:if cond='data:i &lt; (data:labels.length - 1)'>,</b:if></b:loop>}</script></b:includable>
+        <b:includable id='cloud'/>
+        <b:includable id='content'/>
+        <b:includable id='list'/>
+      </b:widget>
+      <b:widget id='Profile01' locked='true' title='Authors' type='Profile' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='showaboutme'>true</b:widget-setting>
+          <b:widget-setting name='showlocation'>true</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:authors' type='application/json'>[<b:if cond='data:team'><b:loop index='i' values='data:authors' var='author'>{&quot;name&quot;:&quot;<data:author.display-name.jsonEscaped/>&quot;,&quot;about&quot;:null,&quot;location&quot;:null,&quot;image&quot;:<b:if cond='data:author.authorPhoto.image'>&quot;<data:author.authorPhoto.image.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;url&quot;:<b:if cond='data:author.userUrl'>&quot;<data:author.userUrl.jsonEscaped/>&quot;<b:else/>null</b:if>}<b:if cond='data:i &lt; (data:authors.length - 1)'>,</b:if></b:loop><b:else/>{&quot;name&quot;:&quot;<data:displayname.jsonEscaped/>&quot;,&quot;about&quot;:<b:if cond='data:showaboutme and data:aboutme != &quot;&quot;'>&quot;<data:aboutme.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;location&quot;:<b:if cond='data:showlocation and data:location != &quot;&quot;'>&quot;<data:location.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;image&quot;:<b:if cond='data:authorPhoto.image'>&quot;<data:authorPhoto.image.jsonEscaped/>&quot;<b:else/>null</b:if>,&quot;url&quot;:<b:if cond='data:userUrl'>&quot;<data:userUrl.jsonEscaped/>&quot;<b:else/>null</b:if>}</b:if>]</script></b:includable>
+        <b:includable id='authorProfileImage'/>
+        <b:includable id='content'/>
+        <b:includable id='defaultProfileImage'/>
+        <b:includable id='profileImage'/>
+        <b:includable id='teamProfile'/>
+        <b:includable id='teamProfileLink'/>
+        <b:includable id='userLocation'/>
+        <b:includable id='userProfile'/>
+        <b:includable id='userProfileData'/>
+        <b:includable id='userProfileImage'/>
+        <b:includable id='userProfileInfo'/>
+        <b:includable id='userProfileText'/>
+        <b:includable id='viewProfileLink'/>
+      </b:widget>
+      <b:widget id='ContactForm01' locked='true' title='Contact Form' type='ContactForm' version='2' visible='true'>
+        <b:includable id='main'><script id='json:contact' type='application/json'>{&quot;token&quot;:&quot;<data:contactFormToken.jsonEscaped/>&quot;,&quot;endpoint&quot;:&quot;<data:submitUrl.jsonEscaped/>&quot;}</script></b:includable>
+        <b:includable id='content'/>
+      </b:widget>
+      <b:widget id='Stats01' locked='true' title='Pageviews last month' type='Stats' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='showGraphicalCounter'>false</b:widget-setting>
+          <b:widget-setting name='showAnimatedCounter'>false</b:widget-setting>
+          <b:widget-setting name='showSparkline'>true</b:widget-setting>
+          <b:widget-setting name='sparklineStyle'>BLACK_TRANSPARENT</b:widget-setting>
+          <b:widget-setting name='timeRange'>LAST_MONTH</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main'><script id='json:stats' type='application/json'>{&quot;endpoint&quot;:&quot;<data:statsUrl.jsonEscaped/>&quot;}</script></b:includable>
+        <b:includable id='content'/>
+      </b:widget>
+    </b:section>
+
+    <b:comment><!--[ Wraps unnecessary contents in textarea ]--></b:comment>
+    <b:eval expr='&quot;&lt;textarea id=&apos;theme_textarea&apos; disabled=&apos;&apos; readonly=&apos;&apos;&gt;&quot;'/><head/><body/><b:eval expr='&quot;&lt;/textarea&gt;&quot;'/>
+  </div>
 
   <b:comment><!--[ </body> ]--></b:comment>
-  <b:eval expr='&quot;&lt;textarea id=&apos;theme_textarea&apos; disabled readonly hidden aria-hidden=&apos;true&apos; class=&apos;notranslate&apos;&gt;&quot;'/><head/><body/><b:eval expr='&quot;&lt;/textarea&gt;&quot;'/>
 <b:eval expr='&quot;&lt;/body&gt;&quot;'/>
 
 </html>
