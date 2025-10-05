@@ -1,3 +1,4 @@
+import { GoogleImage } from '@deox/google-image';
 import { HashIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -10,6 +11,18 @@ export interface Props {
   data: BloggerData;
 }
 
+function resizeAvatarImage(source: string, size: number) {
+  return new GoogleImage(source, { existing: false, pass: true })
+    .size(size)
+    .alternateCrop(true)
+    .disableAnimation(true)
+    .noButton(true)
+    .noUpscaling(true)
+    .webp(true)
+    .cacheDays(90)
+    .url();
+}
+
 function PostCard({ post }: { post: PostMinimal }) {
   return (
     <div className="flex flex-col p-4 border rounded-md">
@@ -20,7 +33,7 @@ function PostCard({ post }: { post: PostMinimal }) {
       <div className="text-muted-foreground flex flex-wrap items-center gap-x-2 text-xs">
         <div className="flex items-center gap-x-1.5">
           <Avatar className="size-5 rounded-full">
-            {post.author.image && <AvatarImage alt={post.author.name} src={post.author.image} />}
+            {post.author.image && <AvatarImage alt={post.author.name} src={resizeAvatarImage(post.author.image, 35)} />}
             <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <span>{post.author.name}</span>
@@ -48,7 +61,7 @@ function BlogAuthorCard({ author }: { author: BlogAuthor }) {
   return (
     <div className="flex items-center gap-3 p-4 border rounded-md">
       <Avatar>
-        {author.image && <AvatarImage className="object-cover object-center" src={author.image} alt={author.name} />}
+        {author.image && <AvatarImage className="object-cover object-center" alt={author.name} src={resizeAvatarImage(author.image, 40)} />}
         <AvatarFallback>{author.name.charAt(0)}</AvatarFallback>
       </Avatar>
       <div>{author.name}</div>

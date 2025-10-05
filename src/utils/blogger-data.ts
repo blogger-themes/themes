@@ -10,6 +10,7 @@ export type LanguageDirection = 'ltr' | 'rtl';
 
 export interface Blog {
   title: string;
+  description: string | null;
   blogId: string;
   url: string;
   homepageUrl: string;
@@ -120,8 +121,8 @@ export interface Meta {
   favicon: Favicon;
   keywords?: string[];
   image?: MetaImage;
-  opengraph?: OpenGraph;
-  twittercard?: TwitterCard;
+  openGraph?: OpenGraph;
+  twitterCard?: TwitterCard;
 }
 
 export interface BlogAuthor {
@@ -154,12 +155,12 @@ export interface PostLocation {
 }
 
 export interface PostMinimal {
+  id: string;
   title: string;
   summary: string;
   snippet: string;
   thumbnail: string | null;
   url: string;
-  id: string;
   published: string;
   publishedTimestamp: string;
   updated: string;
@@ -173,6 +174,48 @@ export interface PostMinimal {
 export interface Post extends PostMinimal {
   author: PostAuthor;
   content: string;
+}
+
+export interface CommentAuthor {
+  name: string;
+  url: string | null;
+  image: string | null;
+  isAnonymous: boolean;
+  isPostAuthor: boolean;
+}
+
+export interface CommentBase {
+  id: string;
+  author: CommentAuthor;
+  body: string;
+  timestamp: string;
+  timestampMs: number;
+  isDeleted: boolean;
+  deleteUrl: string;
+  adminClass: string;
+}
+
+export interface Reply extends CommentBase {
+  inReplyTo: string;
+}
+
+export interface Comment extends CommentBase {
+  replies: Reply[];
+}
+
+export type HeaderImagePlacement = 'BEHIND' | 'REPLACE' | 'BEFORE_DESCRIPTION';
+
+export interface HeaderImage {
+  src: string;
+  width: number | null;
+  height: number | null;
+  placement: HeaderImagePlacement;
+}
+
+export interface Header {
+  title: string;
+  description: string | null;
+  image: HeaderImage | null;
 }
 
 export interface Contact {
@@ -224,6 +267,8 @@ export interface BloggerData {
   posts: Record<string, PostMinimal | Post>;
   post?: Post;
   page?: Post;
+  comments?: Comment[];
+  header: Header;
   contact: Contact;
   stats: Stats;
   analytics?: Analytics;
@@ -233,12 +278,30 @@ export interface BloggerData {
 }
 
 export function parseBloggerData(doc: Document): BloggerData {
-  const [data, labels, authors, posts, contact, stats, featured, popular, metaFavicon, metaKeywords, metaImage, metaOpenGraph, metaTwitterCard] = (
+  const [
+    data,
+    labels,
+    authors,
+    posts,
+    comments,
+    header,
+    contact,
+    stats,
+    featured,
+    popular,
+    metaFavicon,
+    metaKeywords,
+    metaImage,
+    metaOpenGraph,
+    metaTwitterCard,
+  ] = (
     [
       ['data'],
       ['labels', {}],
       ['authors', []],
       ['posts', {}],
+      ['comments', null],
+      ['header', null],
       ['contact'],
       ['stats'],
       ['featured', null],
@@ -286,6 +349,8 @@ export function parseBloggerData(doc: Document): BloggerData {
     Record<string, number>,
     BlogAuthor[],
     Record<string, PostMinimal | Post>,
+    Comment[],
+    Header | null,
     Contact,
     { endpoint: string },
     Featured | null,
@@ -308,10 +373,10 @@ export function parseBloggerData(doc: Document): BloggerData {
     meta.image = metaImage;
   }
   if (metaOpenGraph) {
-    meta.opengraph = metaOpenGraph;
+    meta.openGraph = metaOpenGraph;
   }
   if (metaTwitterCard) {
-    meta.twittercard = metaTwitterCard;
+    meta.twitterCard = metaTwitterCard;
   }
   data.meta = meta;
 
@@ -330,6 +395,21 @@ export function parseBloggerData(doc: Document): BloggerData {
 
   if (data.blog.pageId) {
     data.page = posts[data.blog.pageId] as Post;
+  }
+
+  if (comments) {
+    data.comments = comments;
+  }
+
+  if (header) {
+    data.header = header;
+    data.blog.description = header.description;
+  } else {
+    data.header = {
+      title: data.blog.title,
+      description: null,
+      image: null,
+    };
   }
 
   data.contact = contact;

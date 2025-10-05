@@ -12,7 +12,7 @@ export interface Props {
 export default function PageLayout({ data, children }: Props) {
   return (
     <RootLayout>
-      <Header title={data.blog.title} />
+      <Header title={data.header.title} />
       <div className="p-5 max-w-5xl mx-auto">
         <div>{children}</div>
       </div>

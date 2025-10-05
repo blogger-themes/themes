@@ -4,10 +4,6 @@ import type { ReactNode } from 'react';
 import { ScrollRestoration, useNavigation } from 'react-router';
 import { Toaster } from '@/components/ui/sonner';
 
-export interface Props {
-  children: ReactNode;
-}
-
 function NavigationLoader() {
   const navigation = useNavigation();
   const isNavigating = Boolean(navigation.location);
@@ -19,6 +15,10 @@ function NavigationLoader() {
       </div>
     );
   }
+}
+
+export interface Props {
+  children: ReactNode;
 }
 
 export default function RootLayout({ children }: Props) {
