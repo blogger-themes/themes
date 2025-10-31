@@ -1,11 +1,11 @@
 import { Link } from 'react-router';
 import { ThemeToggle } from './ThemeToggle';
 
-export interface Props {
+export interface HeaderProps {
   title: string;
 }
 
-export default function Header({ title }: Props) {
+export default function Header({ title }: HeaderProps) {
   return (
     <header className="sticky top-0 bg-background/50 z-50 backdrop-blur-sm border-b">
       <div className="flex items-center justify-between gap-4 px-5 py-2.5 min-h-14 max-w-5xl mx-auto">

@@ -9,11 +9,11 @@ export interface BreadcrumbItemType {
   href?: string;
 }
 
-export interface Props {
+export interface BreadcrumbsProps {
   items: BreadcrumbItemType[];
 }
 
-export default function Breadcrumbs({ items }: Props) {
+export default function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>

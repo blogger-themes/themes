@@ -1,91 +1,72 @@
-import { useEffect } from 'react';
-import { type LoaderFunction, type RouteObject, useLoaderData, useRouteError } from 'react-router';
-import BlogPage from './pages/BlogPage';
+import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderData } from 'react-router';
+import { BloggerProvider } from './contexts/blogger';
+import BlogLayout from './layouts/BlogLayout';
 import ErrorPage from './pages/ErrorPage';
-import HomePage from './pages/HomePage';
-import LabelSearchPage from './pages/LabelSearchPage';
-import NotFound from './pages/NotFound';
-import PagePage from './pages/PagePage';
-import PostPage from './pages/PostPage';
-import SearchPage from './pages/SearchPage';
-import { fetchBloggerData, parseBloggerData } from './utils/blogger-data';
+import { type BloggerData, fetchBloggerData, parseBloggerData } from './utils/blogger-data';
 
 const initialBloggerData = parseBloggerData(document);
 
-const store = {
+const bloggerData = {
   initial: initialBloggerData,
-  data: initialBloggerData,
+  current: initialBloggerData,
 };
 
-const loader = (async ({ request }) => {
-  const viewUrl = new URL(store.data.view.url);
-  viewUrl.pathname = viewUrl.pathname.replace(/^\/\//, '/');
+const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
+  const currentUrl = new URL(bloggerData.current.view.url);
+  currentUrl.pathname = currentUrl.pathname.replace(/^\/\//, '/');
 
-  const requestUrl = new URL(request.url);
+  const nextUrl = new URL(url);
 
-  for (const url of [viewUrl, requestUrl]) {
+  for (const url of [currentUrl, nextUrl]) {
     url.searchParams.delete('m');
+    url.searchParams.delete('view');
     if (url.search) {
       url.search = new URLSearchParams([...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b))).toString();
     }
   }
 
-  const shouldFetch = requestUrl.href !== viewUrl.href;
+  return nextUrl.toString() !== currentUrl.toString();
+};
 
-  if (shouldFetch) {
-    const newData = await fetchBloggerData(requestUrl, {
-      mobile: store.initial.blog.isMobileRequest,
-    });
-
-    store.data = newData;
-  }
-
-  return { data: store.data };
-}) satisfies LoaderFunction;
-
-function Component() {
-  const { data } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
-
-  useEffect(() => {
-    document.title = data.meta.title;
-  }, [data.meta.title]);
-
-  if (data.view.isHomepage) {
-    return <HomePage data={data} />;
-  }
-  if (data.view.isPost) {
-    return <PostPage data={data} />;
-  }
-  if (data.view.isPage) {
-    return <PagePage data={data} />;
-  }
-  if (data.view.isBlog) {
-    return <BlogPage data={data} />;
-  }
-  if (data.view.isLabelSearch) {
-    return <LabelSearchPage data={data} />;
-  }
-  if (data.view.isSearch && data.view.search) {
-    return <SearchPage data={data} />;
-  }
-  return <NotFound data={data} />;
+export interface RootLoaderData {
+  data: BloggerData;
 }
 
-function ErrorBoundary() {
-  const error = useRouteError();
+const rootLoader = (async ({ request }): Promise<RootLoaderData> => {
+  if (shouldRevalidate({ nextUrl: request.url })) {
+    const newData = await fetchBloggerData(request.url, {
+      mobile: bloggerData.initial.blog.isMobileRequest ? 'force' : 'ignore',
+    });
 
-  useEffect(() => {
-    document.title = 'Something went wrong!';
-  }, []);
+    bloggerData.current = newData;
+  }
+
+  return { data: bloggerData.current };
+}) satisfies LoaderFunction;
+
+function RootComponent() {
+  const { data } = useRouteLoaderData<RootLoaderData>('root') as RootLoaderData;
+
+  return (
+    <BloggerProvider data={data}>
+      <BlogLayout />
+    </BloggerProvider>
+  );
+}
+
+function RootErrorBoundary() {
+  const error = useRouteError();
 
   return <ErrorPage error={error} />;
 }
 
 export default [
   {
-    path: '/*',
-    loader,
-    Component,
-    ErrorBoundary,
+    id: 'root',
+    path: '*',
+    loader: rootLoader,
+    shouldRevalidate,
+    element: <RootComponent />,
+    errorElement: <RootErrorBoundary />,
   },
 ] satisfies RouteObject[];

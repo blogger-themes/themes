@@ -1,6 +1,4 @@
-/** biome-ignore-all lint/suspicious/noUnknownAtRules: biome does't support tailwind v4 syntax yet */
-
-@reference './global.css';
+@reference "./globals.css";
 
 @layer base {
   p,

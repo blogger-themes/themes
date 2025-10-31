@@ -203,6 +203,23 @@ export interface Comment extends CommentBase {
   replies: Reply[];
 }
 
+export type CommentsSetting = 'disabled' | 'hidden' | 'readonly' | 'allowed';
+
+export type CommentsLocationType = 'embedded' | 'popup' | 'page';
+
+export interface CommentsLocation {
+  type: CommentsLocationType;
+  url: string;
+}
+
+export interface Comments {
+  total: number;
+  title: string;
+  setting: CommentsSetting;
+  location: CommentsLocation | null;
+  items: Comment[];
+}
+
 export type HeaderImagePlacement = 'BEHIND' | 'REPLACE' | 'BEFORE_DESCRIPTION';
 
 export interface HeaderImage {
@@ -267,7 +284,7 @@ export interface BloggerData {
   posts: Record<string, PostMinimal | Post>;
   post?: Post;
   page?: Post;
-  comments?: Comment[];
+  comments?: Comments;
   header: Header;
   contact: Contact;
   stats: Stats;
@@ -334,7 +351,7 @@ export function parseBloggerData(doc: Document): BloggerData {
       try {
         json = JSON.parse(element.textContent);
       } catch (e) {
-        throw new Error(`Error parsing json for element with id '${elementId}'`, {
+        throw new Error(`Failed to parse JSON for element with id '${elementId}'`, {
           cause: e,
         });
       }
@@ -349,7 +366,7 @@ export function parseBloggerData(doc: Document): BloggerData {
     Record<string, number>,
     BlogAuthor[],
     Record<string, PostMinimal | Post>,
-    Comment[],
+    Comments,
     Header | null,
     Contact,
     { endpoint: string },
@@ -445,15 +462,17 @@ export function parseBloggerData(doc: Document): BloggerData {
 }
 
 export interface FetchBloggerDataOptions {
-  mobile?: boolean;
+  mobile?: 'force' | 'drop' | 'ignore';
   content?: boolean;
 }
 
-export async function fetchBloggerData(url: string | URL, { mobile = false, content = true }: FetchBloggerDataOptions = {}) {
+export async function fetchBloggerData(url: string | URL, { mobile = 'ignore', content = true }: FetchBloggerDataOptions = {}) {
   const requestUrl = new URL(url);
   requestUrl.searchParams.set('view', `-Json${content ? '' : '-NoPostContent'}`);
-  if (mobile) {
+  if (mobile === 'force') {
     requestUrl.searchParams.set('m', '1');
+  } else if (mobile === 'drop') {
+    requestUrl.searchParams.set('m', '0');
   }
 
   const response = await fetch(requestUrl);

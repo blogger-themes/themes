@@ -4,12 +4,8 @@ import { Link } from 'react-router';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import PageLayout from '@/layouts/PageLayout';
-import type { BlogAuthor, BloggerData, PostMinimal } from '@/utils/blogger-data';
-
-export interface Props {
-  data: BloggerData;
-}
+import { useBlogger } from '@/contexts/blogger';
+import type { BlogAuthor, PostMinimal } from '@/utils/blogger-data';
 
 function resizeAvatarImage(source: string, size: number) {
   return new GoogleImage(source, { existing: false, pass: true })
@@ -69,27 +65,27 @@ function BlogAuthorCard({ author }: { author: BlogAuthor }) {
   );
 }
 
-export default function HomePage({ data }: Props) {
+export default function HomePage() {
+  const { data } = useBlogger();
+
   return (
-    <PageLayout data={data}>
-      <div className="flex flex-col gap-4">
-        {data.featured && (
-          <>
-            <h2 className="text-xl font-medium">Featured post</h2>
-            <PostCard post={data.featured.post} />
-          </>
-        )}
-        <h2 className="text-xl font-medium">Latest posts</h2>
-        {Object.values(data.posts).map((post) => (
-          <PostCard key={post.id} post={post} />
+    <div className="flex flex-col gap-4">
+      {data.featured && (
+        <>
+          <h2 className="text-xl font-medium">Featured post</h2>
+          <PostCard post={data.featured.post} />
+        </>
+      )}
+      <h2 className="text-xl font-medium">Latest posts</h2>
+      {Object.values(data.posts).map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+      <h2 className="text-xl font-medium">Blog authors</h2>
+      <div className="flex flex-col gap-5">
+        {data.authors.map((author) => (
+          <BlogAuthorCard key={author.id} author={author} />
         ))}
-        <h2 className="text-xl font-medium">Blog authors</h2>
-        <div className="flex flex-col gap-5">
-          {data.authors.map((author) => (
-            <BlogAuthorCard key={author.id} author={author} />
-          ))}
-        </div>
       </div>
-    </PageLayout>
+    </div>
   );
 }

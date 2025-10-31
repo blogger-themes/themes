@@ -6,14 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import RootLayout from '@/layouts/RootLayout';
 
-export interface Props {
+export interface ErrorPageProps {
   error: unknown;
 }
 
-export default function ErrorPage({ error }: Props) {
+export default function ErrorPage({ error }: ErrorPageProps) {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isNavigating = Boolean(navigation.location);
+
+  useEffect(() => {
+    document.title = 'Something went wrong!';
+  }, []);
 
   useEffect(() => {
     if (isNavigating) {
