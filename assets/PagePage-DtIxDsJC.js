@@ -1,4 +1,4 @@
-import{c as t,g as s,j as e}from"./index-CsyGDLYn.js";import{B as l}from"./Breadcrumbs-DJa_ChYg.js";/**
+import{c as t,g as s,j as e}from"./index-ATge19yI.js";import{B as l}from"./Breadcrumbs-CZK-pdbE.js";/**
  * @license lucide-react v0.552.0 - ISC
  *
  * This source code is licensed under the ISC license.
@@ -9,4 +9,4 @@ import{c as t,g as s,j as e}from"./index-CsyGDLYn.js";import{B as l}from"./Bread
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */const r=[["path",{d:"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",key:"1oefj6"}],["path",{d:"M14 2v5a1 1 0 0 0 1 1h5",key:"wfsgrz"}],["path",{d:"M10 9H8",key:"b1mrlr"}],["path",{d:"M16 13H8",key:"t4e002"}],["path",{d:"M16 17H8",key:"z1uh3a"}]],d=t("file-text",r);function p(){const{data:o}=s(),a=o.page;return e.jsxs("div",{className:"flex flex-col gap-5",children:[e.jsx(l,{items:[{label:"Pages",icon:n},{label:a.title,icon:d}]}),e.jsx("h1",{className:"text-3xl font-semibold",children:a.title}),e.jsx("article",{className:"prose",dangerouslySetInnerHTML:{__html:a.content}})]})}export{p as default};
-//# sourceMappingURL=PagePage-CWrLXqpr.js.map
+//# sourceMappingURL=PagePage-DtIxDsJC.js.map
