@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy production
 
 on:
   push:
@@ -41,28 +41,28 @@ jobs:
         env:
           VITE_BASE: "https://cdn.jsdelivr.net/gh/${{ github.repository }}@release-${{ github.sha }}"
 
-      - name: Ensure static branch exists
+      - name: Ensure static-prod branch exists
         run: |
           current_branch=$(git symbolic-ref --short HEAD)
-          if git show-ref --verify --quiet refs/remotes/origin/static; then
-            echo "✅ Branch 'static' exists"
+          if git show-ref --verify --quiet refs/remotes/origin/static-prod; then
+            echo "✅ Branch 'static-prod' exists"
           else
-            echo "⚡ Creating 'static' branch"
+            echo "⚡ Creating 'static-prod' branch"
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git checkout --orphan static
+            git checkout --orphan static-prod
             git reset --hard
-            git commit --allow-empty -m "chore: initial commit for static branch"
-            git push origin static
-            git checkout static
+            git commit --allow-empty -m "chore: initial commit for static-prod branch"
+            git push origin static-prod
+            git checkout static-prod
           fi
 
-      - name: Deploy to static branch
+      - name: Deploy to static-prod branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: static
+          publish_branch: static-prod
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
           commit_message: "Deploy static assets from release branch"

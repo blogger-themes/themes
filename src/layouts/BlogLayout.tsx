@@ -9,6 +9,7 @@ const PagePage = lazy(() => import('@/pages/PagePage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const LabelSearchPage = lazy(() => import('@/pages/LabelSearchPage'));
 const SearchPage = lazy(() => import('@/pages/SearchPage'));
+const ArchivePage = lazy(() => import('@/pages/ArchivePage'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 export default function BlogLayout() {
@@ -30,6 +31,8 @@ export default function BlogLayout() {
         <PostPage />
       ) : data.view.isPage ? (
         <PagePage />
+      ) : data.view.isArchive ? (
+        <ArchivePage />
       ) : data.view.isBlog ? (
         <BlogPage />
       ) : data.view.isLabelSearch ? (
