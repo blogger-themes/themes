@@ -1,5 +1,5 @@
 import { createContext, type PropsWithChildren, useContext } from 'react';
-import type { BloggerData } from '@/utils/blogger-data';
+import type { BloggerData } from '@/lib/blogger-data';
 
 export interface UseBloggerProps {
   data: BloggerData;
@@ -11,7 +11,7 @@ export function useBlogger() {
   const context = useContext(BloggerContext);
 
   if (!context) {
-    throw new Error('useBloggerData must be used within a BloggerDataProvider');
+    throw new Error('useBlogger must be used within a BloggerProvider');
   }
 
   return context;

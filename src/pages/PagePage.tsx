@@ -1,7 +1,7 @@
 import { BookTextIcon, FileTextIcon } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useBlogger } from '@/contexts/blogger';
-import type { Post } from '@/utils/blogger-data';
+import type { Post } from '@/lib/blogger-data';
 
 export default function PagePage() {
   const { data } = useBlogger();

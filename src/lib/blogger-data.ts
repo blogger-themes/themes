@@ -311,31 +311,28 @@ export function parseBloggerData(doc: Document): BloggerData {
     metaImage,
     metaOpenGraph,
     metaTwitterCard,
-  ] = (
-    [
-      ['data'],
-      ['labels', {}],
-      ['authors', []],
-      ['posts', {}],
-      ['comments', null],
-      ['header', null],
-      ['contact'],
-      ['stats'],
-      ['featured', null],
-      ['popular', null],
-      ['meta:favicon'],
-      ['meta:keywords', null],
-      ['meta:image', null],
-      ['meta:opengraph', null],
-      ['meta:twittercard', null],
-    ] as const
-  ).map((descriptor) => {
-    const name = descriptor[0];
-    const defaultValue = descriptor[1];
-    const hasDefaultValue = 1 in descriptor;
+  ] = [
+    { id: 'data' },
+    { id: 'labels', fallback: {} },
+    { id: 'authors', fallback: [] },
+    { id: 'posts', fallback: {} },
+    { id: 'comments', fallback: null },
+    { id: 'header', fallback: null },
+    { id: 'contact' },
+    { id: 'stats' },
+    { id: 'featured', fallback: null },
+    { id: 'popular', fallback: null },
+    { id: 'meta:favicon' },
+    { id: 'meta:keywords', fallback: null },
+    { id: 'meta:image', fallback: null },
+    { id: 'meta:opengraph', fallback: null },
+    { id: 'meta:twittercard', fallback: null },
+  ].map((descriptor) => {
+    const { id, fallback } = descriptor;
+    const hasFallback = 'fallback' in descriptor;
 
-    const elementId = `json:${name}`;
-    const element = doc.getElementById(elementId) as HTMLScriptElement;
+    const elementId = `json:${id}`;
+    const element = doc.getElementById(elementId) as HTMLScriptElement | null;
 
     if (element) {
       if (element.tagName !== 'SCRIPT') {
@@ -357,10 +354,10 @@ export function parseBloggerData(doc: Document): BloggerData {
       }
       return json;
     }
-    if (!hasDefaultValue) {
+    if (!hasFallback) {
       throw new Error(`Missing element with id '${elementId}'`);
     }
-    return defaultValue;
+    return fallback;
   }) as [
     BloggerData,
     Record<string, number>,
@@ -431,7 +428,7 @@ export function parseBloggerData(doc: Document): BloggerData {
 
   data.contact = contact;
 
-  const statsEndpoint = new URL(stats.endpoint, doc.baseURI);
+  const statsEndpoint = new URL(stats.endpoint, data.blog.canonicalHomepageUrl);
   data.stats = {
     endpoint: statsEndpoint.origin + statsEndpoint.pathname,
     token: statsEndpoint.searchParams.get('token') as string,
@@ -466,25 +463,60 @@ export interface FetchBloggerDataOptions {
   content?: boolean;
 }
 
-export async function fetchBloggerData(url: string | URL, { mobile = 'ignore', content = true }: FetchBloggerDataOptions = {}) {
-  const requestUrl = new URL(url);
-  requestUrl.searchParams.set('view', `-Json${content ? '' : '-NoPostContent'}`);
-  if (mobile === 'force') {
-    requestUrl.searchParams.set('m', '1');
-  } else if (mobile === 'drop') {
-    requestUrl.searchParams.set('m', '0');
-  }
+const MOBILE_REGEX =
+  /(?:phone|windows\s+phone|ipod|blackberry|(?:android|bb\d+|meego|silk|googlebot) .+? mobile|palm|windows\s+ce|opera mini|avantgo|mobilesafari|docomo|KAIOS)/i;
+const TABLET_REGEX = /(?:ipad|playbook|(?:android|bb\d+|meego|silk)(?! .+? mobile))/i;
 
-  const response = await fetch(requestUrl);
-  if (!response.headers.get('Content-Type')?.startsWith('text/html')) {
-    throw new Error('Response is not html', { cause: response });
-  }
+export function fetchBlogger(url: string | URL, { mobile = 'ignore', content = true }: FetchBloggerDataOptions = {}) {
+  const result = {} as {
+    response?: Response;
+    data?: BloggerData;
+  };
 
-  if (response.status < 200 || response.status > 404) {
-    throw new Error(`Response code ${response.status} (${response.statusText || 'Unknown'})`, { cause: response });
-  }
+  const asResponse = async () => {
+    if (result.response) {
+      return result.response;
+    }
 
-  const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+    const requestUrl = new URL(url);
+    requestUrl.searchParams.set('view', `-Json${content ? '' : '-NoPostContent'}`);
+    if (mobile === 'force') {
+      requestUrl.searchParams.set('m', '1');
+    } else if (mobile === 'drop') {
+      requestUrl.searchParams.set('m', '0');
+    } else if (MOBILE_REGEX.test(navigator.userAgent) || TABLET_REGEX.test(navigator.userAgent)) {
+      requestUrl.searchParams.set('m', '1');
+    }
 
-  return parseBloggerData(doc);
+    const response = await fetch(requestUrl);
+
+    if (response.status < 200 || response.status > 404) {
+      throw new Error(`Response code ${response.status} (${response.statusText || 'Unknown'})`, { cause: response });
+    }
+
+    result.response = response;
+
+    return result.response;
+  };
+
+  const asData = async () => {
+    if (result.data) {
+      return result.data;
+    }
+
+    const response = await asResponse();
+
+    if (!response.headers.get('Content-Type')?.startsWith('text/html')) {
+      throw new Error('Response is not html', { cause: response });
+    }
+
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    result.data = parseBloggerData(doc);
+
+    return result.data;
+  };
+
+  return { asResponse, asData };
 }

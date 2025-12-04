@@ -1,8 +1,8 @@
 import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderData } from 'react-router';
-import { BloggerProvider } from './contexts/blogger';
-import BlogLayout from './layouts/BlogLayout';
-import ErrorPage from './pages/ErrorPage';
-import { type BloggerData, fetchBloggerData, parseBloggerData } from './utils/blogger-data';
+import { BloggerProvider } from '@/contexts/blogger';
+import BlogLayout from '@/layouts/BlogLayout';
+import { type BloggerData, fetchBlogger, parseBloggerData } from '@/lib/blogger-data';
+import ErrorPage from '@/pages/ErrorPage';
 
 const initialBloggerData = parseBloggerData(document);
 
@@ -34,9 +34,9 @@ export interface RootLoaderData {
 
 const rootLoader = (async ({ request }): Promise<RootLoaderData> => {
   if (shouldRevalidate({ nextUrl: request.url })) {
-    const newData = await fetchBloggerData(request.url, {
+    const newData = await fetchBlogger(request.url, {
       mobile: bloggerData.initial.blog.isMobileRequest ? 'force' : 'ignore',
-    });
+    }).asData();
 
     bloggerData.current = newData;
   }

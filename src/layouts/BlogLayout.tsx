@@ -19,11 +19,23 @@ export default function BlogLayout() {
     document.title = data.meta.title;
   }, [data]);
 
-  return data.view.isError ? (
-    <RootLayout>
-      <NotFound />
-    </RootLayout>
-  ) : (
+  if (
+    !data.view.isHomepage &&
+    !data.view.isPost &&
+    !data.view.isPage &&
+    !data.view.isArchive &&
+    !data.view.isBlog &&
+    !data.view.isLabelSearch &&
+    !data.view.isSearch
+  ) {
+    return (
+      <RootLayout>
+        <NotFound />
+      </RootLayout>
+    );
+  }
+
+  return (
     <PageLayout data={data}>
       {data.view.isHomepage ? (
         <HomePage />
@@ -33,16 +45,12 @@ export default function BlogLayout() {
         <PagePage />
       ) : data.view.isArchive ? (
         <ArchivePage />
-      ) : data.view.isBlog ? (
-        <BlogPage />
       ) : data.view.isLabelSearch ? (
         <LabelSearchPage />
       ) : data.view.isSearch && data.view.search ? (
         <SearchPage />
-      ) : data.view.isError ? (
-        <NotFound />
       ) : (
-        <>No matching page</>
+        <BlogPage />
       )}
     </PageLayout>
   );

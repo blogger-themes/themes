@@ -12,7 +12,7 @@
     "lint:fix": "pnpm run lint --write",
     "check": "biome check --max-diagnostics=150 --log-kind=compact .",
     "check:fix": "pnpm run check --write",
-    "check:types": "tsc --noEmit",
+    "check:types": "tsc --noEmit --project ./tsconfig.app.json",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",

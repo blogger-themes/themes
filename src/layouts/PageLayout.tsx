@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import type { BloggerData } from '@/utils/blogger-data';
+import type { BloggerData } from '@/lib/blogger-data';
 import RootLayout from './RootLayout';
 
 export interface PageLayoutProps extends PropsWithChildren {
