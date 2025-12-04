@@ -17,7 +17,7 @@ export default function BlogLayout() {
 
   useEffect(() => {
     document.title = data.meta.title;
-  }, [data]);
+  }, [data.meta.title]);
 
   if (
     !data.view.isHomepage &&
