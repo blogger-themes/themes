@@ -1,0 +1,2 @@
+import{j as r}from"./index-BiGFhBcg.js";import{B as e}from"./Breadcrumbs-BgVWT0dZ.js";import{L as o}from"./library-big-CZ8Qh720.js";function l(){return r.jsxs("div",{className:"flex flex-col gap-5",children:[r.jsx(e,{items:[{label:"Blog",icon:o}]}),r.jsx("div",{children:"Blog Page"})]})}export{l as default};
+//# sourceMappingURL=BlogPage-e4M0cgGL.js.map
