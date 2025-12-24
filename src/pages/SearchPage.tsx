@@ -1,7 +1,7 @@
 import { SearchIcon } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useBlogger } from '@/contexts/blogger';
-import type { QuerySearch } from '@/lib/blogger-data';
+import type { QuerySearch } from '@/lib/blogger';
 
 export default function SearchPage() {
   const { data } = useBlogger();

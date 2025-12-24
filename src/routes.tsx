@@ -1,7 +1,7 @@
 import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderData } from 'react-router';
 import { BloggerProvider } from '@/contexts/blogger';
 import BlogLayout from '@/layouts/BlogLayout';
-import { type BloggerData, fetchBlogger, parseBloggerData } from '@/lib/blogger-data';
+import { type BloggerData, fetchBlogger, parseBloggerData } from '@/lib/blogger';
 import ErrorPage from '@/pages/ErrorPage';
 
 const initialBloggerData = parseBloggerData(document);

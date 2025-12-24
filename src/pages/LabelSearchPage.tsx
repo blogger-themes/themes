@@ -1,7 +1,7 @@
 import { TagIcon, TagsIcon } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useBlogger } from '@/contexts/blogger';
-import type { LabelSearch } from '@/lib/blogger-data';
+import type { LabelSearch } from '@/lib/blogger';
 
 export default function LabelSearchPage() {
   const { data } = useBlogger();

@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useBlogger } from '@/contexts/blogger';
-import type { BlogAuthor, PostMinimal } from '@/lib/blogger-data';
+import type { BlogAuthor, PostMinimal } from '@/lib/blogger';
 
 function resizeAvatarImage(source: string, size: number) {
   return new GoogleImage(source, { existing: false, pass: true })

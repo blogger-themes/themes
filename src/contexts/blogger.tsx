@@ -1,5 +1,5 @@
 import { createContext, type PropsWithChildren, useContext } from 'react';
-import type { BloggerData } from '@/lib/blogger-data';
+import type { BloggerData } from '@/lib/blogger';
 
 export interface UseBloggerProps {
   data: BloggerData;

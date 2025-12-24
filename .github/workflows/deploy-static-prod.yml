@@ -1,4 +1,4 @@
-name: Deploy production
+name: Deploy static (production)
 
 on:
   push:
