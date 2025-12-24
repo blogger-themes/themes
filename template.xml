@@ -286,7 +286,7 @@
     <!--blogger-plugin:head:begin--><!--blogger-plugin:head:end-->
 
     <b:else/>
-    <b:comment><!--blogger-plugin:head:begin--></b:comment><link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-Dzg23a36.css' rel='stylesheet'/><script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-BiGFhBcg.js' type='module'></script><b:comment><!--blogger-plugin:head:end--></b:comment>
+    <b:comment><!--blogger-plugin:head:begin--></b:comment><link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-Dzg23a36.css' rel='stylesheet'/><script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-BUSDFkHG.js' type='module'></script><b:comment><!--blogger-plugin:head:end--></b:comment>
   </b:if>
 
   <b:if cond='false'><b:skin><![CDATA[]]></b:skin></b:if>
