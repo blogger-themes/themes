@@ -238,12 +238,16 @@ export function parseBloggerData(source: string | Document): BloggerData {
     }
 
     if (manifest.icons && manifest.shortcuts) {
-      const defaultIcon = manifest.icons.find((icon) => icon.sizes === '96x96') ?? manifest.icons[0];
+      const icon = manifest.icons.find((icon) => icon.sizes === '96x96') ?? manifest.icons[0];
 
       for (const shortcut of manifest.shortcuts) {
         if (!shortcut.icons) {
           shortcut.icons = [];
-          shortcut.icons.push(defaultIcon);
+          shortcut.icons.push({
+            src: icon.src,
+            sizes: icon.sizes,
+            type: icon.type,
+          });
         }
       }
     }
