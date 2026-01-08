@@ -1,0 +1,2 @@
+import{c as s,m as a,j as e}from"./index-CxkMf36N.js";import{B as o}from"./Breadcrumbs-jd59Zly3.js";const t=[["path",{d:"m21 21-4.34-4.34",key:"14j7rj"}],["circle",{cx:"11",cy:"11",r:"8",key:"4ej97u"}]],i=s("search",t);function d(){const{data:c}=a(),r=c.view.search;return e.jsxs("div",{className:"flex flex-col gap-5",children:[e.jsx(o,{items:[{label:"Search",icon:i}]}),e.jsxs("div",{children:["Query: ",r.query]})]})}export{d as default};
+//# sourceMappingURL=SearchPage-BpZ8JZA1.js.map
