@@ -90,6 +90,7 @@ export interface MetaImage {
 
 export interface Favicon extends MetaImage {
   isCustom: boolean;
+  sizes: Record<16 | 24 | 32 | 36 | 48 | 64 | 72 | 96 | 144 | 192 | 512, string> | null;
 }
 
 export interface OpenGraphImage extends MetaImage {
@@ -275,6 +276,65 @@ export interface Popular {
   posts: Record<string, PostMinimal | Post>;
 }
 
+export type ManifestDirection = 'auto' | 'ltr' | 'rtl';
+
+export type ManifestOrientation =
+  | 'any'
+  | 'natural'
+  | 'portrait'
+  | 'portrait-primary'
+  | 'portrait-secondary'
+  | 'landscape'
+  | 'landscape-primary'
+  | 'landscape-secondary';
+
+export type ManifestDisplay = 'fullscreen' | 'standalone' | 'minimal-ui' | 'browser';
+
+export interface ManifestImage {
+  src: string;
+  sizes?: string;
+  type?: string;
+}
+
+export type ManifestIconPurpose = 'any' | 'maskable' | 'monochrome';
+
+export interface ManifestIcon extends ManifestImage {
+  purpose?: ManifestIconPurpose;
+}
+
+export type ManifestScreenshotFormFactor = 'narrow' | 'wide';
+
+export interface ManifestScreenshot extends ManifestImage {
+  label?: string;
+  form_factor?: ManifestScreenshotFormFactor;
+}
+
+export interface ManifestShortcut {
+  name: string;
+  short_name?: string;
+  description?: string;
+  url: string;
+  icons?: ManifestIcon[];
+}
+
+export interface WebManifest {
+  id?: string;
+  start_url?: string;
+  name: string;
+  short_name?: string;
+  description?: string;
+  lang?: string;
+  dir?: ManifestDirection;
+  orientation?: ManifestOrientation;
+  display?: ManifestDisplay;
+  theme_color?: string;
+  background_color?: string;
+  prefer_related_applications?: boolean;
+  icons?: ManifestIcon[];
+  screenshots?: ManifestScreenshot[];
+  shortcuts?: ManifestShortcut[];
+}
+
 export interface BloggerData {
   blog: Blog;
   view: View;
@@ -292,4 +352,5 @@ export interface BloggerData {
   adsense?: Adsense;
   featured?: Featured;
   popular?: Popular;
+  manifest?: WebManifest;
 }

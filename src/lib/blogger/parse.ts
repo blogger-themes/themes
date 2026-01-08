@@ -13,6 +13,7 @@ import type {
   Post,
   PostMinimal,
   TwitterCard,
+  WebManifest,
 } from './types';
 
 function createParser(source: string | Document) {
@@ -86,6 +87,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     metaImage,
     metaOpenGraph,
     metaTwitterCard,
+    manifest,
   ] = [
     { id: 'data' },
     { id: 'labels', fallback: {} },
@@ -102,6 +104,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     { id: 'meta:image', fallback: null },
     { id: 'meta:opengraph', fallback: null },
     { id: 'meta:twittercard', fallback: null },
+    { id: 'webmanifest', fallback: null },
   ].map((descriptor) => {
     const { id, fallback } = descriptor;
     const hasFallback = 'fallback' in descriptor;
@@ -133,6 +136,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     MetaImage | null,
     OpenGraph | null,
     TwitterCard | null,
+    WebManifest | null,
   ];
 
   const meta: Meta = {
@@ -212,6 +216,39 @@ export function parseBloggerData(source: string | Document): BloggerData {
       }
     }
     data.popular = popular;
+  }
+
+  if (manifest) {
+    if (!manifest.description && header?.description) {
+      manifest.description = header.description;
+    }
+
+    if (!manifest.icons && metaFavicon.sizes) {
+      manifest.icons = [];
+      const sizes = [16, 24, 32, 36, 48, 64, 72, 96, 144, 192, 512] as const;
+      for (let i = 0; i < sizes.length; i++) {
+        const size = sizes[i];
+        manifest.icons.push({
+          src: metaFavicon.sizes[size],
+          sizes: `${size}x${size}`,
+          type: 'image/png',
+          purpose: i === 9 ? 'maskable' : 'any',
+        });
+      }
+    }
+
+    if (manifest.icons && manifest.shortcuts) {
+      const defaultIcon = manifest.icons.find((icon) => icon.sizes === '96x96') ?? manifest.icons[0];
+
+      for (const shortcut of manifest.shortcuts) {
+        if (!shortcut.icons) {
+          shortcut.icons = [];
+          shortcut.icons.push(defaultIcon);
+        }
+      }
+    }
+
+    data.manifest = manifest;
   }
 
   return data;

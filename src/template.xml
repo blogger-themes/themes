@@ -105,17 +105,17 @@
     <b:comment><!--[ Default Favicon ]--></b:comment>
     <link expr:href='data:blog.blogspotFaviconUrl' rel='icon' type='image/x-icon'/>
     <link expr:href='data:blog.blogspotFaviconUrl' rel='shortcut icon' type='image/x-icon'/>
-    <script id='json:meta:favicon' type='application/json'>{&quot;src&quot;:&quot;<data:blog.blogspotFaviconUrl.jsonEscaped/>&quot;,&quot;width&quot;:null,&quot;height&quot;:null,&quot;isCustom&quot;:false}</script>
+    <script id='json:meta:favicon' type='application/json'>{&quot;src&quot;:&quot;<data:blog.blogspotFaviconUrl.jsonEscaped/>&quot;,&quot;width&quot;:null,&quot;height&quot;:null,&quot;isCustom&quot;:false,&quot;sizes&quot;:null}</script>
   </b:if>
 
   <b:if cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_head&quot;)'>
     <b:eval expr='&quot;&lt;!--&quot;'/>
-    <b:section class='bl-grid-section bl-hide-description' cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_head&quot;)' id='theme_section_head' showaddelement='true'>
+    <b:section class='bl-grid-section bl-hide-description' id='theme_section_head' showaddelement='true'>
       <b:widget id='Image01' locked='true' title='Favicon' type='Image' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='displayUrl'>//blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisldTSPR5qQSsrqZDyfYV81HFSq4Pko5u8xpbzKJ7V05CZAaCkfxG550uqbp2xlCxukxcVL4i2so2XxNri-wqqUO0yuVLLznfFes1rdmg7Ywq8pWE8FXwWQfcyrNiAPlyI3_ngX12x7-KGzAVPfjiTWPMP3HdwelG4pn729xMfH05-hdWVbQyaIsgMkQg/s160/favicon.png</b:widget-setting>
           <b:widget-setting name='displayHeight'>160</b:widget-setting>
-          <b:widget-setting name='sectionWidth'>1231</b:widget-setting>
+          <b:widget-setting name='sectionWidth'>150</b:widget-setting>
           <b:widget-setting name='shrinkToFit'>false</b:widget-setting>
           <b:widget-setting name='displayWidth'>160</b:widget-setting>
           <b:widget-setting name='link'/>
@@ -130,21 +130,29 @@
         </b:includable>
         <b:includable id='content'>
           <b:comment><!--[ Custom Favicon ]--></b:comment>
-          <meta expr:content='resizeImage(data:image, 144, &quot;1:1&quot;)' name='msapplication-TileImage'/>
-          <link expr:href='resizeImage(data:image, 57, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='57x57'/>
-          <link expr:href='resizeImage(data:image, 60, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='60x60'/>
-          <link expr:href='resizeImage(data:image, 72, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='72x72'/>
-          <link expr:href='resizeImage(data:image, 76, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='76x76'/>
-          <link expr:href='resizeImage(data:image, 114, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='114x114'/>
-          <link expr:href='resizeImage(data:image, 120, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='120x120'/>
-          <link expr:href='resizeImage(data:image, 144, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='144x144'/>
-          <link expr:href='resizeImage(data:image, 152, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='152x152'/>
-          <link expr:href='resizeImage(data:image, 180, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='180x180'/>
-          <link expr:href='resizeImage(data:image, 16, &quot;1:1&quot;)' rel='icon' sizes='16x16' type='image/png'/>
-          <link expr:href='resizeImage(data:image, 32, &quot;1:1&quot;)' rel='icon' sizes='32x32' type='image/png'/>
-          <link expr:href='resizeImage(data:image, 96, &quot;1:1&quot;)' rel='icon' sizes='96x96' type='image/png'/>
-          <link expr:href='resizeImage(data:image, 192, &quot;1:1&quot;)' rel='icon' sizes='192x192' type='image/png'/>
-          <script id='json:meta:favicon' type='application/json'>{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;width&quot;:<b:if cond='data:image.width'><data:image.width/><b:else/>null</b:if>,&quot;height&quot;:<b:if cond='data:image.height'><data:image.height/><b:else/>null</b:if>,&quot;isCustom&quot;:true}</script>
+          <b:if cond='data:image.isResizable'>
+            <meta expr:content='resizeImage(data:image, 144, &quot;1:1&quot;)' name='msapplication-TileImage'/>
+            <link expr:href='resizeImage(data:image, 57, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='57x57'/>
+            <link expr:href='resizeImage(data:image, 60, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='60x60'/>
+            <link expr:href='resizeImage(data:image, 72, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='72x72'/>
+            <link expr:href='resizeImage(data:image, 76, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='76x76'/>
+            <link expr:href='resizeImage(data:image, 114, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='114x114'/>
+            <link expr:href='resizeImage(data:image, 120, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='120x120'/>
+            <link expr:href='resizeImage(data:image, 144, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='144x144'/>
+            <link expr:href='resizeImage(data:image, 152, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='152x152'/>
+            <link expr:href='resizeImage(data:image, 180, &quot;1:1&quot;)' rel='apple-touch-icon' sizes='180x180'/>
+            <link expr:href='resizeImage(data:image, 16, &quot;1:1&quot;)' rel='icon' sizes='16x16' type='image/png'/>
+            <link expr:href='resizeImage(data:image, 32, &quot;1:1&quot;)' rel='icon' sizes='32x32' type='image/png'/>
+            <link expr:href='resizeImage(data:image, 96, &quot;1:1&quot;)' rel='icon' sizes='96x96' type='image/png'/>
+            <link expr:href='resizeImage(data:image, 192, &quot;1:1&quot;)' rel='icon' sizes='192x192' type='image/png'/>
+
+            <b:else/>
+            <b:with value='&quot;image/&quot; + (data:image contains &quot;.ico&quot; ? &quot;x-icon&quot; : (data:image contains &quot;.svg&quot; ? &quot;svg&quot; : &quot;png&quot;))' var='type'>
+              <link expr:href='data:image' expr:type='data:type' rel='icon'/>
+              <link expr:href='data:image' expr:type='data:type' rel='shortcut icon'/>
+            </b:with>
+          </b:if>
+          <script id='json:meta:favicon' type='application/json'>{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;width&quot;:<b:if cond='data:image.width'><data:image.width/><b:else/>null</b:if>,&quot;height&quot;:<b:if cond='data:image.height'><data:image.height/><b:else/>null</b:if>,&quot;isCustom&quot;:true,&quot;sizes&quot;:<b:if cond='data:image.isResizable'>{<b:with value='[16, 24, 32, 36, 48, 64, 72, 96, 144, 192, 512]' var='sizes'><b:loop index='i' values='data:sizes' var='size'>&quot;<data:size/>&quot;:&quot;<b:eval expr='resizeImage(data:image, data:size, &quot;1:1&quot;).jsonEscaped'/>&quot;<b:if cond='data:i &lt; (data:sizes.length - 1)'>,</b:if></b:loop></b:with>}<b:else/>null</b:if>}</script>
         </b:includable>
       </b:widget>
       <b:widget cond='!data:view.isError' id='TextList01' locked='true' title='Meta Keywords' type='TextList' version='2' visible='true'>
@@ -540,6 +548,25 @@ body#layout .bl-hide-element{display:none!important}
         <b:includable id='threadedCommentJs'/>
         <b:includable id='threadedComments'/>
         <b:includable id='tooltipCss'/>
+      </b:widget>
+    </b:section>
+
+    <b:comment><!--[ Theme plugins section ]--></b:comment>
+    <b:section class='bl-grid-section bl-hide-description' cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_plugins&quot;)' id='theme_section_plugins' showaddelement='false'>
+      <b:widget id='LinkList01' locked='true' title='Web App Manifest' type='LinkList' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='link-3'>/seach/label/Shortcut1</b:widget-setting>
+          <b:widget-setting name='sorting'>NONE</b:widget-setting>
+          <b:widget-setting name='text-1'>screenshot_narrow</b:widget-setting>
+          <b:widget-setting name='link-1'>https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwDWcsKnjPxz02ZEiymH2uughzuoqJS8zvO5boYT04_zJOo398zLGODzjkwpql29budpWu7gFI_4ngwJIyj62yo19YztcADI5ROOjHPWgXYF2_pN3606-yiYQcdyxlLzUXwpMSzJ1MDIHhhhoESwWZ9Np6_aG2NJChsaIXO8HA-pt04Ef3MChVr33EMJw/s0/narrow-screen.png</b:widget-setting>
+          <b:widget-setting name='text-0'>id</b:widget-setting>
+          <b:widget-setting name='link-2'>https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgfmE071mkOsMFsRM_ndYJHDzDKhi267EMW-nDDBjfS2tfV5E6sMTZvdypOkaQoxo6iGxFwAUBVV3F54vD1vO44ppaKlEvplWAo0TrTpIf9wFMjRUCAmRJSoYXo8sSIXvIKf4xA0ZFgcZuCzL8jcwow3dKQc4xAhKCbvxqkzdgAJfJfUdIlG4fp3YRTwIw/s0/wide-screen.png</b:widget-setting>
+          <b:widget-setting name='text-3'>Shortcut 1</b:widget-setting>
+          <b:widget-setting name='link-0'>/?view=app</b:widget-setting>
+          <b:widget-setting name='text-2'>screenshot_wide</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main'><b:with value='[&quot;id&quot;, &quot;start_url&quot;, &quot;name&quot;, &quot;short_name&quot;, &quot;description&quot;, &quot;lang&quot;, &quot;dir&quot;, &quot;orientation&quot;, &quot;display&quot;, &quot;theme_color&quot;, &quot;background_color&quot;, &quot;prefer_related_applications&quot;, &quot;icon&quot;]' var='properties'><b:with value='data:properties map (p =&gt; { name: data:p, value: ((data:links filter (l =&gt; l.name == data:p and l.target not in [&quot;https://&quot;, &quot;#&quot;])).last.target) })' var='fields'><script id='json:webmanifest' type='application/json'>{&quot;id&quot;:&quot;<b:eval expr='(data:fields[0].value ?: &quot;/?view=app&quot;).jsonEscaped'/>&quot;,&quot;start_url&quot;:&quot;<b:eval expr='(data:fields[1].value ?: params(data:blog.homepageUrl.canonical.https, { utm_source: &quot;homescreen&quot;, view: &quot;app&quot; })).jsonEscaped'/>&quot;,&quot;name&quot;:&quot;<b:eval expr='(data:fields[2].value ?: data:blog.title).jsonEscaped'/>&quot;,&quot;short_name&quot;:&quot;<b:eval expr='(data:fields[3].value ?: data:blog.title).jsonEscaped'/>&quot;<b:if cond='data:fields[4].value'>,&quot;description&quot;:&quot;<b:eval expr='data:fields[4].value.jsonEscaped'/>&quot;</b:if>,&quot;lang&quot;:&quot;<b:eval expr='(data:fields[5].value ?: data:blog.locale).jsonEscaped'/>&quot;,&quot;dir&quot;:&quot;<b:eval expr='(data:fields[6].value in [&quot;auto&quot;, &quot;ltr&quot;, &quot;rtl&quot;] ? data:fields[6].value : data:blog.languageDirection).jsonEscaped'/>&quot;,&quot;orientation&quot;:&quot;<b:eval expr='(data:fields[7].value in [&quot;any&quot;, &quot;natural&quot;, &quot;portrait&quot;, &quot;portrait-primary&quot;, &quot;portrait-secondary&quot;, &quot;landscape&quot;, &quot;landscape-primary&quot;, &quot;landscape-secondary&quot;] ? data:fields[7].value : &quot;any&quot;).jsonEscaped'/>&quot;,&quot;display&quot;:&quot;<b:eval expr='(data:fields[8].value in [&quot;fullscreen&quot;, &quot;standalone&quot;, &quot;minimal-ui&quot;, &quot;browser&quot;] ? data:fields[8].value : &quot;minimal-ui&quot;).jsonEscaped'/>&quot;,&quot;theme_color&quot;:&quot;<b:eval expr='(data:fields[9].value ?: &quot;#ffffff&quot;).jsonEscaped'/>&quot;,&quot;background_color&quot;:&quot;<b:eval expr='(data:fields[10].value ?: &quot;#ffffff&quot;).jsonEscaped'/>&quot;,&quot;prefer_related_applications&quot;:<b:eval expr='data:fields[11].value in [&quot;true&quot;, &quot;false&quot;] ? data:fields[11].value : &quot;false&quot;'/><b:if cond='data:fields[12].value'><b:with value='resizeImage((data:fields[12].value not contains &quot;http://&quot; and data:fields[12].value not contains &quot;https://&quot; ? (snippet(data:view.url) contains &quot;https://&quot; ? &quot;https:&quot; : &quot;http:&quot;) + data:fields[12].value : data:fields[12].value), 512, &quot;1:1&quot;)' var='image'><b:if cond='data:image.isResizable'>,&quot;icons&quot;:[<b:with value='[16, 24, 32, 36, 48, 64, 72, 96, 144, 192, 512]' var='sizes'><b:loop index='i' values='data:sizes' var='size'>{&quot;src&quot;:&quot;<b:eval expr='resizeImage(data:image, data:size, &quot;1:1&quot;)'/>&quot;,&quot;sizes&quot;:&quot;<b:eval expr='(data:size + &quot;x&quot; + data:size).jsonEscaped'/>&quot;,&quot;type&quot;:&quot;<b:eval expr='(&quot;image/png&quot;).jsonEscaped'/>&quot;,&quot;purpose&quot;:&quot;<b:eval expr='(data:i == 9 ? &quot;maskable&quot; : &quot;any&quot;).jsonEscaped'/>&quot;}<b:if cond='data:i &lt; (data:sizes.length - 1)'>,</b:if></b:loop></b:with>]</b:if></b:with></b:if><b:with value='data:links filter (l =&gt; l.name in [&quot;screenshot&quot;, &quot;screenshot_narrow&quot;, &quot;screenshot_wide&quot;] and l.target not in [&quot;https://&quot;, &quot;#&quot;]) map (l =&gt; { source: data:l.target, form: (data:l.name == &quot;screenshot_wide&quot; ? &quot;wide&quot; : &quot;narrow&quot;) })' var='screens'><b:if cond='data:screens.notEmpty'>,&quot;screenshots&quot;:[<b:loop index='i' values='data:screens' var='screen'><b:with value='resizeImage((data:screen.source not contains &quot;http://&quot; and data:screen.source not contains &quot;https://&quot; ? (snippet(data:view.url) contains &quot;https://&quot; ? &quot;https:&quot; : &quot;http:&quot;) + data:screen.source : data:screen.source), (data:screen.form == &quot;wide&quot; ? 720 : 540), (data:screen.form == &quot;wide&quot; ? &quot;4:3&quot; : &quot;3:4&quot;))' var='image'>{&quot;src&quot;:&quot;<data:image.jsonEscaped/>&quot;,&quot;sizes&quot;:&quot;<b:eval expr='(data:screen.form == &quot;wide&quot; ? &quot;720x540&quot; : &quot;540x720&quot;).jsonEscaped'/>&quot;,&quot;type&quot;:&quot;<b:eval expr='(&quot;image/png&quot;).jsonEscaped'/>&quot;,&quot;form_factor&quot;:&quot;<b:eval expr='data:screen.form.jsonEscaped'/>&quot;}</b:with><b:if cond='data:i &lt; (data:screens.length - 1)'>,</b:if></b:loop>]</b:if></b:with><b:with value='data:links filter (l =&gt; l.name not in data:properties and l.name not in [&quot;screenshot&quot;, &quot;screenshot_narrow&quot;, &quot;screenshot_wide&quot;] and l.name not contains &quot;[icon]&quot; and l.target not in [&quot;https://&quot;, &quot;#&quot;])' var='shortcuts'><b:if cond='data:shortcuts.notEmpty'>,&quot;shortcuts&quot;:[<b:loop index='i' values='data:shortcuts' var='shortcut'>{&quot;name&quot;:&quot;<data:shortcut.name.jsonEscaped/>&quot;,&quot;url&quot;:&quot;<b:eval expr='appendParams(path(data:blog.homepageUrl.canonical.https, data:shortcut.target), { utm_source: &quot;homescreen&quot;, view: &quot;app&quot; }).jsonEscaped'/>&quot;<b:with value='(data:links filter (l =&gt; l.name == (data:shortcut.name + &quot; [icon]&quot;) and l.target not in [&quot;https://&quot;, &quot;#&quot;])).last.target ?: data:fields[12].value' var='source'><b:if cond='data:source'>,&quot;icons&quot;:[{&quot;src&quot;:&quot;<b:eval expr='resizeImage((data:source not contains &quot;http://&quot; and data:source not contains &quot;https://&quot; ? (snippet(data:view.url) contains &quot;https://&quot; ? &quot;https:&quot; : &quot;http:&quot;) + data:source : data:source), 96, &quot;1:1&quot;).jsonEscaped'/>&quot;,&quot;sizes&quot;:&quot;<b:eval expr='(&quot;96x96&quot;).jsonEscaped'/>&quot;,&quot;type&quot;:&quot;<b:eval expr='(&quot;image/png&quot;).jsonEscaped'/>&quot;}]</b:if></b:with>}<b:if cond='data:i &lt; (data:shortcuts.length - 1)'>,</b:if></b:loop>]</b:if></b:with>}</script></b:with></b:with></b:includable>
+        <b:includable id='content'><!--[ removed ]--></b:includable>
       </b:widget>
     </b:section>
 

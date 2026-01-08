@@ -1,8 +1,10 @@
+import { createElement } from '@deox/utils/create-element';
 import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderData } from 'react-router';
 import { BloggerProvider } from '@/contexts/blogger';
 import BlogLayout from '@/layouts/BlogLayout';
 import { type BloggerData, fetchBlogger, parseBloggerData } from '@/lib/blogger';
 import ErrorPage from '@/pages/ErrorPage';
+import { worker } from '@/web-workers/main-worker';
 
 const initialBloggerData = parseBloggerData(document);
 
@@ -10,6 +12,23 @@ const bloggerData = {
   initial: initialBloggerData,
   current: initialBloggerData,
 };
+
+if (initialBloggerData.manifest?.icons && (import.meta.env.DEV || location.protocol === 'https:') && !document.querySelector('link[rel=manifest]')) {
+  const blob = new Blob([JSON.stringify(initialBloggerData.manifest, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  const element = createElement('link', {
+    rel: 'manifest',
+    href: url,
+  });
+
+  document.head.appendChild(element);
+}
+
+// TODO: remove it, for testing purpose only
+worker.call('hello').then((message) => {
+  console.log(message);
+});
 
 const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
   const currentUrl = new URL(bloggerData.current.view.url);
