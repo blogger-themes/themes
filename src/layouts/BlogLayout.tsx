@@ -36,7 +36,7 @@ export default function BlogLayout() {
   }
 
   return (
-    <PageLayout data={data}>
+    <PageLayout>
       {data.view.isHomepage ? (
         <HomePage />
       ) : data.view.isPost ? (

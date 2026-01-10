@@ -1,4 +1,5 @@
 import { BookTextIcon, FileTextIcon } from 'lucide-react';
+import ArticleContent from '@/components/ArticleContent';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useBlogger } from '@/contexts/blogger';
 import type { Post } from '@/lib/blogger';
@@ -23,7 +24,9 @@ export default function PagePage() {
       />
 
       <h1 className="text-3xl font-semibold">{page.title}</h1>
-      <article className="prose" dangerouslySetInnerHTML={{ __html: page.content }} />
+      <article className="prose">
+        <ArticleContent html={page.content} />
+      </article>
     </div>
   );
 }

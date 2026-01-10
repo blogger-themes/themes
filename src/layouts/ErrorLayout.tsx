@@ -45,7 +45,7 @@ export default function ErrorPage({ error }: ErrorPageProps) {
               disabled={isNavigating}
               className="grow"
               type="button"
-              onClick={() => navigate(navigation.location?.pathname ?? window.location.pathname)}
+              onClick={() => navigate(navigation.location?.pathname ?? window.location.pathname, { replace: true })}
             >
               {isNavigating ? (
                 <>

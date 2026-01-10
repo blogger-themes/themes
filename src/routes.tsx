@@ -2,9 +2,8 @@ import { createElement } from '@deox/utils/create-element';
 import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderData } from 'react-router';
 import { BloggerProvider } from '@/contexts/blogger';
 import BlogLayout from '@/layouts/BlogLayout';
+import ErrorLayout from '@/layouts/ErrorLayout';
 import { type BloggerData, fetchBlogger, parseBloggerData } from '@/lib/blogger';
-import ErrorPage from '@/pages/ErrorPage';
-import { worker } from '@/web-workers/main-worker';
 
 const initialBloggerData = parseBloggerData(document);
 
@@ -25,11 +24,6 @@ if (initialBloggerData.manifest?.icons && (import.meta.env.DEV || location.proto
   document.head.appendChild(element);
 }
 
-// TODO: remove it, for testing purpose only
-worker.call('hello').then((message) => {
-  console.log(message);
-});
-
 const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
   const currentUrl = new URL(bloggerData.current.view.url);
   currentUrl.pathname = currentUrl.pathname.replace(/^\/\//, '/');
@@ -47,7 +41,7 @@ const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
   return nextUrl.toString() !== currentUrl.toString();
 };
 
-export interface RootLoaderData {
+interface RootLoaderData {
   data: BloggerData;
 }
 
@@ -76,7 +70,7 @@ function RootComponent() {
 function RootErrorBoundary() {
   const error = useRouteError();
 
-  return <ErrorPage error={error} />;
+  return <ErrorLayout error={error} />;
 }
 
 export default [

@@ -1,4 +1,5 @@
 import { BookOpenTextIcon, LibraryBigIcon } from 'lucide-react';
+import ArticleContent from '@/components/ArticleContent';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { useBlogger } from '@/contexts/blogger';
 import type { Post } from '@/lib/blogger';
@@ -23,7 +24,9 @@ export default function PostPage() {
       />
 
       <h1 className="text-3xl font-semibold">{post.title}</h1>
-      <article className="prose" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <article className="prose">
+        <ArticleContent html={post.content} />
+      </article>
     </div>
   );
 }

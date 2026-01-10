@@ -1,14 +1,14 @@
 import type { PropsWithChildren } from 'react';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import type { BloggerData } from '@/lib/blogger';
+import { useBlogger } from '@/contexts/blogger';
 import RootLayout from './RootLayout';
 
-export interface PageLayoutProps extends PropsWithChildren {
-  data: BloggerData;
-}
+export interface PageLayoutProps extends PropsWithChildren {}
 
-export default function PageLayout({ data, children }: PageLayoutProps) {
+export default function PageLayout({ children }: PageLayoutProps) {
+  const { data } = useBlogger();
+
   return (
     <RootLayout>
       <Header title={data.header.title} />

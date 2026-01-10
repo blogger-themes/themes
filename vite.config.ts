@@ -20,4 +20,7 @@ export default defineConfig({
       proxyBlog: 'https://react-template-preview.blogspot.com',
     }),
   ],
+  worker: {
+    plugins: () => [tsconfigPaths()],
+  },
 });
