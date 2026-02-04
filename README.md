@@ -1,3 +1,3 @@
 # React Blogger Template
 
-A React-powered Blogger template for learning and experiments.
+A React.js powered Blogger template for learning and experiments.
