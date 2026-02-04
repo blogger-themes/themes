@@ -1,3 +1,4 @@
+import { unescapeHtml } from '../utils';
 import type {
   BlogAuthor,
   BloggerData,
@@ -63,7 +64,14 @@ function createParser(source: string | Document) {
       }
     },
     title() {
-      return typeof source === 'string' ? source.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1].trim() || '' : source.title;
+      if (typeof source === 'string') {
+        const match = source.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i);
+        if (match?.[1]) {
+          return unescapeHtml(match[1]);
+        }
+        return '';
+      }
+      return source.title;
     },
   };
 }
@@ -139,6 +147,33 @@ export function parseBloggerData(source: string | Document): BloggerData {
     WebManifest | null,
   ];
 
+  data.blog.title = unescapeHtml(data.blog.title);
+
+  const search = data.view.search;
+  if (search) {
+    if (search.type === 'query') {
+      search.query = unescapeHtml(search.query);
+    } else {
+      search.label = unescapeHtml(search.label);
+    }
+  }
+
+  if (header) {
+    header.title = unescapeHtml(header.title);
+    if (header.description) {
+      header.description = unescapeHtml(header.description);
+    }
+
+    data.header = header;
+    data.blog.description = header.description;
+  } else {
+    data.header = {
+      title: data.blog.title,
+      description: null,
+      image: null,
+    };
+  }
+
   const meta: Meta = {
     title: parser.title(),
     favicon: metaFavicon,
@@ -150,20 +185,38 @@ export function parseBloggerData(source: string | Document): BloggerData {
     meta.image = metaImage;
   }
   if (metaOpenGraph) {
+    metaOpenGraph.siteName = unescapeHtml(metaOpenGraph.siteName);
+    metaOpenGraph.title = unescapeHtml(metaOpenGraph.title);
+    metaOpenGraph.description = unescapeHtml(metaOpenGraph.description);
+
     meta.openGraph = metaOpenGraph;
   }
   if (metaTwitterCard) {
+    metaTwitterCard.title = unescapeHtml(metaTwitterCard.title);
+    metaTwitterCard.description = unescapeHtml(metaTwitterCard.description);
+
     meta.twitterCard = metaTwitterCard;
   }
   data.meta = meta;
 
-  data.labels = labels;
+  data.labels = {};
+  for (const label in labels) {
+    data.labels[unescapeHtml(label)] = labels[label];
+  }
 
   for (let i = 0; i < authors.length; i++) {
     authors[i].id = `author-${i + 1}`;
   }
   data.authors = authors;
 
+  for (const id in posts) {
+    const post = posts[id];
+    post.title = unescapeHtml(post.title);
+
+    for (let i = 0; i < post.labels.length; i++) {
+      post.labels[i] = unescapeHtml(post.labels[i]);
+    }
+  }
   data.posts = posts;
 
   if (data.blog.postId) {
@@ -176,17 +229,6 @@ export function parseBloggerData(source: string | Document): BloggerData {
 
   if (comments) {
     data.comments = comments;
-  }
-
-  if (header) {
-    data.header = header;
-    data.blog.description = header.description;
-  } else {
-    data.header = {
-      title: data.blog.title,
-      description: null,
-      image: null,
-    };
   }
 
   data.contact = contact;
@@ -219,6 +261,11 @@ export function parseBloggerData(source: string | Document): BloggerData {
   }
 
   if (manifest) {
+    manifest.name = unescapeHtml(manifest.name);
+    if (manifest.short_name) {
+      manifest.short_name = unescapeHtml(manifest.short_name);
+    }
+
     if (!manifest.description && header?.description) {
       manifest.description = header.description;
     }
@@ -237,17 +284,23 @@ export function parseBloggerData(source: string | Document): BloggerData {
       }
     }
 
-    if (manifest.icons && manifest.shortcuts) {
-      const icon = manifest.icons.find((icon) => icon.sizes === '96x96') ?? manifest.icons[0];
+    if (manifest.shortcuts) {
+      const icon = manifest.icons?.find((icon) => icon.sizes === '96x96') ?? manifest.icons?.[0];
 
       for (const shortcut of manifest.shortcuts) {
-        if (!shortcut.icons) {
-          shortcut.icons = [];
-          shortcut.icons.push({
-            src: icon.src,
-            sizes: icon.sizes,
-            type: icon.type,
-          });
+        shortcut.name = unescapeHtml(shortcut.name);
+        if (shortcut.short_name) {
+          shortcut.short_name = unescapeHtml(shortcut.short_name);
+        }
+
+        if (!shortcut.icons && icon) {
+          shortcut.icons = [
+            {
+              src: icon.src,
+              sizes: icon.sizes,
+              type: icon.type,
+            },
+          ];
         }
       }
     }

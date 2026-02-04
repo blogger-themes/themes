@@ -21,6 +21,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
           <BreadcrumbLink className="flex items-center gap-x-2" asChild>
             <Link to="/">
               <HomeIcon className="size-4 shrink-0" />
+              <span className="sr-only">Home</span>
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
