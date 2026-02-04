@@ -3,17 +3,11 @@ import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderDat
 import { BloggerProvider } from '@/contexts/blogger';
 import BlogLayout from '@/layouts/BlogLayout';
 import ErrorLayout from '@/layouts/ErrorLayout';
-import { type BloggerData, fetchBlogger, parseBloggerData } from '@/lib/blogger';
+import { type BloggerData, fetchBlogger } from '@/lib/blogger';
+import { bloggerData } from '@/lib/blogger-data';
 
-const initialBloggerData = parseBloggerData(document);
-
-const bloggerData = {
-  initial: initialBloggerData,
-  current: initialBloggerData,
-};
-
-if (initialBloggerData.manifest?.icons && (import.meta.env.DEV || location.protocol === 'https:') && !document.querySelector('link[rel=manifest]')) {
-  const blob = new Blob([JSON.stringify(initialBloggerData.manifest, null, 2)], { type: 'application/json' });
+if (bloggerData.initial.manifest?.icons && (import.meta.env.DEV || location.protocol === 'https:') && !document.querySelector('link[rel=manifest]')) {
+  const blob = new Blob([JSON.stringify(bloggerData.initial.manifest, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
 
   const element = createElement('link', {

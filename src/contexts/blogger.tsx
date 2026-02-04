@@ -10,7 +10,7 @@ const BloggerContext = createContext<UseBloggerProps | undefined>(undefined);
 export function useBlogger() {
   const context = useContext(BloggerContext);
 
-  if (!context) {
+  if (typeof context === 'undefined') {
     throw new Error('useBlogger must be used within a BloggerProvider');
   }
 

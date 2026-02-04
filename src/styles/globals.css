@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@custom-variant blog-admin (&:is(.is-blog-admin *));
+
 @theme inline {
   --font-sans: var(--font-inclusive-sans);
   --radius-sm: calc(var(--radius) - 4px);
