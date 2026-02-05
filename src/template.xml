@@ -382,87 +382,6 @@ body#layout .bl-hide-element{display:none!important}
         <b:includable id='image'/>
         <b:includable id='title'/>
       </b:widget>
-      <b:widget id='FeaturedPost01' locked='true' title='Featured post' type='FeaturedPost' version='2' visible='true'>
-        <b:widget-settings>
-          <b:widget-setting name='showSnippet'>true</b:widget-setting>
-          <b:widget-setting name='showPostTitle'>true</b:widget-setting>
-          <b:widget-setting name='postId'>0</b:widget-setting>
-          <b:widget-setting name='showFirstImage'>true</b:widget-setting>
-          <b:widget-setting name='useMostRecentPost'>true</b:widget-setting>
-        </b:widget-settings>
-        <b:includable id='main' var='this'><script id='json:featured' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
-        <b:includable id='blogThisShare'/>
-        <b:includable id='bylineByName'/>
-        <b:includable id='bylineRegion'/>
-        <b:includable id='commentsLink'/>
-        <b:includable id='commentsLinkIframe'/>
-        <b:includable id='emailPostIcon'/>
-        <b:includable id='facebookShare'/>
-        <b:includable id='footerBylines'/>
-        <b:includable id='googlePlusShare'/>
-        <b:includable id='headerByline'/>
-        <b:includable id='linkShare'/>
-        <b:includable id='otherSharingButton'/>
-        <b:includable id='platformShare'/>
-        <b:includable id='postAuthor'/>
-        <b:includable id='postCommentsLink'/>
-        <b:includable id='postJumpLink'/>
-        <b:includable id='postLabels'/>
-        <b:includable id='postLocation'/>
-        <b:includable id='postReactions'/>
-        <b:includable id='postShareButtons'/>
-        <b:includable id='postTimestamp'/>
-        <b:includable id='sharingButton'/>
-        <b:includable id='sharingButtonContent'/>
-        <b:includable id='sharingButtons'/>
-        <b:includable id='sharingButtonsMenu'/>
-        <b:includable id='sharingPlatformIcon'/>
-        <b:includable id='snippetedPostByline'/>
-        <b:includable id='snippetedPostContent'/>
-        <b:includable id='snippetedPostThumbnail'/>
-        <b:includable id='snippetedPostTitle'/>
-        <b:includable id='snippetedPosts'/>
-      </b:widget>
-      <b:widget id='PopularPosts01' locked='true' title='' type='PopularPosts' version='2' visible='true'>
-        <b:widget-settings>
-          <b:widget-setting name='numItemsToShow'>10</b:widget-setting>
-          <b:widget-setting name='showThumbnails'>true</b:widget-setting>
-          <b:widget-setting name='showSnippets'>true</b:widget-setting>
-          <b:widget-setting name='timeRange'>LAST_YEAR</b:widget-setting>
-        </b:widget-settings>
-        <b:includable id='main' var='this'><script id='json:popular' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
-        <b:includable id='blogThisShare'/>
-        <b:includable id='bylineByName'/>
-        <b:includable id='bylineRegion'/>
-        <b:includable id='commentsLink'/>
-        <b:includable id='commentsLinkIframe'/>
-        <b:includable id='emailPostIcon'/>
-        <b:includable id='facebookShare'/>
-        <b:includable id='footerBylines'/>
-        <b:includable id='googlePlusShare'/>
-        <b:includable id='headerByline'/>
-        <b:includable id='linkShare'/>
-        <b:includable id='otherSharingButton'/>
-        <b:includable id='platformShare'/>
-        <b:includable id='postAuthor'/>
-        <b:includable id='postCommentsLink'/>
-        <b:includable id='postJumpLink'/>
-        <b:includable id='postLabels'/>
-        <b:includable id='postLocation'/>
-        <b:includable id='postReactions'/>
-        <b:includable id='postShareButtons'/>
-        <b:includable id='postTimestamp'/>
-        <b:includable id='sharingButton'/>
-        <b:includable id='sharingButtonContent'/>
-        <b:includable id='sharingButtons'/>
-        <b:includable id='sharingButtonsMenu'/>
-        <b:includable id='sharingPlatformIcon'/>
-        <b:includable id='snippetedPostByline'/>
-        <b:includable id='snippetedPostContent'/>
-        <b:includable id='snippetedPostThumbnail'/>
-        <b:includable id='snippetedPostTitle'/>
-        <b:includable id='snippetedPosts'/>
-      </b:widget>
       <b:widget id='Blog01' locked='true' title='Blog Posts' type='Blog' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='showDateHeader'>false</b:widget-setting>
@@ -549,11 +468,115 @@ body#layout .bl-hide-element{display:none!important}
         <b:includable id='threadedComments'/>
         <b:includable id='tooltipCss'/>
       </b:widget>
+      <b:widget id='FeaturedPost01' locked='true' title='Featured post' type='FeaturedPost' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='showSnippet'>true</b:widget-setting>
+          <b:widget-setting name='showPostTitle'>true</b:widget-setting>
+          <b:widget-setting name='postId'>0</b:widget-setting>
+          <b:widget-setting name='showFirstImage'>true</b:widget-setting>
+          <b:widget-setting name='useMostRecentPost'>true</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:featured' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
+        <b:includable id='blogThisShare'/>
+        <b:includable id='bylineByName'/>
+        <b:includable id='bylineRegion'/>
+        <b:includable id='commentsLink'/>
+        <b:includable id='commentsLinkIframe'/>
+        <b:includable id='emailPostIcon'/>
+        <b:includable id='facebookShare'/>
+        <b:includable id='footerBylines'/>
+        <b:includable id='googlePlusShare'/>
+        <b:includable id='headerByline'/>
+        <b:includable id='linkShare'/>
+        <b:includable id='otherSharingButton'/>
+        <b:includable id='platformShare'/>
+        <b:includable id='postAuthor'/>
+        <b:includable id='postCommentsLink'/>
+        <b:includable id='postJumpLink'/>
+        <b:includable id='postLabels'/>
+        <b:includable id='postLocation'/>
+        <b:includable id='postReactions'/>
+        <b:includable id='postShareButtons'/>
+        <b:includable id='postTimestamp'/>
+        <b:includable id='sharingButton'/>
+        <b:includable id='sharingButtonContent'/>
+        <b:includable id='sharingButtons'/>
+        <b:includable id='sharingButtonsMenu'/>
+        <b:includable id='sharingPlatformIcon'/>
+        <b:includable id='snippetedPostByline'/>
+        <b:includable id='snippetedPostContent'/>
+        <b:includable id='snippetedPostThumbnail'/>
+        <b:includable id='snippetedPostTitle'/>
+        <b:includable id='snippetedPosts'/>
+      </b:widget>
+      <b:widget id='PopularPosts01' locked='true' title='' type='PopularPosts' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='numItemsToShow'>10</b:widget-setting>
+          <b:widget-setting name='showThumbnails'>true</b:widget-setting>
+          <b:widget-setting name='showSnippets'>true</b:widget-setting>
+          <b:widget-setting name='timeRange'>LAST_YEAR</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='this'><script id='json:popular' type='application/json'>{&quot;showTitle&quot;:<b:eval expr='data:this.postDisplay.showTitle ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showDate&quot;:<b:eval expr='data:this.postDisplay.showDate ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showAuthor&quot;:<b:eval expr='data:this.postDisplay.showAuthor ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showSnippet&quot;:<b:eval expr='data:this.postDisplay.showSnippet ? &quot;true&quot; : &quot;false&quot;'/>,&quot;showThumbnail&quot;:<b:eval expr='data:this.postDisplay.showFeaturedImage ? &quot;true&quot; : &quot;false&quot;'/>,&quot;posts&quot;:{<b:loop index='i' values='data:posts' var='post'>&quot;<data:post.id/>&quot;:<b:if cond='data:post.id not in (data:widgets.Blog.first.posts map (p =&gt; p.id))'><b:include data='data:post' name='json:post'/><b:else/>null</b:if><b:if cond='data:i &lt; (data:posts.length - 1)'>,</b:if></b:loop>}}</script></b:includable>
+        <b:includable id='blogThisShare'/>
+        <b:includable id='bylineByName'/>
+        <b:includable id='bylineRegion'/>
+        <b:includable id='commentsLink'/>
+        <b:includable id='commentsLinkIframe'/>
+        <b:includable id='emailPostIcon'/>
+        <b:includable id='facebookShare'/>
+        <b:includable id='footerBylines'/>
+        <b:includable id='googlePlusShare'/>
+        <b:includable id='headerByline'/>
+        <b:includable id='linkShare'/>
+        <b:includable id='otherSharingButton'/>
+        <b:includable id='platformShare'/>
+        <b:includable id='postAuthor'/>
+        <b:includable id='postCommentsLink'/>
+        <b:includable id='postJumpLink'/>
+        <b:includable id='postLabels'/>
+        <b:includable id='postLocation'/>
+        <b:includable id='postReactions'/>
+        <b:includable id='postShareButtons'/>
+        <b:includable id='postTimestamp'/>
+        <b:includable id='sharingButton'/>
+        <b:includable id='sharingButtonContent'/>
+        <b:includable id='sharingButtons'/>
+        <b:includable id='sharingButtonsMenu'/>
+        <b:includable id='sharingPlatformIcon'/>
+        <b:includable id='snippetedPostByline'/>
+        <b:includable id='snippetedPostContent'/>
+        <b:includable id='snippetedPostThumbnail'/>
+        <b:includable id='snippetedPostTitle'/>
+        <b:includable id='snippetedPosts'/>
+      </b:widget>
     </b:section>
 
     <b:comment><!--[ Theme plugins section ]--></b:comment>
     <b:section class='bl-grid-section bl-hide-description' cond='data:widgets any (w =&gt; w.sectionId == &quot;theme_section_plugins&quot;)' id='theme_section_plugins' showaddelement='false'>
-      <b:widget id='LinkList01' locked='true' title='Web App Manifest' type='LinkList' version='2' visible='true'>
+      <b:widget id='LinkList01' locked='true' title='Firebase Configuration' type='LinkList' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='link-7'>storageBucket goes here</b:widget-setting>
+          <b:widget-setting name='link-5'>messagingSenderId goes here</b:widget-setting>
+          <b:widget-setting name='link-6'>projectId goes here</b:widget-setting>
+          <b:widget-setting name='link-3'>databaseURL goes here</b:widget-setting>
+          <b:widget-setting name='link-4'>measurementId goes here</b:widget-setting>
+          <b:widget-setting name='text-1'>appId</b:widget-setting>
+          <b:widget-setting name='text-0'>apiKey</b:widget-setting>
+          <b:widget-setting name='text-3'>databaseURL</b:widget-setting>
+          <b:widget-setting name='text-2'>authDomain</b:widget-setting>
+          <b:widget-setting name='text-5'>messagingSenderId</b:widget-setting>
+          <b:widget-setting name='text-4'>measurementId</b:widget-setting>
+          <b:widget-setting name='text-7'>storageBucket</b:widget-setting>
+          <b:widget-setting name='text-6'>projectId</b:widget-setting>
+          <b:widget-setting name='sorting'>NONE</b:widget-setting>
+          <b:widget-setting name='link-1'>appId goes here</b:widget-setting>
+          <b:widget-setting name='link-2'>authDomain goes here</b:widget-setting>
+          <b:widget-setting name='link-0'>apiKey goes here</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main'><b:with value='[&quot;apiKey&quot;, &quot;appId&quot;, &quot;authDomain&quot;, &quot;databaseURL&quot;, &quot;measurementId&quot;, &quot;messagingSenderId&quot;, &quot;projectId&quot;, &quot;storageBucket&quot;]' var='properties'><b:with value='data:properties map (p =&gt; data:links filter (l =&gt; l.name == data:p and l.target not in [&quot;https://&quot;, &quot;#&quot;] and (l.target + &quot;&quot;) not contains &quot;goes here&quot;)) filter (a =&gt; a.notEmpty) map(a =&gt; { name: data:a.last.name, value: data:a.last.target })' var='entries'><script id='json:firebase:config' type='application/json'>{<b:loop index='i' values='data:entries' var='entry'>&quot;<data:entry.name.jsonEscaped/>&quot;:&quot;<data:entry.value.jsonEscaped/>&quot;<b:if cond='data:i &lt; (data:entries.length - 1)'>,</b:if></b:loop>}</script></b:with></b:with></b:includable>
+        <b:includable id='content'><!--[ removed ]--></b:includable>
+      </b:widget>
+      <b:widget id='LinkList02' locked='true' title='Web App Manifest' type='LinkList' version='2' visible='true'>
         <b:widget-settings>
           <b:widget-setting name='link-3'>/seach/label/Shortcut1</b:widget-setting>
           <b:widget-setting name='sorting'>NONE</b:widget-setting>

@@ -161,6 +161,8 @@ const calloutVariants = cva('relative px-4 py-3 my-6 border-l-4 text-sm', {
   },
 });
 
+export const validCalloutVariants = Object.keys(calloutConfig);
+
 export type CalloutVariant = keyof typeof calloutConfig;
 
 export interface CalloutProps extends VariantProps<typeof calloutVariants>, Omit<ComponentProps<'details'>, 'title'> {

@@ -335,6 +335,21 @@ export interface WebManifest {
   shortcuts?: ManifestShortcut[];
 }
 
+export interface FirebaseConfig {
+  apiKey?: string;
+  appId?: string;
+  authDomain?: string;
+  databaseURL?: string;
+  measurementId?: string;
+  messagingSenderId?: string;
+  projectId?: string;
+  storageBucket?: string;
+}
+
+export interface Firebase {
+  config?: FirebaseConfig;
+}
+
 export interface BloggerData {
   blog: Blog;
   view: View;
@@ -353,4 +368,5 @@ export interface BloggerData {
   featured?: Featured;
   popular?: Popular;
   manifest?: WebManifest;
+  firebase: Firebase;
 }

@@ -19,7 +19,7 @@
     "upgrade": "pnpm dlx npm-check-updates --peer --interactive --format group"
   },
   "dependencies": {
-    "@deox/dom-to-react": "^0.0.3",
+    "@deox/dom-to-react": "^0.0.4",
     "@deox/google-image": "^0.0.2",
     "@deox/utils": "^0.0.4",
     "@deox/worker-rpc": "^0.0.18",
@@ -36,6 +36,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "firebase": "^12.8.0",
     "github-slugger": "^2.0.0",
     "lucide-react": "^0.563.0",
     "next-themes": "^0.4.6",
@@ -55,7 +56,7 @@
     "@biomejs/biome": "^2.3.14",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^25.2.0",
-    "@types/react": "^19.2.10",
+    "@types/react": "^19.2.11",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react-swc": "^4.2.3",
     "blogger-plugin": "^0.0.2",

@@ -6,6 +6,7 @@ import type {
   Contact,
   Favicon,
   Featured,
+  FirebaseConfig,
   Header,
   Meta,
   MetaImage,
@@ -96,6 +97,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     metaOpenGraph,
     metaTwitterCard,
     manifest,
+    firebaseConfig,
   ] = [
     { id: 'data' },
     { id: 'labels', fallback: {} },
@@ -113,6 +115,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     { id: 'meta:opengraph', fallback: null },
     { id: 'meta:twittercard', fallback: null },
     { id: 'webmanifest', fallback: null },
+    { id: 'firebase:config', fallback: null },
   ].map((descriptor) => {
     const { id, fallback } = descriptor;
     const hasFallback = 'fallback' in descriptor;
@@ -145,6 +148,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     OpenGraph | null,
     TwitterCard | null,
     WebManifest | null,
+    FirebaseConfig | null,
   ];
 
   data.blog.title = unescapeHtml(data.blog.title);
@@ -306,6 +310,12 @@ export function parseBloggerData(source: string | Document): BloggerData {
     }
 
     data.manifest = manifest;
+  }
+
+  data.firebase ||= {};
+
+  if (firebaseConfig) {
+    data.firebase.config = firebaseConfig;
   }
 
   return data;

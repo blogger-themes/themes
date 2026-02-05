@@ -1,7 +1,9 @@
 import { convertFromHTML } from '@deox/dom-to-react';
 import GithubSlugger from 'github-slugger';
-import { type ReactNode, useMemo } from 'react';
-import Callout, { type CalloutVariant } from './Callout';
+import { TriangleAlertIcon } from 'lucide-react';
+import { type ComponentProps, type PropsWithChildren, type ReactNode, useMemo } from 'react';
+import { cn } from '@/lib/utils';
+import Callout, { type CalloutVariant, validCalloutVariants } from './Callout';
 import CodeBlock from './CodeBlock';
 
 export interface Heading {
@@ -63,50 +65,62 @@ export function parseContent(html: string): ParsedContent {
       const component = element.getAttribute('data-component');
 
       if (component === 'callout') {
-        const attrTitle = element.getAttribute('data-title');
-        const attrVariant = element.getAttribute('data-variant');
+        if (element.tagName !== 'DETAILS') {
+          return <ComponentError>Component 'callout' must be a details element.</ComponentError>;
+        }
 
-        const validVariants = [
-          'note',
-          'tip',
-          'warning',
-          'danger',
-          'important',
-          'definition',
-          'theorem',
-          'lemma',
-          'proof',
-          'corollary',
-          'proposition',
-          'axiom',
-          'conjecture',
-          'notation',
-          'remark',
-          'intuition',
-          'recall',
-          'explanation',
-          'example',
-          'exercise',
-          'problem',
-          'answer',
-          'solution',
-          'summary',
-        ];
+        const summaries: Element[] = [];
+        const contents: Node[] = [];
 
-        const title = attrTitle || undefined;
-        const variant = (attrVariant && validVariants.includes(attrVariant) ? attrVariant : validVariants[0]) as CalloutVariant;
-        const children = ctx.children();
+        for (let i = 0; i < element.childNodes.length; i++) {
+          const child = element.childNodes[i];
+          if (child.nodeType === Node.ELEMENT_NODE && (child as Element).tagName === 'SUMMARY') {
+            summaries.push(child as Element);
+          } else {
+            contents.push(child);
+          }
+        }
+
+        if (summaries.length === 0) {
+          return <ComponentError>Component 'callout' must have a summary element.</ComponentError>;
+        }
+
+        const dataVariant = element.getAttribute('data-variant');
+
+        const open = element.hasAttribute('open');
+        const variant = (dataVariant && validCalloutVariants.includes(dataVariant) ? dataVariant : 'note') as CalloutVariant;
+
+        const title = this.parseNodes(summaries[0].childNodes, { level: ctx.level + 1 });
+        const children = this.parseNodes(contents, { level: ctx.level + 2 });
 
         return (
-          <Callout key={ctx.key} title={title} variant={variant}>
+          <Callout key={ctx.key} title={title} variant={variant} open={open}>
             {children}
           </Callout>
         );
+      }
+
+      if (component !== null) {
+        return <ComponentError>Component '{component}' is not supported.</ComponentError>;
       }
     },
   });
 
   return { headings, node };
+}
+
+interface ComponentErrorProps extends PropsWithChildren, ComponentProps<'div'> {}
+
+function ComponentError({ className, children, ...props }: ComponentErrorProps) {
+  return (
+    <div className={cn('p-4 space-y-1 border border-destructive border-dashed rounded-md', className)} {...props}>
+      <div className="flex items-center gap-2">
+        <TriangleAlertIcon className="size-4.5" />
+        Component error
+      </div>
+      <div className="text-sm">{children}</div>
+    </div>
+  );
 }
 
 export interface ArticleContentProps {
