@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @import "@fontsource-variable/inclusive-sans";
 
 @custom-variant dark (&:is(.dark *));
@@ -8,10 +9,14 @@
 
 @theme inline {
   --font-sans: var(--font-inclusive-sans);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -47,6 +52,7 @@
 
 :root {
   --font-inclusive-sans: "Inclusive Sans Variable", sans-serif;
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -121,5 +127,17 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    z-index: 9999;
+  }
+  ::view-transition-old(root) {
+    z-index: 1;
   }
 }

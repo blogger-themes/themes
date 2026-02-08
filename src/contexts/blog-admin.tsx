@@ -2,7 +2,7 @@ import { loadStylesheet } from '@deox/utils/create-element';
 import { lazy } from '@deox/utils/lazy';
 import { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { bloggerData } from '@/lib/blogger-data';
-import { subscribeStorage } from '@/lib/helpers';
+import { subscribeStorage } from '@/utils/helpers';
 
 const BLOG_ADMIN_LS_KEY = 'is-blog-admin';
 const BLOG_ADMIN_LS_VALUE = '1';

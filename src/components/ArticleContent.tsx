@@ -38,7 +38,7 @@ export function parseContent(html: string): ParsedContent {
         const children = ctx.children();
         const level = (headingIndex + 1) as 1 | 2 | 3 | 4 | 5 | 6;
         const value = element.textContent;
-        const id = slugger.slug(value);
+        const id = element.getAttribute('id') ?? slugger.slug(value);
 
         headings.push({
           level,

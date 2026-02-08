@@ -1,4 +1,4 @@
-import { unescapeHtml } from '../utils';
+import { unescapeHtml } from '@/utils';
 import type {
   BlogAuthor,
   BloggerData,
