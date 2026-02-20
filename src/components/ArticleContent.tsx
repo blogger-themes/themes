@@ -59,7 +59,8 @@ export function parseContent(html: string): ParsedContent {
           return null;
         }
         const language = child.className.match(/\blanguage-([\w-]+)\b/i)?.[1];
-        return <CodeBlock key={ctx.key} code={child.textContent} lang={language} />;
+        const title = element.getAttribute('data-title') || undefined;
+        return <CodeBlock key={ctx.key} code={child.textContent} lang={language} title={title} />;
       }
 
       const component = element.getAttribute('data-component');

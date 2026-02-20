@@ -3,6 +3,7 @@ import { ThemeProvider } from 'next-themes';
 import type { PropsWithChildren } from 'react';
 import { ScrollRestoration, useNavigation } from 'react-router';
 import { Toaster } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { BlogAdminProvider } from '@/contexts/blog-admin';
 
 function NavigationLoader() {
@@ -23,17 +24,19 @@ export interface RootLayoutProps extends PropsWithChildren {}
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <ThemeProvider attribute="class">
-      <BlogAdminProvider>
-        {children}
-        <Toaster
-          richColors
-          style={{
-            fontFamily: 'var(--font-sans)',
-          }}
-        />
-        <NavigationLoader />
-        <ScrollRestoration />
-      </BlogAdminProvider>
+      <TooltipProvider>
+        <BlogAdminProvider>
+          {children}
+          <Toaster
+            richColors
+            style={{
+              fontFamily: 'var(--font-sans)',
+            }}
+          />
+          <NavigationLoader />
+          <ScrollRestoration />
+        </BlogAdminProvider>
+      </TooltipProvider>
     </ThemeProvider>
   );
 }

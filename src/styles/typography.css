@@ -118,7 +118,7 @@
       @apply text-left [[align=center]]:text-center [[align=right]]:text-right;
     }
 
-    :where(img, video, figure, .expressive-code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+    :where(img, video, figure):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
       @apply mx-auto my-6;
     }
 
@@ -133,10 +133,6 @@
     :where(kbd):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
       @apply text-foreground bg-muted rounded-md border px-2 py-1 text-xs font-medium;
     }
-
-    :where(.katex-display):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-      @apply text-foreground/80 my-6 overflow-x-auto overflow-y-hidden py-2 tracking-normal;
-    }
   }
 }
 
@@ -145,23 +141,5 @@
 }
 
 @utility small {
-  @apply text-sm leading-6 [&_code]:text-xs [&_img,video,figure,details,blockquote,.katex-display,.expressive-code]:my-4! [&_li,ol]:mt-0 [&_p]:my-2! [&_ul]:my-0;
-}
-
-.shiki,
-.shiki span {
-  color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
-  font-style: var(--shiki-light-font-style);
-  font-weight: var(--shiki-light-font-weight);
-  text-decoration: var(--shiki-light-text-decoration);
-}
-
-.dark .shiki,
-.dark .shiki span {
-  color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
-  font-style: var(--shiki-dark-font-style);
-  font-weight: var(--shiki-dark-font-weight);
-  text-decoration: var(--shiki-dark-text-decoration);
+  @apply text-sm leading-6 [&_code]:text-xs [&_img,video,figure,details,blockquote]:my-4! [&_li,ol]:mt-0 [&_p]:my-2! [&_ul]:my-0;
 }

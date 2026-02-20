@@ -1,0 +1,68 @@
+.shiki {
+  --padding-left: calc(var(--spacing) * 4);
+  --padding-right: calc(var(--spacing) * 4);
+
+  code span {
+    color: var(--shiki-light);
+    font-style: var(--shiki-light-font-style);
+    font-weight: var(--shiki-light-font-weight);
+    text-decoration: var(--shiki-light-text-decoration);
+  }
+
+  .line {
+    padding-left: var(--padding-left);
+    padding-right: var(--padding-right);
+
+    @apply relative;
+  }
+
+  .line:empty {
+    @apply h-lh;
+  }
+
+  &[data-line-numbers] .line {
+    counter-increment: line;
+    padding-left: calc(var(--padding-left) + 7 * var(--spacing));
+  }
+
+  &[data-line-numbers] .line::before {
+    content: counter(line);
+    width: calc(var(--padding-left) + 7 * var(--spacing));
+    @apply absolute inline-block top-0 left-0 h-full bg-card text-center text-muted-foreground;
+  }
+
+  &[data-line-numbers]:not([data-wrapped]) .line {
+    padding-left: 0;
+  }
+
+  &[data-line-numbers] .highlighted {
+    @apply border-l-0;
+  }
+
+  &[data-line-numbers] .highlighted::before {
+    @apply border-r-2 border-destructive/50;
+  }
+
+  &[data-line-numbers]:not([data-wrapped]) .line::before {
+    @apply sticky;
+  }
+
+  .highlighted {
+    padding-left: calc(var(--padding-left) - 2px);
+
+    @apply border-l-2 border-destructive/50 bg-destructive/10;
+  }
+
+  .highlighted-word {
+    @apply p-px border -my-px border-destructive/30 bg-destructive/10 rounded-md font-medium;
+  }
+}
+
+.dark .shiki {
+  code span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+}

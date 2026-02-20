@@ -20,11 +20,10 @@ if (bloggerData.initial.manifest?.icons && (import.meta.env.DEV || location.prot
 
 const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
   const currentUrl = new URL(bloggerData.current.view.url);
-  currentUrl.pathname = currentUrl.pathname.replace(/^\/\//, '/');
-
   const nextUrl = new URL(url);
 
   for (const url of [currentUrl, nextUrl]) {
+    url.pathname = url.pathname.replace(/^\/\//, '/');
     url.searchParams.delete('m');
     url.searchParams.delete('view');
     if (url.search) {
