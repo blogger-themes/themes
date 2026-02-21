@@ -66,11 +66,11 @@
     @apply absolute z-1 inline-block top-0 left-0 h-full bg-card text-center text-muted-foreground;
   }
 
-  &[data-line-numbers]:not([data-wrapped]) .line {
+  &[data-line-numbers][data-sticky-line-numbers]:not([data-wrapped]) .line {
     padding-left: 0;
   }
 
-  &[data-line-numbers]:not([data-wrapped]) .line::before {
+  &[data-line-numbers][data-sticky-line-numbers]:not([data-wrapped]) .line::before {
     @apply sticky;
   }
 

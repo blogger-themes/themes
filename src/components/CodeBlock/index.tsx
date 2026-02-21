@@ -1,5 +1,3 @@
-// TODO: improve this component
-
 import { CheckIcon, ClipboardIcon, ListIndentDecreaseIcon, ListOrderedIcon, TextAlignJustifyIcon, TextWrapIcon } from 'lucide-react';
 import { type ComponentProps, type RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { useCopyButton } from '@/hooks/use-copy-button';
@@ -45,28 +43,30 @@ export interface CodeBlockProps extends ComponentProps<'figure'> {
   code: string;
   lang?: string;
   title?: string;
-  wrap?: boolean;
-  lineNumbers?: boolean;
-  actionCopy?: boolean;
-  actionWrap?: boolean;
-  actionLineNumbers?: boolean;
+  isWrapped?: boolean;
+  showLineNumbers?: boolean;
+  stickyLineNumbers?: boolean;
+  allowCopy?: boolean;
+  allowWrapToggle?: boolean;
+  allowLineNumbersToggle?: boolean;
 }
 
 export default function CodeBlock({
   code,
   lang,
   title,
-  wrap = false,
-  lineNumbers = true,
-  actionCopy = true,
-  actionWrap = true,
-  actionLineNumbers = true,
+  isWrapped: optIsWrapped = false,
+  showLineNumbers: optShowLineNumbers = true,
+  stickyLineNumbers = true,
+  allowCopy = true,
+  allowWrapToggle = true,
+  allowLineNumbersToggle = true,
   className,
   ...props
 }: CodeBlockProps) {
   const [highlightedResult, setHighlightedResult] = useState<HighlightResult | null>(null);
-  const [isWrapped, setIsWrapped] = useState(wrap);
-  const [showLineNumbers, setShowLineNumbers] = useState(lineNumbers);
+  const [isWrapped, setIsWrapped] = useState(optIsWrapped);
+  const [showLineNumbers, setShowLineNumbers] = useState(optShowLineNumbers);
   const preRef = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
@@ -108,17 +108,22 @@ export default function CodeBlock({
         highlightedResult?.props.className,
       )}
       style={highlightedResult?.props.style}
-      {...(showLineNumbers ? { 'data-line-numbers': '' } : {})}
+      {...(showLineNumbers
+        ? {
+            'data-line-numbers': '',
+            ...(stickyLineNumbers ? { 'data-sticky-line-numbers': '' } : {}),
+          }
+        : {})}
       {...(isWrapped ? { 'data-wrapped': '' } : {})}
       {...props}
     >
-      {(title || actionCopy || actionWrap) && (
+      {(title || allowLineNumbersToggle || allowWrapToggle || allowCopy) && (
         <div className="flex text-muted-foreground items-center gap-2 h-9.5 border-b px-4">
           {Icon && <Icon className="size-3.5 shrink-0" />}
           {title && <figcaption className="flex-1 truncate">{title}</figcaption>}
-          {(actionCopy || actionWrap) && (
+          {(allowLineNumbersToggle || allowWrapToggle || allowCopy) && (
             <div className="flex gap-0.5 ms-auto -me-2.5">
-              {actionLineNumbers && (
+              {allowLineNumbersToggle && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -138,7 +143,7 @@ export default function CodeBlock({
                   </TooltipContent>
                 </Tooltip>
               )}
-              {actionWrap && (
+              {allowWrapToggle && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -149,16 +154,16 @@ export default function CodeBlock({
                         setIsWrapped((current) => !current);
                       }}
                     >
-                      <span className="sr-only">{isWrapped ? 'No wrap' : 'Wrap'}</span>
+                      <span className="sr-only">{isWrapped ? 'Disable line wrapping' : 'Enable line wrapping'}</span>
                       {isWrapped ? <TextAlignJustifyIcon /> : <TextWrapIcon />}
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{isWrapped ? 'No wrap' : 'Wrap'}</p>
+                    <p>{isWrapped ? 'Disable line wrapping' : 'Enable line wrapping'}</p>
                   </TooltipContent>
                 </Tooltip>
               )}
-              {actionCopy && (
+              {allowCopy && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <CopyButton containerRef={preRef} type="button" variant="ghost" size="icon-sm" />

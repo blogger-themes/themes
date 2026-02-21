@@ -28,6 +28,7 @@
     "@deox/worker-rpc": "^0.0.18",
     "@fontsource-variable/inclusive-sans": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@icons-pack/react-simple-icons": "^13.11.2",
     "@shikijs/langs": "^3.22.0",
     "@shikijs/themes": "^3.22.0",
     "@shikijs/transformers": "^3.22.0",
