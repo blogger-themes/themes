@@ -1,5 +1,12 @@
 import { register } from '@deox/worker-rpc/register';
-import { transformerNotationDiff, transformerNotationHighlight, transformerNotationWordHighlight } from '@shikijs/transformers';
+import {
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+  transformerRemoveNotationEscape,
+} from '@shikijs/transformers';
 import type { CodeToHastOptions, CodeToTokensOptions } from 'shiki/core';
 import styleToJs from 'style-to-js';
 import { highlighterPromise } from '@/lib/shiki/wasm';
@@ -38,7 +45,14 @@ const registered = register(async () => {
         },
         defaultColor: false,
         ...options,
-        transformers: [transformerNotationDiff(), transformerNotationHighlight(), transformerNotationWordHighlight()],
+        transformers: [
+          transformerNotationDiff(),
+          transformerNotationHighlight(),
+          transformerNotationWordHighlight(),
+          transformerNotationFocus(),
+          transformerNotationErrorLevel(),
+          transformerRemoveNotationEscape(),
+        ],
       };
       const html = highlighter.codeToHtml(code, opts);
 

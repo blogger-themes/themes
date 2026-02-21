@@ -20,6 +20,41 @@
     @apply h-lh;
   }
 
+  .highlighted {
+    padding-left: calc(var(--padding-left) - 2px);
+
+    @apply border-l-2 border-blue-400 bg-blue-100;
+  }
+
+  .highlighted-word {
+    @apply p-px border -my-px border-blue-300 bg-blue-100 rounded-md font-medium;
+  }
+
+  .diff::after {
+    position: absolute;
+    left: calc(var(--spacing));
+
+    @apply top-0 z-0;
+  }
+
+  .diff.remove {
+    @apply bg-red-100;
+  }
+
+  .diff.remove::after {
+    content: "-";
+    @apply text-red-700;
+  }
+
+  .diff.add {
+    @apply bg-green-100;
+  }
+
+  .diff.add::after {
+    content: "+";
+    @apply text-green-700;
+  }
+
   &[data-line-numbers] .line {
     counter-increment: line;
     padding-left: calc(var(--padding-left) + 7 * var(--spacing));
@@ -28,11 +63,15 @@
   &[data-line-numbers] .line::before {
     content: counter(line);
     width: calc(var(--padding-left) + 7 * var(--spacing));
-    @apply absolute inline-block top-0 left-0 h-full bg-card text-center text-muted-foreground;
+    @apply absolute z-1 inline-block top-0 left-0 h-full bg-card text-center text-muted-foreground;
   }
 
   &[data-line-numbers]:not([data-wrapped]) .line {
     padding-left: 0;
+  }
+
+  &[data-line-numbers]:not([data-wrapped]) .line::before {
+    @apply sticky;
   }
 
   &[data-line-numbers] .highlighted {
@@ -40,21 +79,33 @@
   }
 
   &[data-line-numbers] .highlighted::before {
-    @apply border-r-2 border-destructive/50;
+    @apply border-l-2 border-blue-400 bg-blue-200;
   }
 
-  &[data-line-numbers]:not([data-wrapped]) .line::before {
-    @apply sticky;
+  &[data-line-numbers].has-diff .line::before {
+    width: calc(var(--padding-left) + 5 * var(--spacing));
+    @apply mr-2;
   }
 
-  .highlighted {
-    padding-left: calc(var(--padding-left) - 2px);
-
-    @apply border-l-2 border-destructive/50 bg-destructive/10;
+  &[data-line-numbers] .diff::after {
+    left: calc(var(--padding-left) + 5 * var(--spacing));
   }
 
-  .highlighted-word {
-    @apply p-px border -my-px border-destructive/30 bg-destructive/10 rounded-md font-medium;
+  &[data-line-numbers] .diff.remove::before {
+    @apply bg-red-200;
+  }
+
+  &[data-line-numbers] .diff.add::before {
+    @apply bg-green-200;
+  }
+
+  &.has-focused .line:not(.focused) {
+    filter: blur(2px);
+    transition: filter 200ms;
+  }
+
+  &.has-focused:hover .line:not(.focused) {
+    filter: blur(0);
   }
 }
 
