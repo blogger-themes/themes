@@ -24,170 +24,204 @@ import {
   RotateCcwIcon,
   ShieldAlertIcon,
 } from 'lucide-react';
-import type { ComponentProps, ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 const calloutConfig = {
   note: {
-    style: 'border-blue-500 dark:bg-blue-950/5',
+    name: 'Note',
+    style: 'before:bg-blue-400/60',
     textColor: 'text-blue-700 dark:text-blue-300',
     Icon: InfoIcon,
   },
   tip: {
-    style: 'border-green-500 dark:bg-green-950/5',
+    name: 'Tip',
+    style: 'before:bg-green-400/60',
     textColor: 'text-green-700 dark:text-green-300',
     Icon: LightbulbIcon,
   },
   warning: {
-    style: 'border-amber-500 dark:bg-amber-950/5',
+    name: 'Warning',
+    style: 'before:bg-amber-400/60',
     textColor: 'text-amber-700 dark:text-amber-300',
     Icon: AlertTriangleIcon,
   },
   danger: {
-    style: 'border-red-500 dark:bg-red-950/5',
+    name: 'Danger',
+    style: 'before:bg-red-400/60',
     textColor: 'text-red-700 dark:text-red-300',
     Icon: ShieldAlertIcon,
   },
   important: {
-    style: 'border-purple-500 dark:bg-purple-950/5',
+    name: 'Important',
+    style: 'before:bg-purple-400/60',
     textColor: 'text-purple-700 dark:text-purple-300',
     Icon: MessageSquareWarningIcon,
   },
   definition: {
-    style: 'border-purple-500 dark:bg-purple-950/5',
+    name: 'Definition',
+    style: 'before:bg-purple-400/60',
     textColor: 'text-purple-700 dark:text-purple-300',
     Icon: BookOpenIcon,
   },
   theorem: {
-    style: 'border-teal-500 dark:bg-teal-950/5',
+    name: 'Theorem',
+    style: 'before:bg-teal-400/60',
     textColor: 'text-teal-700 dark:text-teal-300',
     Icon: CheckCircleIcon,
   },
   lemma: {
-    style: 'border-sky-400 dark:bg-sky-950/5',
+    name: 'Lemma',
+    style: 'before:bg-sky-400/60',
     textColor: 'text-sky-700 dark:text-sky-300',
     Icon: PuzzleIcon,
   },
   proof: {
-    style: 'border-gray-500 dark:bg-gray-950/5',
+    name: 'Proof',
+    style: 'before:bg-gray-400/60',
     textColor: 'text-gray-700 dark:text-gray-300',
     Icon: CheckSquareIcon,
   },
   corollary: {
-    style: 'border-cyan-500 dark:bg-cyan-950/5',
+    name: 'Corollary',
+    style: 'before:bg-cyan-400/60',
     textColor: 'text-cyan-700 dark:text-cyan-300',
     Icon: GitBranchIcon,
   },
   proposition: {
-    style: 'border-slate-500 dark:bg-slate-950/5',
+    name: 'Proposition',
+    style: 'before:bg-slate-400/60',
     textColor: 'text-slate-700 dark:text-slate-300',
     Icon: FileTextIcon,
   },
   axiom: {
-    style: 'border-violet-600 dark:bg-violet-950/5',
+    name: 'Axiom',
+    style: 'before:bg-violet-400/60',
     textColor: 'text-violet-700 dark:text-violet-300',
     Icon: AnchorIcon,
   },
   conjecture: {
-    style: 'border-pink-500 dark:bg-pink-950/5',
+    name: 'Conjecture',
+    style: 'before:bg-pink-400/60',
     textColor: 'text-pink-700 dark:text-pink-300',
     Icon: HelpCircleIcon,
   },
   notation: {
-    style: 'border-slate-400 dark:bg-slate-950/5',
+    name: 'Notation',
+    style: 'before:bg-slate-400/60',
     textColor: 'text-slate-700 dark:text-slate-300',
     Icon: PenToolIcon,
   },
   remark: {
-    style: 'border-gray-400 dark:bg-gray-950/5',
+    name: 'Remark',
+    style: 'before:bg-gray-400/60',
     textColor: 'text-gray-700 dark:text-gray-300',
     Icon: MessageCircleIcon,
   },
   intuition: {
-    style: 'border-yellow-500 dark:bg-yellow-950/5',
+    name: 'Intuition',
+    style: 'before:bg-yellow-400/60',
     textColor: 'text-yellow-700 dark:text-yellow-300',
     Icon: LightbulbIcon,
   },
   recall: {
-    style: 'border-blue-300 dark:bg-blue-950/5',
+    name: 'Recall',
+    style: 'before:bg-blue-400/60',
     textColor: 'text-blue-600 dark:text-blue-300',
     Icon: RotateCcwIcon,
   },
   explanation: {
-    style: 'border-lime-500 dark:bg-lime-950/5',
+    name: 'Explanation',
+    style: 'before:bg-lime-400/60',
     textColor: 'text-lime-700 dark:text-lime-300',
     Icon: HelpCircleIcon,
   },
   example: {
-    style: 'border-emerald-500 dark:bg-emerald-950/5',
+    name: 'Example',
+    style: 'before:bg-emerald-400/60',
     textColor: 'text-emerald-700 dark:text-emerald-300',
     Icon: CodeIcon,
   },
   exercise: {
-    style: 'border-indigo-500 dark:bg-indigo-950/5',
+    name: 'Exercise',
+    style: 'before:bg-indigo-400/60',
     textColor: 'text-indigo-700 dark:text-indigo-300',
     Icon: DumbbellIcon,
   },
   problem: {
-    style: 'border-orange-600 dark:bg-orange-950/5',
+    name: 'Problem',
+    style: 'before:bg-orange-400/60',
     textColor: 'text-orange-700 dark:text-orange-300',
     Icon: AlertCircleIcon,
   },
   answer: {
-    style: 'border-teal-500 dark:bg-teal-950/5',
+    name: 'Answer',
+    style: 'before:bg-teal-400/60',
     textColor: 'text-teal-700 dark:text-teal-300',
     Icon: CheckIcon,
   },
   solution: {
-    style: 'border-emerald-600 dark:bg-emerald-950/5',
+    name: 'Solution',
+    style: 'before:bg-emerald-400/60',
     textColor: 'text-emerald-700 dark:text-emerald-300',
     Icon: CheckCircle2Icon,
   },
   summary: {
-    style: 'border-sky-500 dark:bg-sky-950/5',
+    name: 'Summary',
+    style: 'before:bg-sky-400/60',
     textColor: 'text-sky-700 dark:text-sky-300',
     Icon: ListIcon,
   },
 } as const;
 
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
-
-const calloutVariants = cva('relative px-4 py-3 my-6 border-l-4 text-sm', {
-  variants: {
-    variant: Object.fromEntries(Object.entries(calloutConfig).map(([key, config]) => [key, config.style])),
+const calloutVariants = cva(
+  'relative my-4 p-3 ps-3.75 bg-card border rounded-xl shadow-sm text-sm before:absolute before:w-0.5 before:top-3 before:bottom-3 before:inset-s-1 before:rounded-sm',
+  {
+    variants: {
+      variant: Object.fromEntries(Object.entries(calloutConfig).map(([key, config]) => [key, config.style])),
+    },
+    defaultVariants: {
+      variant: 'note',
+    },
   },
-  defaultVariants: {
-    variant: 'note',
-  },
-});
+);
 
 export const validCalloutVariants = Object.keys(calloutConfig);
 
 export type CalloutVariant = keyof typeof calloutConfig;
 
-export interface CalloutProps extends VariantProps<typeof calloutVariants>, Omit<ComponentProps<'details'>, 'title'> {
+export interface CalloutProps extends VariantProps<typeof calloutVariants>, Omit<HTMLAttributes<HTMLElement>, 'title'> {
   title?: ReactNode;
   variant?: CalloutVariant;
+  collapsible?: boolean;
+  open?: boolean;
 }
 
-export default function Callout({ children, title, variant = 'note', open = true, className, ...rest }: CalloutProps) {
-  const { Icon, textColor } = calloutConfig[variant];
+export default function Callout({ children, title, collapsible = true, variant = 'note', open = true, className, ...props }: CalloutProps) {
+  if (!calloutConfig[variant]) {
+    throw new TypeError(`'${variant}' is not a valid variant for Callout component.`);
+  }
+
+  const { Icon, textColor, name } = calloutConfig[variant];
+
+  const Details = collapsible ? 'details' : 'div';
+  const Summary = collapsible ? 'summary' : 'div';
 
   return (
-    <details
-      className={cn(calloutVariants({ variant }), className, '[&[open]>summary_svg:last-child]:rotate-180 [&[open]>summary]:mb-3')}
-      open={open}
-      {...rest}
+    <Details
+      className={cn(calloutVariants({ variant }), collapsible && '[&[open]>summary_svg:last-child]:rotate-180 [&[open]>summary]:mb-3', className)}
+      {...(collapsible ? { open } : {})}
+      {...props}
     >
-      <summary className="flex cursor-pointer items-center font-medium [&::-webkit-details-marker]:hidden">
-        <Icon className={cn('mr-2 size-4 shrink-0', textColor)} />
-        <span className={cn('font-medium mr-2', textColor)}>
-          {capitalize(variant)}
+      <Summary className={cn('flex gap-2 items-center font-medium', collapsible ? 'cursor-pointer [&::-webkit-details-marker]:hidden' : 'mb-3')}>
+        <Icon className={cn('size-4 shrink-0', textColor)} />
+        <span className={cn('font-medium', textColor)}>
+          {name}
           {title && <span className="font-normal opacity-70"> ({title})</span>}
         </span>
-        <ChevronDownIcon className={cn('ml-auto h-4 w-4 shrink-0 transition-transform duration-200', textColor)} />
-      </summary>
+        {collapsible && <ChevronDownIcon className={cn('ml-auto size-4 shrink-0 transition-transform duration-200', textColor)} />}
+      </Summary>
       <div>{children}</div>
-    </details>
+    </Details>
   );
 }

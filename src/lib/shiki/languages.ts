@@ -1,3 +1,4 @@
+import astro from '@shikijs/langs/astro';
 import c from '@shikijs/langs/c';
 import cpp from '@shikijs/langs/cpp';
 import css from '@shikijs/langs/css';
@@ -9,4 +10,4 @@ import tsx from '@shikijs/langs/tsx';
 import typescript from '@shikijs/langs/typescript';
 import type { LanguageInput } from 'shiki/core';
 
-export const languages: LanguageInput[] = [html, css, javascript, typescript, jsx, tsx, json, c, cpp];
+export const languages: LanguageInput[] = [html, css, javascript, typescript, jsx, tsx, json, astro, c, cpp];

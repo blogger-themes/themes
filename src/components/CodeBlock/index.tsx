@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import type { HighlightResult } from '@/web-workers/shiki-worker';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
-import { langIcons } from './icons';
+import { LangIcon } from './icons';
 
 function Placeholder({ code }: { code: string }) {
   return (
@@ -78,12 +78,6 @@ export default function CodeBlock({
     }
   }, [code, lang]);
 
-  const Icon = useMemo(() => {
-    if (lang) {
-      return langIcons.find((e) => e.langs.includes(lang.toLowerCase()))?.icon;
-    }
-  }, [lang]);
-
   const node = useMemo(() => {
     return (
       <code
@@ -119,7 +113,7 @@ export default function CodeBlock({
     >
       {(title || allowLineNumbersToggle || allowWrapToggle || allowCopy) && (
         <div className="flex text-muted-foreground items-center gap-2 h-9.5 border-b px-4">
-          {Icon && <Icon className="size-3.5 shrink-0" />}
+          {lang && <LangIcon lang={lang} className="size-3.5 shrink-0" />}
           {title && <figcaption className="flex-1 truncate">{title}</figcaption>}
           {(allowLineNumbersToggle || allowWrapToggle || allowCopy) && (
             <div className="flex gap-0.5 ms-auto -me-2.5">

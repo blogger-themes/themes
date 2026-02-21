@@ -1,6 +1,7 @@
 import { GithubIcon, MailIcon } from 'lucide-react';
-import { buttonVariants } from './ui/button';
+import { Button } from './ui/button';
 import { Separator } from './ui/separator';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export default function Footer() {
   return (
@@ -18,16 +19,34 @@ export default function Footer() {
           </p>
         </div>
         <ul className="flex flex-wrap gap-2">
-          <li>
-            <a href="https://github.com/kumardeo" aria-label="GitHub" title="GitHub" className={buttonVariants({ variant: 'outline', size: 'icon' })}>
-              <GithubIcon className="size-4" />
-            </a>
-          </li>
-          <li>
-            <a href="mailto:deo@fineshopdesign.com" aria-label="Email" title="Email" className={buttonVariants({ variant: 'outline', size: 'icon' })}>
-              <MailIcon className="size-4" />
-            </a>
-          </li>
+          {[
+            {
+              label: 'Github',
+              link: 'https://github.com/kumardeo',
+              icon: GithubIcon,
+            },
+            {
+              label: 'Email',
+              link: 'mailto:deo@fineshopdesign.com',
+              icon: MailIcon,
+            },
+          ].map(({ label, link, icon: Icon }) => (
+            <li key={`${label}:${link}`}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" asChild>
+                    <a href={link}>
+                      <span className="sr-only">{label}</span>
+                      <Icon className="size-4" />
+                    </a>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{label}</p>
+                </TooltipContent>
+              </Tooltip>
+            </li>
+          ))}
         </ul>
       </div>
     </footer>
