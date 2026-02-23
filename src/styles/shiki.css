@@ -23,11 +23,19 @@
   .highlighted {
     padding-left: calc(var(--padding-left) - 2px);
 
-    @apply border-l-2 border-blue-400 bg-blue-100;
+    @apply border-l-2 border-blue-400 bg-blue-100 dark:border-blue-400 dark:bg-blue-950;
+  }
+
+  .highlighted.warning {
+    @apply border-orange-400 bg-orange-100 dark:border-yellow-400 dark:bg-yellow-950;
+  }
+
+  .highlighted.error {
+    @apply border-red-400 bg-red-100 dark:border-red-400 dark:bg-red-950;
   }
 
   .highlighted-word {
-    @apply p-px border -my-px border-blue-300 bg-blue-100 rounded-md font-medium;
+    @apply p-px border -my-px border-blue-300 bg-blue-100 rounded-md font-medium dark:bg-blue-950;
   }
 
   .diff::after {
@@ -38,7 +46,7 @@
   }
 
   .diff.remove {
-    @apply bg-red-100;
+    @apply bg-red-100 dark:bg-red-950;
   }
 
   .diff.remove::after {
@@ -47,7 +55,7 @@
   }
 
   .diff.add {
-    @apply bg-green-100;
+    @apply bg-green-100 dark:bg-green-950;
   }
 
   .diff.add::after {
@@ -56,8 +64,11 @@
   }
 
   &[data-line-numbers] .line {
-    counter-increment: line;
     padding-left: calc(var(--padding-left) + 7 * var(--spacing));
+  }
+
+  &[data-line-numbers] .line:not(.diff.remove) {
+    counter-increment: line;
   }
 
   &[data-line-numbers] .line::before {
@@ -66,11 +77,15 @@
     @apply absolute z-1 inline-block top-0 left-0 h-full bg-card text-center text-muted-foreground;
   }
 
-  &[data-line-numbers][data-sticky-line-numbers]:not([data-wrapped]) .line {
+  &[data-line-numbers] .line.diff.remove::before {
+    content: "\2022";
+  }
+
+  &[data-line-numbers][data-line-sticky]:not([data-line-wrapped]) .line {
     padding-left: 0;
   }
 
-  &[data-line-numbers][data-sticky-line-numbers]:not([data-wrapped]) .line::before {
+  &[data-line-numbers][data-line-sticky]:not([data-line-wrapped]) .line::before {
     @apply sticky;
   }
 
@@ -80,6 +95,14 @@
 
   &[data-line-numbers] .highlighted::before {
     @apply border-l-2 border-blue-400 bg-blue-200;
+  }
+
+  &[data-line-numbers] .highlighted.warning::before {
+    @apply border-l-2 border-orange-400 bg-orange-200;
+  }
+
+  &[data-line-numbers] .highlighted.error::before {
+    @apply border-l-2 border-red-400 bg-red-200;
   }
 
   &[data-line-numbers].has-diff .line::before {
@@ -115,5 +138,25 @@
     font-style: var(--shiki-dark-font-style);
     font-weight: var(--shiki-dark-font-weight);
     text-decoration: var(--shiki-dark-text-decoration);
+  }
+
+  &[data-line-numbers] .highlighted::before {
+    @apply border-blue-400 bg-blue-900;
+  }
+
+  &[data-line-numbers] .highlighted.warning::before {
+    @apply border-yellow-400 bg-yellow-900;
+  }
+
+  &[data-line-numbers] .highlighted.error::before {
+    @apply border-red-400 bg-red-900;
+  }
+
+  &[data-line-numbers] .diff.remove::before {
+    @apply bg-red-900;
+  }
+
+  &[data-line-numbers] .diff.add::before {
+    @apply bg-green-900;
   }
 }
