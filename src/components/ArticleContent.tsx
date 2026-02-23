@@ -21,6 +21,7 @@ export function parseContent(html: string): ParsedContent {
   const slugger = new GithubSlugger();
 
   const headings: Heading[] = [];
+
   const node = convertFromHTML(html, {
     filter(node) {
       return node.nodeName !== 'SCRIPT';
@@ -32,37 +33,7 @@ export function parseContent(html: string): ParsedContent {
 
       const element = node as Element;
 
-      const headingIndex = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].indexOf(element.tagName);
-      if (headingIndex !== -1) {
-        const Comp = element.tagName.toLowerCase() as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-        const children = ctx.children();
-        const level = (headingIndex + 1) as 1 | 2 | 3 | 4 | 5 | 6;
-        const value = element.textContent;
-        const id = element.getAttribute('id') ?? slugger.slug(value);
-
-        headings.push({
-          level,
-          value,
-          id,
-        });
-
-        return (
-          <Comp key={ctx.key} id={id}>
-            <a href={`#${id}`}>{children}</a>
-          </Comp>
-        );
-      }
-
-      if (element.tagName === 'PRE') {
-        const child = (node as Element).children[0];
-        if (!child || !child.textContent || child.nodeName !== 'CODE') {
-          return null;
-        }
-        const language = child.className.match(/\blanguage-([\w-]+)\b/i)?.[1];
-        const title = element.getAttribute('data-title') || undefined;
-        return <CodeBlock key={ctx.key} code={child.textContent} lang={language} title={title} />;
-      }
-
+      // handle custom components
       const component = element.getAttribute('data-component');
 
       if (component === 'callout') {
@@ -103,6 +74,40 @@ export function parseContent(html: string): ParsedContent {
 
       if (component !== null) {
         return <ComponentError>Component '{component}' is not supported.</ComponentError>;
+      }
+
+      // handle headings
+      const headingIndex = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].indexOf(element.tagName);
+      if (headingIndex !== -1) {
+        const Comp = element.tagName.toLowerCase() as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+        const children = ctx.children();
+        const level = (headingIndex + 1) as 1 | 2 | 3 | 4 | 5 | 6;
+        const value = element.textContent;
+        const id = element.getAttribute('id') ?? slugger.slug(value);
+
+        headings.push({
+          level,
+          value,
+          id,
+        });
+
+        return (
+          <Comp key={ctx.key} id={id}>
+            <a href={`#${id}`}>{children}</a>
+          </Comp>
+        );
+      }
+
+      // handle codeblocks
+      if (element.tagName === 'PRE') {
+        const child = (node as Element).children.item(0);
+        if (!child || !child.textContent || child.nodeName !== 'CODE') {
+          // TODO: maybe we can show helpful message
+          return null;
+        }
+        const language = child.className.match(/\blanguage-([\w-]+)\b/i)?.[1];
+        const title = element.getAttribute('data-title') || undefined;
+        return <CodeBlock key={ctx.key} code={child.textContent} lang={language} title={title} />;
       }
     },
   });

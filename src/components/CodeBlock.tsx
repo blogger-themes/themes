@@ -1,11 +1,11 @@
 import { SiAstro, SiCplusplus, SiCss, SiHtml5, SiJavascript, SiJson, SiReact, SiTypescript } from '@icons-pack/react-simple-icons';
-import { CheckIcon, ClipboardIcon, ListIndentDecreaseIcon, ListOrderedIcon, TextAlignJustifyIcon, TextWrapIcon } from 'lucide-react';
+import { CheckIcon, ClipboardIcon, ListIndentDecreaseIcon, ListOrderedIcon, TextAlignJustifyIcon, TextWrapIcon, XIcon } from 'lucide-react';
 import { type ComponentProps, type ReactNode, type RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCopyButton } from '@/hooks/use-copy-button';
 import { cn } from '@/lib/utils';
-import type { HighlightResult } from '@/web-workers/shiki-worker';
+import type { HighlightResult } from '@/web-workers/shiki';
 
 export interface CodeBlockRootProps extends Omit<ComponentProps<'figure'>, 'title'> {
   title?: ReactNode;
@@ -112,7 +112,7 @@ interface CopyButtonProps extends ComponentProps<'button'> {
 }
 
 function CopyButton({ className, containerRef, ...props }: CopyButtonProps) {
-  const [checked, onClick] = useCopyButton(() => {
+  const [checked, onClick, error] = useCopyButton(async () => {
     const pre = containerRef.current?.getElementsByTagName('pre').item(0);
     if (!pre) {
       return;
@@ -123,8 +123,11 @@ function CopyButton({ className, containerRef, ...props }: CopyButtonProps) {
       node.replaceWith('\n');
     });
 
-    void navigator.clipboard.writeText(clone.textContent ?? '');
+    await navigator.clipboard.writeText(clone.textContent ?? '');
   });
+
+  const message = error ? 'Failed to copy' : checked ? 'Copied Text' : 'Copy Text';
+  const icon = error ? <XIcon /> : checked ? <CheckIcon /> : <ClipboardIcon />;
 
   return (
     <ActionButton
@@ -133,10 +136,11 @@ function CopyButton({ className, containerRef, ...props }: CopyButtonProps) {
       className={cn('data-checked:text-accent-foreground', className)}
       onClick={onClick}
       data-checked={checked ? '' : undefined}
-      tooltip={<p>{checked ? 'Copied Text' : 'Copy Text'}</p>}
+      data-error={error ? '' : undefined}
+      tooltip={<p>{message}</p>}
     >
-      <span className="sr-only">{checked ? 'Copied Text' : 'Copy Text'}</span>
-      {checked ? <CheckIcon /> : <ClipboardIcon />}
+      <span className="sr-only">{message}</span>
+      {icon}
     </ActionButton>
   );
 }
@@ -146,15 +150,13 @@ interface WrapButtonProps extends ComponentProps<'button'> {
 }
 
 function WrapButton({ enabled, ...props }: WrapButtonProps) {
+  const message = enabled ? 'Disable line wrapping' : 'Enable line wrapping';
+  const icon = enabled ? <TextAlignJustifyIcon /> : <TextWrapIcon />;
+
   return (
-    <ActionButton
-      type="button"
-      {...props}
-      data-checked={enabled ? '' : undefined}
-      tooltip={<p>{enabled ? 'Disable line wrapping' : 'Enable line wrapping'}</p>}
-    >
-      <span className="sr-only">{enabled ? 'Disable line wrapping' : 'Enable line wrapping'}</span>
-      {enabled ? <TextAlignJustifyIcon /> : <TextWrapIcon />}
+    <ActionButton type="button" {...props} data-checked={enabled ? '' : undefined} tooltip={<p>{message}</p>}>
+      <span className="sr-only">{message}</span>
+      {icon}
     </ActionButton>
   );
 }
@@ -164,15 +166,13 @@ interface LineButtonProps extends ComponentProps<'button'> {
 }
 
 function LineButton({ enabled, ...props }: LineButtonProps) {
+  const message = enabled ? 'Hide line numbers' : 'Show line numbers';
+  const icon = enabled ? <ListIndentDecreaseIcon /> : <ListOrderedIcon />;
+
   return (
-    <ActionButton
-      type="button"
-      {...props}
-      data-checked={enabled ? '' : undefined}
-      tooltip={<p>{enabled ? 'Hide line numbers' : 'Show line numbers'}</p>}
-    >
-      <span className="sr-only">{enabled ? 'Hide line numbers' : 'Show line numbers'}</span>
-      {enabled ? <ListIndentDecreaseIcon /> : <ListOrderedIcon />}
+    <ActionButton type="button" {...props} data-checked={enabled ? '' : undefined} tooltip={<p>{message}</p>}>
+      <span className="sr-only">{message}</span>
+      {icon}
     </ActionButton>
   );
 }
@@ -183,36 +183,28 @@ export interface CodeBlockProps extends CodeBlockRootProps {
 }
 
 export default function CodeBlock({ code, lang, icon, className, style, ...props }: CodeBlockProps) {
-  const [highlightedResult, setHighlightedResult] = useState<HighlightResult | null>(null);
+  const [result, setResult] = useState<HighlightResult>();
 
   useEffect(() => {
     if (lang) {
-      import('@/web-workers/shiki-worker').then(async ({ highlight }) => {
-        const result = await highlight(code, lang);
-        setHighlightedResult(result);
+      import('@/web-workers/shiki').then(async ({ highlight }) => {
+        setResult(await highlight(code, lang));
       });
     }
   }, [code, lang]);
 
   const node = useMemo(
-    () => (
-      <code
-        className="bg-transparent p-0 flex flex-col"
-        dangerouslySetInnerHTML={highlightedResult ? { __html: highlightedResult.content } : undefined}
-      >
-        {highlightedResult ? undefined : <Placeholder code={code} />}
-      </code>
-    ),
-    [code, lang, highlightedResult],
+    () => <code dangerouslySetInnerHTML={result ? { __html: result.content } : undefined}>{result ? undefined : <Placeholder code={code} />}</code>,
+    [code, lang, result],
   );
 
   return (
     <CodeBlockRoot
-      icon={icon ?? (lang && <LangIcon lang={lang} />)}
       {...props}
-      className={cn('shiki', className, highlightedResult?.props.className)}
+      icon={icon ?? (lang && <LangIcon lang={lang} />)}
+      className={cn('shiki', className, result?.props.className)}
       style={{
-        ...highlightedResult?.props.style,
+        ...result?.props.style,
         ...style,
       }}
     >
@@ -221,7 +213,11 @@ export default function CodeBlock({ code, lang, icon, className, style, ...props
   );
 }
 
-function Placeholder({ code }: { code: string }) {
+interface PlaceholderProps {
+  code: string;
+}
+
+function Placeholder({ code }: PlaceholderProps) {
   return (
     <>
       {code.split('\n').map((line, i) => (
