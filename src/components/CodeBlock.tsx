@@ -182,7 +182,7 @@ export interface CodeBlockProps extends CodeBlockRootProps {
   lang?: string;
 }
 
-export default function CodeBlock({ code, lang, icon, className, ...props }: CodeBlockProps) {
+export default function CodeBlock({ code, lang, icon, className, style, ...props }: CodeBlockProps) {
   const [highlightedResult, setHighlightedResult] = useState<HighlightResult | null>(null);
 
   useEffect(() => {
@@ -207,7 +207,15 @@ export default function CodeBlock({ code, lang, icon, className, ...props }: Cod
   );
 
   return (
-    <CodeBlockRoot icon={icon ?? (lang && <LangIcon lang={lang} />)} {...props} className={cn('shiki', className)}>
+    <CodeBlockRoot
+      icon={icon ?? (lang && <LangIcon lang={lang} />)}
+      {...props}
+      className={cn('shiki', className, highlightedResult?.props.className)}
+      style={{
+        ...highlightedResult?.props.style,
+        ...style,
+      }}
+    >
       <CodeBlockPre>{node}</CodeBlockPre>
     </CodeBlockRoot>
   );
