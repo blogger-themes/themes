@@ -4,7 +4,7 @@ import { TriangleAlertIcon } from 'lucide-react';
 import { type ComponentProps, type PropsWithChildren, type ReactNode, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import Callout, { type CalloutVariant, validCalloutVariants } from './Callout';
-import CodeBlock from './CodeBlock';
+import DynamicCodeBlock from './DynamicCodeBlock';
 
 export interface Heading {
   level: 1 | 2 | 3 | 4 | 5 | 6;
@@ -107,7 +107,7 @@ export function parseContent(html: string): ParsedContent {
         }
         const language = child.className.match(/\blanguage-([\w-]+)\b/i)?.[1];
         const title = element.getAttribute('data-title') || undefined;
-        return <CodeBlock key={ctx.key} code={child.textContent} lang={language} title={title} />;
+        return <DynamicCodeBlock key={ctx.key} code={child.textContent} lang={language} title={title} />;
       }
     },
   });

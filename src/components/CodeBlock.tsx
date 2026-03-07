@@ -1,11 +1,10 @@
 import { SiAstro, SiCplusplus, SiCss, SiHtml5, SiJavascript, SiJson, SiReact, SiTypescript } from '@icons-pack/react-simple-icons';
 import { CheckIcon, ClipboardIcon, ListIndentDecreaseIcon, ListOrderedIcon, TextAlignJustifyIcon, TextWrapIcon, XIcon } from 'lucide-react';
-import { type ComponentProps, type ReactNode, type RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { type ComponentProps, type ReactNode, type RefObject, useMemo, useRef, useState } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCopyButton } from '@/hooks/use-copy-button';
 import { cn } from '@/lib/utils';
-import type { HighlightResult } from '@/web-workers/shiki';
 
 export interface CodeBlockRootProps extends Omit<ComponentProps<'figure'>, 'title'> {
   title?: ReactNode;
@@ -177,47 +176,11 @@ function LineButton({ enabled, ...props }: LineButtonProps) {
   );
 }
 
-export interface CodeBlockProps extends CodeBlockRootProps {
-  code: string;
-  lang?: string;
-}
-
-export default function CodeBlock({ code, lang, icon, className, style, ...props }: CodeBlockProps) {
-  const [result, setResult] = useState<HighlightResult>();
-
-  useEffect(() => {
-    if (lang) {
-      import('@/web-workers/shiki').then(async ({ highlight }) => {
-        setResult(await highlight(code, lang));
-      });
-    }
-  }, [code, lang]);
-
-  const node = useMemo(
-    () => <code dangerouslySetInnerHTML={result ? { __html: result.content } : undefined}>{result ? undefined : <Placeholder code={code} />}</code>,
-    [code, lang, result],
-  );
-
-  return (
-    <CodeBlockRoot
-      {...props}
-      icon={icon ?? (lang && <LangIcon lang={lang} />)}
-      className={cn('shiki', className, result?.props.className)}
-      style={{
-        ...result?.props.style,
-        ...style,
-      }}
-    >
-      <CodeBlockPre>{node}</CodeBlockPre>
-    </CodeBlockRoot>
-  );
-}
-
 interface PlaceholderProps {
   code: string;
 }
 
-function Placeholder({ code }: PlaceholderProps) {
+export function Placeholder({ code }: PlaceholderProps) {
   return (
     <>
       {code.split('\n').map((line, i) => (
