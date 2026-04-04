@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# blogger-plugin tailwind
+.tailwind-classes.json

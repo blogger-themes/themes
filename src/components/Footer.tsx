@@ -1,4 +1,5 @@
-import { GithubIcon, MailIcon } from 'lucide-react';
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import { MailIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -23,7 +24,7 @@ export default function Footer() {
             {
               label: 'Github',
               link: 'https://github.com/kumardeo',
-              icon: GithubIcon,
+              icon: SiGithub,
             },
             {
               label: 'Email',

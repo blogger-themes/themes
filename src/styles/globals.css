@@ -5,6 +5,8 @@
 @import "@fontsource-variable/jetbrains-mono";
 @import "./shiki.css";
 
+@source "../../.tailwind-classes.json";
+
 @custom-variant dark (&:is(.dark *));
 
 @custom-variant blog-admin (&:is(.is-blog-admin *));
