@@ -292,7 +292,7 @@
     <!--blogger-plugin:head:begin--><!--blogger-plugin:head:end-->
 
     <b:else/>
-    <b:comment><!--blogger-plugin:head:begin--></b:comment><script type='module' crossorigin='' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-am88x6Ls.js'></script><link rel='stylesheet' crossorigin='' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/index-CKHQlCep.css' /><b:comment><!--blogger-plugin:head:end--></b:comment>
+    <b:comment><!--blogger-plugin:head:begin--></b:comment><script type='module' crossorigin='' src='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/template-BGJ08w2R.js'></script><link rel='modulepreload' crossorigin='' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/utils-DKs6LDaY.js' /><link rel='modulepreload' crossorigin='' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/dist-CJUJBwzm.js' /><link rel='modulepreload' crossorigin='' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/dist-D8QHMJzJ.js' /><link rel='stylesheet' crossorigin='' href='https://cdn.jsdelivr.net/gh/kumardeo/react-blogger-template@static-dev/assets/template-Bs6n3rxW.css' /><b:comment><!--blogger-plugin:head:end--></b:comment>
   </b:if>
 
   <b:if cond='false'><b:skin><![CDATA[]]></b:skin></b:if>
