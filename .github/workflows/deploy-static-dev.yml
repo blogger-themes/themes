@@ -15,17 +15,17 @@ jobs:
       matrix:
         node-version: ["22.x"]
     steps:
-      - name: "Checkout ${{ github.ref_name }} branch"
-        uses: actions/checkout@v5
+      - name: Checkout ${{ github.ref_name }} branch
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       - name: Use pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Use Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
@@ -37,11 +37,11 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build app
-        run: "pnpm run build"
+        run: pnpm run build
         env:
-          VITE_BASE: "https://cdn.jsdelivr.net/gh/${{ github.repository }}@static-dev"
+          VITE_BASE: https://cdn.jsdelivr.net/gh/${{ github.repository }}@static-dev
 
-      - name: Ensure static branch exists
+      - name: Ensure static-dev branch exists
         run: |
           current_branch=$(git symbolic-ref --short HEAD)
           if git show-ref --verify --quiet refs/remotes/origin/static-dev; then
@@ -58,14 +58,14 @@ jobs:
           fi
 
       - name: Deploy to static-dev branch
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
           publish_branch: static-dev
-          user_name: "github-actions[bot]"
-          user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_message: "Deploy static assets from development branch"
+          commit_message: Deploy static assets from development branch
+          publish_dir: ./dist
 
   purge:
     name: Purge JsDelivr files
@@ -73,7 +73,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Checkout static-dev branch
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: static-dev
           fetch-depth: 2

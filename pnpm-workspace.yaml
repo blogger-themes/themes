@@ -1,7 +1,6 @@
-onlyBuiltDependencies:
-  - '@firebase/util'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - msw
-  - protobufjs
+allowBuilds:
+  '@firebase/util': true
+  '@swc/core': true
+  esbuild: true
+  msw: true
+  protobufjs: true
