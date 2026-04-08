@@ -1,5 +1,34 @@
-import { SiAstro, SiCplusplus, SiCss, SiHtml5, SiJavascript, SiJson, SiReact, SiTypescript } from '@icons-pack/react-simple-icons';
-import { CheckIcon, ClipboardIcon, ListIndentDecreaseIcon, ListOrderedIcon, TextAlignJustifyIcon, TextWrapIcon, XIcon } from 'lucide-react';
+import {
+  SiAstro,
+  SiCplusplus,
+  SiCss,
+  SiGo,
+  SiHtml5,
+  SiJavascript,
+  SiJson,
+  SiMarkdown,
+  SiMdx,
+  SiPhp,
+  SiPython,
+  SiReact,
+  SiRust,
+  SiSvelte,
+  SiToml,
+  SiTypescript,
+  SiVuedotjs,
+  SiYaml,
+} from '@icons-pack/react-simple-icons';
+import {
+  CheckIcon,
+  ClipboardIcon,
+  DatabaseIcon,
+  ListIndentDecreaseIcon,
+  ListOrderedIcon,
+  TerminalIcon,
+  TextAlignJustifyIcon,
+  TextWrapIcon,
+  XIcon,
+} from 'lucide-react';
 import { type ComponentProps, type ReactNode, type RefObject, useMemo, useRef, useState } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -196,30 +225,7 @@ export const langIcons: {
   langs: string[];
   icon: (props: ComponentProps<'svg'>) => ReactNode;
 }[] = [
-  {
-    langs: ['js', 'javascript'],
-    icon: SiJavascript,
-  },
-  {
-    langs: ['ts', 'typescript'],
-    icon: SiTypescript,
-  },
-  {
-    langs: ['jsx', 'tsx'],
-    icon: SiReact,
-  },
-  {
-    langs: ['html'],
-    icon: SiHtml5,
-  },
-  {
-    langs: ['css'],
-    icon: SiCss,
-  },
-  {
-    langs: ['json', 'jsonc'],
-    icon: SiJson,
-  },
+  // Systems
   {
     langs: ['c'],
     icon(props) {
@@ -241,9 +247,101 @@ export const langIcons: {
     langs: ['cpp', 'c++'],
     icon: SiCplusplus,
   },
+  // {
+  //   langs: ['csharp', 'c#', 'cs'],
+  //   icon(props) {},
+  // },
+  {
+    langs: ['go'],
+    icon: SiGo,
+  },
+  {
+    langs: ['rust', 'rs'],
+    icon: SiRust,
+  },
+  // {
+  //   langs: ['java'],
+  //   icon(props) {},
+  // },
+
+  // Scripting
+  {
+    langs: ['python', 'py'],
+    icon: SiPython,
+  },
+  {
+    langs: ['php'],
+    icon: SiPhp,
+  },
+  {
+    langs: ['shellscript', 'bash', 'sh', 'shell', 'zsh'],
+    icon: TerminalIcon,
+  },
+
+  // Web
+  {
+    langs: ['html'],
+    icon: SiHtml5,
+  },
+  {
+    langs: ['css'],
+    icon: SiCss,
+  },
+  {
+    langs: ['javascript', 'js', 'cjs', 'mjs'],
+    icon: SiJavascript,
+  },
+  {
+    langs: ['typescript', 'ts', 'cts', 'mts'],
+    icon: SiTypescript,
+  },
+  {
+    langs: ['jsx'],
+    icon: SiReact,
+  },
+  {
+    langs: ['tsx'],
+    icon: SiReact,
+  },
+  {
+    langs: ['json'],
+    icon: SiJson,
+  },
   {
     langs: ['astro'],
     icon: SiAstro,
+  },
+  {
+    langs: ['vue'],
+    icon: SiVuedotjs,
+  },
+  {
+    langs: ['svelte'],
+    icon: SiSvelte,
+  },
+
+  // Data / Config
+  {
+    langs: ['yaml', 'yml'],
+    icon: SiYaml,
+  },
+  {
+    langs: ['toml'],
+    icon: SiToml,
+  },
+  {
+    langs: ['sql'],
+    icon: DatabaseIcon,
+  },
+
+  // Markup / Docs
+  {
+    langs: ['markdown', 'md'],
+    icon: SiMarkdown,
+  },
+  {
+    langs: ['mdx'],
+    icon: SiMdx,
   },
 ];
 
