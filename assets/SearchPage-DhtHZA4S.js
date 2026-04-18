@@ -1,2 +1,0 @@
-import{c as e,l as t}from"./utils-C2fAqyZ4.js";import{n}from"./blogger-CVi5FsOf.js";import{t as r}from"./Breadcrumbs-Cmy2Qn6w.js";var i=e(`search`,[[`path`,{d:`m21 21-4.34-4.34`,key:`14j7rj`}],[`circle`,{cx:`11`,cy:`11`,r:`8`,key:`4ej97u`}]]),a=t();function o(){let{data:e}=n(),t=e.view.search;return(0,a.jsxs)(`div`,{className:`flex flex-col gap-5`,children:[(0,a.jsx)(r,{items:[{label:`Search`,icon:i}]}),(0,a.jsxs)(`div`,{children:[`Query: `,t.query]})]})}export{o as default};
-//# sourceMappingURL=SearchPage-DhtHZA4S.js.map

@@ -1,2 +1,0 @@
-import{S as e,b as t,l as n}from"./utils-C2fAqyZ4.js";var r=e(t(),1),i=n(),a=(0,r.createContext)(void 0);function o(){let e=(0,r.useContext)(a);if(e===void 0)throw Error(`useBlogger must be used within a BloggerProvider`);return e}function s({children:e,data:t}){return(0,i.jsx)(a.Provider,{value:{data:t},children:e})}export{o as n,s as t};
-//# sourceMappingURL=blogger-CVi5FsOf.js.map
