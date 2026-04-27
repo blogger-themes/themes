@@ -24,10 +24,10 @@ const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
 
   for (const url of [currentUrl, nextUrl]) {
     url.pathname = url.pathname.replace(/^\/\//, '/');
-    url.searchParams.delete('m');
-    url.searchParams.delete('view');
     if (url.search) {
-      url.search = new URLSearchParams([...url.searchParams.entries()].sort(([a], [b]) => a.localeCompare(b))).toString();
+      url.searchParams.delete('m');
+      url.searchParams.delete('view');
+      url.searchParams.sort();
     }
   }
 

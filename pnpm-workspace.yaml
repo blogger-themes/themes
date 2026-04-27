@@ -4,3 +4,8 @@ allowBuilds:
   esbuild: true
   msw: true
   protobufjs: true
+
+engineStrict: true
+# strictPeerDependencies: true
+shellEmulator: true
+enablePrePostScripts: true
