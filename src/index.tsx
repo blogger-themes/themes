@@ -1,12 +1,12 @@
+import '@/styles/globals.css';
+import '@/styles/typography.css';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { z } from 'zod';
 import routes from './routes';
-
-import '@/styles/globals.css';
-import '@/styles/typography.css';
 
 /**
  * Explicitly configure Zod error locale.

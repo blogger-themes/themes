@@ -100,7 +100,7 @@ export function parseContent(html: string): ParsedContent {
 
       // handle codeblocks
       if (element.tagName === 'PRE') {
-        const child = (node as Element).children.item(0);
+        const child = element.children.item(0);
         if (!child?.textContent || child.nodeName !== 'CODE') {
           // TODO: maybe we can show helpful message
           return null;

@@ -5,7 +5,7 @@ allowBuilds:
   msw: true
   protobufjs: true
 
-engineStrict: true
+# engineStrict: true
 # strictPeerDependencies: true
 shellEmulator: true
 enablePrePostScripts: true
