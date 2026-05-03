@@ -73,6 +73,18 @@
     </b:if>
   </b:if>
 
+  <b:comment><!--[ DNS Prefetch and Preconnect ]--></b:comment>
+  <link href='https://www.blogger.com' rel='dns-prefetch'/>
+  <link href='https://1.bp.blogspot.com' rel='dns-prefetch'/>
+  <link href='https://2.bp.blogspot.com' rel='dns-prefetch'/>
+  <link href='https://3.bp.blogspot.com' rel='dns-prefetch'/>
+  <link href='https://4.bp.blogspot.com' rel='dns-prefetch'/>
+  <link href='https://lh3.googleusercontent.com' rel='dns-prefetch'/>
+  <link href='https://blogger.googleusercontent.com' rel='dns-prefetch'/>
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link crossorigin='anonymous' href='https://cdn.jsdelivr.net' rel='preconnect'/>
+
   <b:if cond='!data:view.isError'>
     <b:comment><!--[ Link Canonical ]--></b:comment>
     <link expr:href='data:blog.url.canonical' rel='canonical'/>
