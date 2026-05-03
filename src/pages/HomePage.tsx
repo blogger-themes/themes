@@ -1,22 +1,52 @@
 import { GoogleImage } from '@deox/google-image';
 import { HashIcon } from 'lucide-react';
 import { Link } from 'react-router';
+import StructuredData from '@/components/StructuredData';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useBlogger } from '@/contexts/blogger';
 import type { BlogAuthor, PostMinimal } from '@/lib/blogger';
 
-function resizeAvatarImage(source: string, size: number) {
-  return new GoogleImage(source, { existing: false, pass: true })
-    .size(size)
-    .alternateCrop(true)
-    .disableAnimation(true)
-    .noButton(true)
-    .noUpscaling(true)
-    .webp(true)
-    .cacheDays(90)
-    .url();
+export default function HomePage() {
+  const { data } = useBlogger();
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          url: data.blog.canonicalHomepageUrl,
+          name: data.blog.title,
+          alternateName: data.blog.title,
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: `${data.blog.searchUrl}?q={search_term_string}`,
+            'query-input': 'required name=search_term_string',
+          },
+        }}
+      />
+      <div className="flex flex-col gap-4">
+        {data.featured && (
+          <>
+            <h2 className="text-xl font-medium">Featured post</h2>
+            <PostCard post={data.featured.post} />
+          </>
+        )}
+        <h2 className="text-xl font-medium">Latest posts</h2>
+        {Object.values(data.posts).map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+        <h2 className="text-xl font-medium">Blog authors</h2>
+        <div className="flex flex-col gap-5">
+          {data.authors.map((author) => (
+            <BlogAuthorCard key={author.id} author={author} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
 }
 
 function PostCard({ post }: { post: PostMinimal }) {
@@ -65,27 +95,14 @@ function BlogAuthorCard({ author }: { author: BlogAuthor }) {
   );
 }
 
-export default function HomePage() {
-  const { data } = useBlogger();
-
-  return (
-    <div className="flex flex-col gap-4">
-      {data.featured && (
-        <>
-          <h2 className="text-xl font-medium">Featured post</h2>
-          <PostCard post={data.featured.post} />
-        </>
-      )}
-      <h2 className="text-xl font-medium">Latest posts</h2>
-      {Object.values(data.posts).map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
-      <h2 className="text-xl font-medium">Blog authors</h2>
-      <div className="flex flex-col gap-5">
-        {data.authors.map((author) => (
-          <BlogAuthorCard key={author.id} author={author} />
-        ))}
-      </div>
-    </div>
-  );
+function resizeAvatarImage(source: string, size: number) {
+  return new GoogleImage(source, { existing: false, pass: true })
+    .size(size)
+    .alternateCrop(true)
+    .disableAnimation(true)
+    .noButton(true)
+    .noUpscaling(true)
+    .webp(true)
+    .cacheDays(90)
+    .url();
 }

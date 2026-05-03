@@ -48,6 +48,7 @@
     "react-day-picker": "^9.14.0",
     "react-dom": "^19.2.5",
     "react-router": "^7.14.2",
+    "schema-dts": "^2.0.0",
     "shiki": "^4.0.2",
     "sonner": "^2.0.7",
     "style-to-js": "^1.1.21",
