@@ -1,24 +1,26 @@
+import { getDeviceType } from '@/utils/device-type';
 import { parseBloggerData } from './parse';
 import type { BloggerData } from './types';
 
-export interface FetchBloggerDataOptions {
+export interface FetchBloggerOptions {
   mobile?: 'force' | 'drop' | 'ignore';
   content?: boolean;
 }
 
-const MOBILE_REGEX =
-  /(?:phone|windows\s+phone|ipod|blackberry|(?:android|bb\d+|meego|silk|googlebot) .+? mobile|palm|windows\s+ce|opera mini|avantgo|mobilesafari|docomo|KAIOS)/i;
-const TABLET_REGEX = /(?:ipad|playbook|(?:android|bb\d+|meego|silk)(?! .+? mobile))/i;
+export interface FetchBloggerResult {
+  asResponse: () => Promise<Response>;
+  asData: () => Promise<BloggerData>;
+}
 
-export function fetchBlogger(url: string | URL, { mobile = 'ignore', content = true }: FetchBloggerDataOptions = {}) {
-  const result = {} as {
+export function fetchBlogger(url: string | URL, { mobile = 'ignore', content = true }: FetchBloggerOptions = {}): FetchBloggerResult {
+  const cache: {
     response?: Response;
     data?: BloggerData;
-  };
+  } = {};
 
-  const asResponse = async () => {
-    if (result.response) {
-      return result.response;
+  const asResponse: FetchBloggerResult['asResponse'] = async () => {
+    if (cache.response) {
+      return cache.response;
     }
 
     const requestUrl = new URL(url);
@@ -27,7 +29,7 @@ export function fetchBlogger(url: string | URL, { mobile = 'ignore', content = t
       requestUrl.searchParams.set('m', '1');
     } else if (mobile === 'drop') {
       requestUrl.searchParams.set('m', '0');
-    } else if (MOBILE_REGEX.test(navigator.userAgent) || TABLET_REGEX.test(navigator.userAgent)) {
+    } else if (getDeviceType(navigator.userAgent) !== 'desktop') {
       requestUrl.searchParams.set('m', '1');
     }
 
@@ -37,14 +39,14 @@ export function fetchBlogger(url: string | URL, { mobile = 'ignore', content = t
       throw new Error(`Response code ${response.status} (${response.statusText || 'Unknown'})`, { cause: response });
     }
 
-    result.response = response;
+    cache.response = response;
 
-    return result.response;
+    return cache.response;
   };
 
-  const asData = async () => {
-    if (result.data) {
-      return result.data;
+  const asData: FetchBloggerResult['asData'] = async () => {
+    if (cache.data) {
+      return cache.data;
     }
 
     const response = await asResponse();
@@ -55,9 +57,9 @@ export function fetchBlogger(url: string | URL, { mobile = 'ignore', content = t
 
     const html = await response.text();
 
-    result.data = parseBloggerData(html);
+    cache.data = parseBloggerData(html);
 
-    return result.data;
+    return cache.data;
   };
 
   return { asResponse, asData };

@@ -39,7 +39,7 @@ jobs:
       - name: Build app
         run: pnpm run build
         env:
-          VITE_BASE: https://cdn.jsdelivr.net/gh/${{ github.repository }}@static-dev
+          VITE_BASE: https://cdn.jsdelivr.net/gh/${{ github.repository }}@static-dev/
 
       - name: Ensure static-dev branch exists
         run: |

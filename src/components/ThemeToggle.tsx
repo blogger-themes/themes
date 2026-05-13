@@ -1,6 +1,6 @@
 import { MonitorIcon, Moon, MoonStarIcon, Sun, SunIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import type { MouseEvent } from 'react';
+import { type MouseEvent, useRef } from 'react';
+import { useStore } from 'zustand/react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,19 +10,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { preferencesStore, type ResolvedTheme, type Theme } from '@/stores/preferences';
 
 export function ThemeToggle() {
-  const { theme: currentTheme, setTheme: setCurrentTheme } = useTheme();
+  const currentTheme = useStore(preferencesStore, (state) => state.theme);
+  const setCurrentTheme = useStore(preferencesStore, (state) => state.setTheme);
+  const darkMQRef = useRef<MediaQueryList | null>(window.matchMedia('(prefers-color-scheme: dark)'));
 
-  const setTheme = (theme: string, event?: MouseEvent) => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const resolveTheme = (theme: Theme): ResolvedTheme => {
+    if (theme === 'system') {
+      return darkMQRef.current?.matches ? 'dark' : 'light';
+    }
+    return theme;
+  };
 
-    const currentIsDark = currentTheme === 'dark' || (currentTheme === 'system' && mediaQuery.matches);
-    const nextIsDark = theme === 'dark' || (theme === 'system' && mediaQuery.matches);
-
+  const setTheme = (theme: Theme, event?: MouseEvent) => {
     if (
       event &&
-      currentIsDark !== nextIsDark &&
+      resolveTheme(theme) !== resolveTheme(currentTheme) &&
       !document.documentElement.hasAttribute('data-astro-transition') &&
       !/^((?!chrome|android).)*safari/i.test(navigator.userAgent) &&
       'startViewTransition' in document
@@ -67,11 +72,13 @@ export function ThemeToggle() {
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-          {[
-            { theme: 'light', name: 'Light', icon: SunIcon },
-            { theme: 'dark', name: 'Dark', icon: MoonStarIcon },
-            { theme: 'system', name: 'System', icon: MonitorIcon },
-          ].map(({ theme, name, icon: Icon }) => (
+          {(
+            [
+              { theme: 'light', name: 'Light', icon: SunIcon },
+              { theme: 'dark', name: 'Dark', icon: MoonStarIcon },
+              { theme: 'system', name: 'System', icon: MonitorIcon },
+            ] as const
+          ).map(({ theme, name, icon: Icon }) => (
             <DropdownMenuCheckboxItem key={theme} checked={currentTheme === theme} onClick={(event) => setTheme(theme, event)}>
               <Icon /> {name}
             </DropdownMenuCheckboxItem>

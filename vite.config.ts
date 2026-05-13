@@ -13,6 +13,10 @@ export default defineConfig({
       modules: ['src/index.tsx'],
       styles: ['src/styles/globals.css'],
       template: 'src/template.xml',
+      xml: {
+        tags: true,
+        minify: true,
+      },
     }),
     react(),
     tailwindcss(),

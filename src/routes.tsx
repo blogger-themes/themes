@@ -1,22 +1,9 @@
-import { createElement } from '@deox/utils/create-element';
 import { type LoaderFunction, type RouteObject, useRouteError, useRouteLoaderData } from 'react-router';
 import { BloggerProvider } from '@/contexts/blogger';
 import BlogLayout from '@/layouts/BlogLayout';
 import ErrorLayout from '@/layouts/ErrorLayout';
 import { type BloggerData, fetchBlogger } from '@/lib/blogger';
 import { bloggerData } from '@/lib/blogger-data';
-
-if (bloggerData.initial.manifest?.icons && (import.meta.env.DEV || location.protocol === 'https:') && !document.querySelector('link[rel=manifest]')) {
-  const blob = new Blob([JSON.stringify(bloggerData.initial.manifest, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-
-  const element = createElement('link', {
-    rel: 'manifest',
-    href: url,
-  });
-
-  document.head.appendChild(element);
-}
 
 const shouldRevalidate = ({ nextUrl: url }: { nextUrl: string | URL }) => {
   const currentUrl = new URL(bloggerData.current.view.url);

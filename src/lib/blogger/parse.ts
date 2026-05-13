@@ -18,7 +18,10 @@ import type {
   WebManifest,
 } from './types';
 
-function createParser(source: string | Document) {
+function createParser(source: string | Document): {
+  json: (id: string) => unknown;
+  title: () => string;
+} {
   const scripts = new Map<string, string>();
 
   if (typeof source === 'string') {
@@ -36,7 +39,7 @@ function createParser(source: string | Document) {
   }
 
   return {
-    json(id: string) {
+    json(id) {
       let content: string | undefined;
       if (typeof source === 'string') {
         content = scripts.get(id);
@@ -117,8 +120,7 @@ export function parseBloggerData(source: string | Document): BloggerData {
     { id: 'webmanifest', fallback: null },
     { id: 'firebase:config', fallback: null },
   ].map((descriptor) => {
-    const { id, fallback } = descriptor;
-    const hasFallback = 'fallback' in descriptor;
+    const { id } = descriptor;
 
     const parsed = parser.json(id);
 
@@ -126,17 +128,17 @@ export function parseBloggerData(source: string | Document): BloggerData {
       return parsed;
     }
 
-    if (!hasFallback) {
-      throw new Error(`Missing element with id 'json:${id}'`);
+    if ('fallback' in descriptor) {
+      return descriptor.fallback;
     }
 
-    return fallback;
+    throw new Error(`Missing element with id 'json:${id}'`);
   }) as [
     BloggerData,
     Record<string, number>,
     BlogAuthor[],
     Record<string, PostMinimal | Post>,
-    Comments,
+    Comments | null,
     Header | null,
     Contact,
     { endpoint: string },

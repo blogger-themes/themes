@@ -19,10 +19,12 @@ export default function DynamicCodeBlock({ code, lang, icon, className, style, .
     }
   }, [code, lang]);
 
-  const node = useMemo(
-    () => <code dangerouslySetInnerHTML={result ? { __html: result.content } : undefined}>{result ? undefined : <Placeholder code={code} />}</code>,
-    [code, lang, result],
-  );
+  const node = useMemo(() => {
+    if (result) {
+      return <code dangerouslySetInnerHTML={{ __html: result.content }} />;
+    }
+    return <code>{<Placeholder code={code} />}</code>;
+  }, [code, result]);
 
   return (
     <CodeBlockRoot

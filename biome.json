@@ -16,7 +16,7 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "useExhaustiveDependencies": "off"
+        "useExhaustiveDependencies": "error"
       },
       "style": {
         "useEnumInitializers": "off",

@@ -1,41 +1,32 @@
 import { loadStylesheet } from '@deox/utils/create-element';
 import { lazy } from '@deox/utils/lazy';
-import { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { createContext, type PropsWithChildren, useContext, useEffect } from 'react';
+import { useStore } from 'zustand/react';
 import { bloggerData } from '@/lib/blogger-data';
-import { subscribeStorage } from '@/utils/helpers';
+import { preferencesStore } from '@/stores/preferences';
 
-const BLOG_ADMIN_LS_KEY = 'is-blog-admin';
-const BLOG_ADMIN_LS_VALUE = '1';
-const BLOG_ADMIN_CLASSNAME = 'is-blog-admin';
+const BLOG_ADMIN_CLASS = 'is-blog-admin';
 
-function getFromLS(): boolean {
-  try {
-    return localStorage.getItem(BLOG_ADMIN_LS_KEY) === BLOG_ADMIN_LS_VALUE;
-  } catch (_) {
-    return false;
-  }
-}
-
-function setToLS(isBlogAdmin: boolean): void {
-  try {
-    if (isBlogAdmin) {
-      localStorage.setItem(BLOG_ADMIN_LS_KEY, BLOG_ADMIN_LS_VALUE);
-    } else {
-      localStorage.removeItem(BLOG_ADMIN_LS_KEY);
-    }
-  } catch (_) {}
-}
-
-function authorizationCssUrl(blogId: string) {
+function getAuthorizationCssUrl(blogId: string): string {
   return `https://www.blogger.com/dyn-css/authorization.css?targetBlogID=${blogId}`;
 }
 
-function updateDOM(isBlogAdmin: boolean) {
-  if (isBlogAdmin) {
-    document.documentElement.classList.add(BLOG_ADMIN_CLASSNAME);
-  } else {
-    document.documentElement.classList.remove(BLOG_ADMIN_CLASSNAME);
-  }
+async function detectBlogAdmin(blogId: string): Promise<boolean> {
+  await loadStylesheet(getAuthorizationCssUrl(blogId));
+
+  const probeElement = document.createElement('div');
+  probeElement.className = 'hidden blog-admin';
+  document.body.appendChild(probeElement);
+
+  const isBlogAdmin = getComputedStyle(probeElement).display === 'block';
+
+  probeElement.remove();
+
+  return isBlogAdmin;
+}
+
+function updateBlogAdminElement(blogAdmin: boolean) {
+  document.documentElement.classList[blogAdmin ? 'add' : 'remove'](BLOG_ADMIN_CLASS);
 }
 
 const BlogAdminContext = createContext<boolean | undefined>(undefined);
@@ -50,51 +41,29 @@ export function useBlogAdmin() {
   return context;
 }
 
+let blogAdminDetectionPromise: Promise<boolean> | undefined;
+
 export interface BlogAdminProviderProps extends PropsWithChildren {}
 
-let authCssPromise: Promise<void>;
-
 export function BlogAdminProvider({ children }: BlogAdminProviderProps) {
-  const [isBlogAdmin, setIsBlogAdmin] = useState(getFromLS());
+  const blogAdmin = useStore(preferencesStore, (state) => state.blogAdmin);
+  const setBlogAdmin = useStore(preferencesStore, (state) => state.setBlogAdmin);
 
   const data = bloggerData.initial;
 
   useEffect(() => {
-    updateDOM(isBlogAdmin);
-  }, [isBlogAdmin]);
+    updateBlogAdminElement(blogAdmin);
+  }, [blogAdmin]);
 
   useEffect(() => {
-    if (!authCssPromise && import.meta.env.PROD) {
-      authCssPromise = lazy.then(async () => {
-        await loadStylesheet(authorizationCssUrl(data.blog.blogId));
-
-        const container = document.createElement('div');
-        container.className = 'hidden blog-admin';
-        document.body.appendChild(container);
-        const styles = getComputedStyle(container);
-
-        if (styles.display === 'block') {
-          setIsBlogAdmin(true);
-          setToLS(true);
-        } else {
-          setIsBlogAdmin(false);
-          setToLS(false);
-        }
-
-        container.remove();
-      });
+    if (!import.meta.env.PROD) {
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    return subscribeStorage(BLOG_ADMIN_LS_KEY, (event) => {
-      if (event.newValue === BLOG_ADMIN_LS_VALUE) {
-        setIsBlogAdmin(true);
-      } else {
-        setIsBlogAdmin(false);
-      }
-    });
-  }, []);
+    blogAdminDetectionPromise ||= lazy.then(() => detectBlogAdmin(data.blog.blogId));
 
-  return <BlogAdminContext.Provider value={isBlogAdmin}>{children}</BlogAdminContext.Provider>;
+    blogAdminDetectionPromise.then(setBlogAdmin);
+  }, [setBlogAdmin]);
+
+  return <BlogAdminContext.Provider value={blogAdmin}>{children}</BlogAdminContext.Provider>;
 }
