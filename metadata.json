@@ -1,0 +1,13 @@
+{
+  "repository": "blogger-themes/themes",
+  "version": "static-dev",
+  "base": "https://cdn.jsdelivr.net/gh/blogger-themes/themes@static-dev/",
+  "themes": [
+    {
+      "name": "@themes/react-theme",
+      "version": "0.0.0",
+      "directory": "react-theme",
+      "base": "https://cdn.jsdelivr.net/gh/blogger-themes/themes@static-dev/react-theme/"
+    }
+  ]
+}

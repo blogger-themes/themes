@@ -1,0 +1,2 @@
+import{l as e,t}from"./createLucideIcon-DhBTKiYa.js";import{t as n}from"./Breadcrumbs-BE9kf73j.js";var r=t(`archive`,[[`rect`,{width:`20`,height:`5`,x:`2`,y:`3`,rx:`1`,key:`1wp1u1`}],[`path`,{d:`M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8`,key:`1s80jp`}],[`path`,{d:`M10 12h4`,key:`a56b0p`}]]),i=e();function a(){return(0,i.jsxs)(`div`,{className:`flex flex-col gap-5`,children:[(0,i.jsx)(n,{items:[{label:`Archive`,icon:r}]}),(0,i.jsx)(`div`,{children:`Archive Page`})]})}export{a as default};
+//# sourceMappingURL=ArchivePage-DkscEmEx.js.map
