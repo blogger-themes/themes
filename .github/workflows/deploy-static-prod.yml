@@ -15,55 +15,28 @@ jobs:
       matrix:
         node-version: ["22.x"]
     steps:
-      - name: Checkout ${{ github.ref_name }} branch
+      - name: Checkout
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.ref_name }}
-          fetch-depth: 0
-
       - name: Use pnpm
         uses: pnpm/action-setup@v5
-
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-
-      - name: Update npm
-        run: npm i -g npm@10
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Build app
         run: pnpm run build
         env:
           VITE_BASE: https://cdn.jsdelivr.net/gh/${{ github.repository }}@release-${{ github.sha }}/
-
-      - name: Ensure static-prod branch exists
-        run: |
-          current_branch=$(git symbolic-ref --short HEAD)
-          if git show-ref --verify --quiet refs/remotes/origin/static-prod; then
-            echo "✅ Branch 'static-prod' exists"
-          else
-            echo "⚡ Creating 'static-prod' branch"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git config --local user.name "github-actions[bot]"
-            git checkout --orphan static-prod
-            git reset --hard
-            git commit --allow-empty -m "chore: initial commit for static-prod branch"
-            git push origin static-prod
-            git checkout static-prod
-          fi
-
       - name: Deploy to static-prod branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
           publish_branch: static-prod
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
           commit_message: Deploy static assets from release branch
           tag_name: release-${{ github.sha }}
           tag_message: Deployment for ${{ github.sha }}

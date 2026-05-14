@@ -80,6 +80,7 @@ export function parseContent(html: string): ParsedContent {
       const headingIndex = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].indexOf(element.tagName);
       if (headingIndex !== -1) {
         const Comp = element.tagName.toLowerCase() as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+        const props = ctx.props();
         const children = ctx.children();
         const level = (headingIndex + 1) as 1 | 2 | 3 | 4 | 5 | 6;
         const value = element.textContent;
@@ -92,7 +93,7 @@ export function parseContent(html: string): ParsedContent {
         });
 
         return (
-          <Comp key={ctx.key} id={id}>
+          <Comp id={id} {...props} key={ctx.key}>
             <a href={`#${id}`}>{children}</a>
           </Comp>
         );

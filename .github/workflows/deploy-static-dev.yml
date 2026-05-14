@@ -1,4 +1,4 @@
-name: Deploy static (development)
+name: Publish static (development)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    name: Build and Deploy
+    name: Build and Publish
     runs-on: [ubuntu-latest]
     permissions:
       contents: write
@@ -15,56 +15,29 @@ jobs:
       matrix:
         node-version: ["22.x"]
     steps:
-      - name: Checkout ${{ github.ref_name }} branch
+      - name: Checkout
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.ref_name }}
-          fetch-depth: 0
-
       - name: Use pnpm
         uses: pnpm/action-setup@v5
-
       - name: Use Node ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-
-      - name: Update npm
-        run: npm i -g npm@10
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Build app
         run: pnpm run build
         env:
           VITE_BASE: https://cdn.jsdelivr.net/gh/${{ github.repository }}@static-dev/
-
-      - name: Ensure static-dev branch exists
-        run: |
-          current_branch=$(git symbolic-ref --short HEAD)
-          if git show-ref --verify --quiet refs/remotes/origin/static-dev; then
-            echo "✅ Branch 'static-dev' exists"
-          else
-            echo "⚡ Creating 'static-dev' branch"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git config --local user.name "github-actions[bot]"
-            git checkout --orphan static-dev
-            git reset --hard
-            git commit --allow-empty -m "chore: initial commit for static-dev branch"
-            git push origin static-dev
-            git checkout "$current_branch"
-          fi
-
-      - name: Deploy to static-dev branch
+      - name: Publish assets to static-dev branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
           publish_branch: static-dev
-          commit_message: Deploy static assets from development branch
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: Publish static assets from development branch
           publish_dir: ./dist
 
   purge:
@@ -77,13 +50,11 @@ jobs:
         with:
           ref: static-dev
           fetch-depth: 2
-
       - name: Install curl
         run: |
           sudo apt-get update
           sudo apt-get install -y curl
-
-      - name: Send Purge Requests to JsDelivr for changed files
+      - name: Send purge requests to JsDelivr for changed files
         run: |
           if git rev-parse HEAD^ >/dev/null 2>&1; then
               changed_files=$(git diff --name-only HEAD^ HEAD)

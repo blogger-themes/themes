@@ -11,10 +11,7 @@ export default function LabelSearchPage() {
     <div className="flex flex-col gap-4">
       <Breadcrumbs
         items={[
-          {
-            label: 'Labels',
-            icon: TagsIcon,
-          },
+          { label: 'Labels', icon: TagsIcon },
           { label: search.label, icon: TagIcon },
         ]}
       />

@@ -12,14 +12,8 @@ export default function PagePage() {
     <div className="flex flex-col gap-5">
       <Breadcrumbs
         items={[
-          {
-            label: 'Pages',
-            icon: BookTextIcon,
-          },
-          {
-            label: page.title,
-            icon: FileTextIcon,
-          },
+          { label: 'Pages', icon: BookTextIcon },
+          { label: page.title, icon: FileTextIcon },
         ]}
       />
 

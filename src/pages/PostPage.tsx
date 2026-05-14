@@ -13,14 +13,8 @@ export default function PostPage() {
     <main className="flex flex-col gap-5">
       <Breadcrumbs
         items={[
-          {
-            label: 'Posts',
-            icon: LibraryBigIcon,
-          },
-          {
-            label: post.title,
-            icon: BookOpenTextIcon,
-          },
+          { label: 'Posts', icon: LibraryBigIcon },
+          { label: post.title, icon: BookOpenTextIcon },
         ]}
       />
 
