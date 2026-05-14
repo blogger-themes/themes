@@ -147,7 +147,6 @@ jobs:
           tag_name: ${{ case(github.ref == 'refs/heads/release', steps.tag.outputs.name, '') }}
           tag_message: Deployment for ${{ github.sha }}
           publish_dir: ./.output
-          exclude_assets: "**/template.xml,**/template.min.xml"
 
       - name: GitHub Release
         uses: softprops/action-gh-release@v3
