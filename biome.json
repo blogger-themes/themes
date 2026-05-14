@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["**", "!**/node_modules", "!!**/dist"]
+    "includes": ["**", "!**/node_modules", "!!**/dist", "!!**/.output"]
   },
   "assist": {
     "enabled": true,
@@ -29,6 +29,10 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "error",
+        "noDangerouslySetInnerHtmlWithChildren": "error"
       }
     }
   },

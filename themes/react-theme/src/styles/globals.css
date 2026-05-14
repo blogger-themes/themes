@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@themes/ui";
+@import "@fontsource-variable/inclusive-sans";
+@import "@fontsource-variable/jetbrains-mono";
+@import "./shiki.css";
+
+@source "../../../../packages/ui/dist/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant blog-admin (&:is(.is-blog-admin *));
+
+@theme inline {
+  --font-sans: var(--font-inclusive-sans);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+:root {
+  --font-inclusive-sans: "Inclusive Sans Variable", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono Variable", monospace;
+}
+
+@layer base {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    z-index: 9999;
+  }
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+}

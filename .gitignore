@@ -7,22 +7,26 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+node_modules/
+dist/
+dist-ssr/
+.output/
 *.local
 
 # Editor directories and files
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
-.idea
+.idea/*
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# turbo
+.turbo/
 
 # blogger-plugin tailwind
 .tailwind-classes.json
