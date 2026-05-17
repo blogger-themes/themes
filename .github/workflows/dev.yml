@@ -1,24 +1,21 @@
-name: Deploy static assets
+name: Publish static assets
 
 on:
   push:
     branches:
       - development
-      - release
 
 concurrency:
-  group: deploy-${{ github.ref_name }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 env:
   PUBLISH_REPOSITORY: ${{ github.repository }}
-  PUBLISH_DEV_BRANCH: static-dev
-  PUBLISH_PROD_BRANCH: static-prod
+  PUBLISH_BRANCH: static-dev
 
 jobs:
   publish:
     name: Build and Publish
-    if: ${{ github.ref == 'refs/heads/development' || github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -37,10 +34,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Generate tag name
-        id: tag
-        run: echo "name=release-$(date -u +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
 
       - name: Build themes and generate output
         run: |
@@ -132,43 +125,29 @@ jobs:
           fi
         env:
           REPOSITORY: ${{ env.PUBLISH_REPOSITORY }}
-          VERSION: |-
-            ${{ case(github.ref == 'refs/heads/release', steps.tag.outputs.name, env.PUBLISH_DEV_BRANCH) }}
+          VERSION: ${{ env.PUBLISH_BRANCH }}
 
-      - name: Publish assets to ${{ env.PUBLISH_REPOSITORY }}@${{ case(github.ref == 'refs/heads/release', env.PUBLISH_PROD_BRANCH, env.PUBLISH_DEV_BRANCH) }}
+      - name: Publish assets to ${{ env.PUBLISH_REPOSITORY }}@${{ env.PUBLISH_BRANCH }}
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           user_name: github-actions[bot]
           user_email: 41898282+github-actions[bot]@users.noreply.github.com
           external_repository: ${{ case(env.PUBLISH_REPOSITORY != github.repository, env.PUBLISH_REPOSITORY, '') }}
-          publish_branch: ${{ case(github.ref == 'refs/heads/release', env.PUBLISH_PROD_BRANCH, env.PUBLISH_DEV_BRANCH) }}
+          publish_branch: ${{ env.PUBLISH_BRANCH }}
           full_commit_message: "chore: publish static assets (${{ github.sha }})"
-          tag_name: ${{ case(github.ref == 'refs/heads/release', steps.tag.outputs.name, '') }}
-          tag_message: Deployment for ${{ github.sha }}
           publish_dir: ./.output
-
-      - name: GitHub Release
-        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
-        if: ${{ github.ref == 'refs/heads/release' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ env.PUBLISH_REPOSITORY }}
-          tag_name: ${{ steps.tag.outputs.name }}
-          body_path: ./.output/README.md
-          generate_release_notes: false
 
   purge:
     name: Purge JsDelivr files
     needs: [publish]
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/development' }}
     steps:
-      - name: Checkout ${{ env.PUBLISH_REPOSITORY }}@${{ env.PUBLISH_DEV_BRANCH }}
+      - name: Checkout ${{ env.PUBLISH_REPOSITORY }}@${{ env.PUBLISH_BRANCH }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: ${{ env.PUBLISH_REPOSITORY }}
-          ref: ${{ env.PUBLISH_DEV_BRANCH }}
+          ref: "ref/heads/${{ env.PUBLISH_BRANCH }}"
           fetch-depth: 2
 
       - name: Install curl
@@ -190,7 +169,7 @@ jobs:
           fi
 
           for file in $changed_files; do
-            url="https://purge.jsdelivr.net/gh/${{ env.PUBLISH_REPOSITORY }}@$(printf '%s' "${{ env.PUBLISH_DEV_BRANCH }}" | jq -sRr @uri)/$file"
+            url="https://purge.jsdelivr.net/gh/${{ env.PUBLISH_REPOSITORY }}@$(printf '%s' "${{ env.PUBLISH_BRANCH }}" | jq -sRr @uri)/$file"
             echo "Purging $url"
             curl -sS "$url" &
           done
