@@ -1,5 +1,5 @@
-## Themes
+## Packages
 
-| Name | Version | Directory |
-|------|---------|-----------|
-| `@themes/react-theme` | `0.0.0` |`react-theme` |
+| Name | Version |
+|------|---------|
+| `@themes/react-theme` | `0.0.0` |
