@@ -1,7 +1,7 @@
 {
   "name": "@themes/react-theme",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "license": "MIT",
   "engines": {
     "node": ">=22.12.0"

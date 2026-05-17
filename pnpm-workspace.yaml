@@ -1,6 +1,7 @@
 packages:
   - themes/*
   - packages/*
+  - scripts
 
 allowBuilds:
   '@firebase/util': true

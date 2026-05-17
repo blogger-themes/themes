@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@11.1.1",
+  "type": "module",
   "scripts": {
     "format": "biome format --max-diagnostics=100 --log-kind=compact",
     "format:all": "pnpm run format .",
@@ -17,13 +18,15 @@
     "upgrade": "pnpm dlx npm-check-updates@latest --root --workspaces --peer --interactive --format group",
     "build": "FORCE_COLOR=1 turbo run build --filter='./packages/*' --filter='./themes/*'",
     "dev": "FORCE_COLOR=1 turbo run dev --concurrency=24 --filter='./packages/*' --filter='./themes/*'",
-    "test": "FORCE_COLOR=1 turbo run test"
+    "test": "FORCE_COLOR=1 turbo run test",
+    "build:output": "tsx scripts/build-output.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@changesets/config": "^3.1.4",
+    "tsx": "^4.22.0",
     "turbo": "^2.9.12",
     "typescript": "^6.0.3"
   }

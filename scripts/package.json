@@ -1,0 +1,16 @@
+{
+  "name": "@themes/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@manypkg/get-packages": "^3.1.0",
+    "@pnpm/fs.packlist": "^1100.0.1",
+    "package-manager-detector": "^1.6.0",
+    "spawndamnit": "^3.0.1",
+    "tar": "^7.5.15"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:"
+  }
+}

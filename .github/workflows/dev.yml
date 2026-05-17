@@ -35,97 +35,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build themes and generate output
+      - name: Build
         run: |
-          set -e
-
-          : "${REPOSITORY:?Missing REPOSITORY environment variable}"
-          : "${VERSION:?Missing VERSION environment variable}"
-
-          OUTPUT_DIR=".output"
-          METADATA_FILE="$OUTPUT_DIR/metadata.json"
-          README_FILE="$OUTPUT_DIR/README.md"
-          CDN_BASE="https://cdn.jsdelivr.net/gh/$REPOSITORY@$(printf '%s' "$VERSION" | jq -sRr @uri)/"
-
-          metadata_json=$(
-            jq -n \
-              --arg repository "$REPOSITORY" \
-              --arg version "$VERSION" \
-              --arg base "$CDN_BASE" \
-              '{
-                repository: $repository,
-                version: $version,
-                base: $base,
-                themes: []
-              }'
-          )
-
-          rm -rf "$OUTPUT_DIR"
-          mkdir -p "$OUTPUT_DIR"
-
-          for dir in themes/*; do
-            if [ ! -f "$dir/package.json" ]; then
-              continue
-            fi
-
-            read -r name version description < <(
-              jq -r 'select(.name and .version) | [.name, .version, (.description // "")] | @tsv' "$dir/package.json"
-            ) || continue
-
-            base_name="$(basename "$dir")"
-            vite_base="${CDN_BASE}${base_name}/"
-
-            VITE_BASE="$vite_base" pnpm exec turbo run build --filter="$name"
-
-            src="$dir/dist"
-
-            if [ ! -d "$src" ]; then
-              continue
-            fi
-
-            dest="$OUTPUT_DIR/$base_name"
-
-            rm -rf "$dest"
-            mkdir -p "$dest"
-            cp -r "$src/." "$dest/"
-
-            metadata_json=$(
-              printf '%s' "$metadata_json" |
-                jq \
-                  --arg name "$name" \
-                  --arg description "$description" \
-                  --arg version "$version" \
-                  --arg directory "$base_name" \
-                  --arg base "$vite_base" \
-                  '.themes += [{
-                    name: $name,
-                    version: $version
-                  } + (if $description != "" then {description: $description} else {} end) + {
-                    directory: $directory,
-                    base: $base
-                  }]'
-            )
-          done
-
-          echo "$metadata_json" >"$METADATA_FILE"
-
-          theme_count=$(printf '%s' "$metadata_json" | jq '.themes | length')
-
-          if [ "$theme_count" -gt 0 ]; then
-            {
-              echo "## Themes"
-              echo ""
-              echo "| Name | Version | Directory |"
-              echo "|------|---------|-----------|"
-              printf '%s' "$metadata_json" | jq -r '
-                .themes[] |
-                "| `\(.name)` | `\(.version)` |`\(.directory)` |"
-              '
-            } > "$README_FILE"
-          fi
-        env:
-          REPOSITORY: ${{ env.PUBLISH_REPOSITORY }}
-          VERSION: ${{ env.PUBLISH_BRANCH }}
+          VITE_BASE=jsdelivr-dev pnpm run build
+          pnpm run build:output
 
       - name: Publish assets to ${{ env.PUBLISH_REPOSITORY }}@${{ env.PUBLISH_BRANCH }}
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
@@ -135,7 +48,7 @@ jobs:
           user_email: 41898282+github-actions[bot]@users.noreply.github.com
           external_repository: ${{ case(env.PUBLISH_REPOSITORY != github.repository, env.PUBLISH_REPOSITORY, '') }}
           publish_branch: ${{ env.PUBLISH_BRANCH }}
-          full_commit_message: "chore: publish static assets (${{ github.sha }})"
+          full_commit_message: "chore: publish (${{ github.sha }})"
           publish_dir: ./.output
 
   purge:
