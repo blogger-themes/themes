@@ -12,14 +12,14 @@ allowBuilds:
 
 catalog:
   "@tsdown/css": "^0.22.0"
-  "@types/node": "^25.7.0"
+  "@types/node": "^25.8.0"
   "@types/react": "^19.2.14"
   "@types/react-dom": "^19.2.3"
   blogger-plugin: "^0.0.11"
   react: "^19.2.6"
   react-dom: "^19.2.6"
   tsdown: "^0.22.0"
-  vite: "^8.0.12"
+  vite: "^8.0.13"
 
 # engineStrict: true
 # strictPeerDependencies: true
