@@ -50,7 +50,7 @@ jobs:
           publish_branch: ${{ env.PUBLISH_BRANCH }}
           full_commit_message: "chore: publish (${{ github.sha }})"
           publish_dir: ./.output
-          enable_jekyll: false
+          disable_nojekyll: true
 
   purge:
     name: Purge JsDelivr files
