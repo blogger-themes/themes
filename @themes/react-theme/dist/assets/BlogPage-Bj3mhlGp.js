@@ -1,2 +1,0 @@
-import{t as e}from"./Breadcrumbs-CR3M-lJI.js";import{t}from"./library-big-Bla6NsyQ.js";import{w as n}from"./template-CXDn2h-4.js";var r=n();function i(){return(0,r.jsxs)(`div`,{className:`flex flex-col gap-5`,children:[(0,r.jsx)(e,{items:[{label:`Blog`,icon:t}]}),(0,r.jsx)(`div`,{children:`Blog Page`})]})}export{i as default};
-//# sourceMappingURL=BlogPage-Bj3mhlGp.js.map
