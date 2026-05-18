@@ -9,7 +9,7 @@ import { RouterProvider } from 'react-router/dom';
 import { z } from 'zod';
 import { bloggerData } from './lib/blogger-data';
 import routes from './routes';
-import { preferencesStore, type Theme } from './stores/preferences';
+import { PreferencesBlogAdminAction, PreferencesThemeAction } from './stores/preferences/actions';
 
 /**
  * Explicitly configure Zod error locale.
@@ -29,40 +29,11 @@ const router = createBrowserRouter(routes);
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
+    <PreferencesThemeAction />
+    <PreferencesBlogAdminAction />
     <RouterProvider router={router} />
   </StrictMode>,
 );
-
-/**
- * Sync the document theme with the current user preference and system
- * color scheme by updating the <html> attributes, `.dark` class,
- * and browser `color-scheme`.
- */
-const darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
-
-function updateThemeElement(theme: Theme) {
-  const isDark = theme === 'dark' || (theme === 'system' && darkMQ.matches);
-
-  document.documentElement.setAttribute('data-theme', theme);
-  document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-  document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
-}
-
-updateThemeElement(preferencesStore.getState().theme);
-
-preferencesStore.subscribe((state, prevState) => {
-  if (state.theme !== prevState.theme) {
-    updateThemeElement(state.theme);
-  }
-});
-
-darkMQ.addEventListener('change', () => {
-  const state = preferencesStore.getState();
-
-  if (state.theme === 'system') {
-    updateThemeElement(state.theme);
-  }
-});
 
 /**
  * Dynamically generate and attach a web app manifest when manifest data

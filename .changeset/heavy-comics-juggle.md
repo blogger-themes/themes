@@ -2,4 +2,4 @@
 "@themes/react-theme": patch
 ---
 
-chore: initial release
+refactor: preferences effects and contexts to actions

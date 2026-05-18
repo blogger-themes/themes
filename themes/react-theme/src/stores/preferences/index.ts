@@ -1,7 +1,7 @@
 import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 import { DEFAULT_THEME, PREFERENCES_KEY, PREFERENCES_VERSION } from '@/constants';
-import { createStateSetterFunction, type SetStateFunction, syncPersist } from './helpers';
+import { createStateSetterFunction, type SetStateFunction, syncPersist } from '../helpers';
 
 export type ResolvedTheme = 'light' | 'dark';
 export type Theme = ResolvedTheme | 'system';

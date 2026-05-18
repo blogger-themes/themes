@@ -3,24 +3,21 @@ import { LoaderCircle } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import { ScrollRestoration, useNavigation } from 'react-router';
 import Toaster from '@/components/Toaster';
-import { BlogAdminProvider } from '@/contexts/blog-admin';
 
 export interface RootLayoutProps extends PropsWithChildren {}
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <TooltipProvider>
-      <BlogAdminProvider>
-        {children}
-        <Toaster
-          richColors
-          style={{
-            fontFamily: 'var(--font-sans)',
-          }}
-        />
-        <NavigationLoader />
-        <ScrollRestoration />
-      </BlogAdminProvider>
+      {children}
+      <Toaster
+        richColors
+        style={{
+          fontFamily: 'var(--font-sans)',
+        }}
+      />
+      <NavigationLoader />
+      <ScrollRestoration />
     </TooltipProvider>
   );
 }
