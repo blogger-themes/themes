@@ -1,0 +1,42 @@
+{
+  "name": "@themes/shiki",
+  "version": "0.0.0",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "biome lint ./src",
+    "check": "biome check ./src",
+    "check:types": "tsc --noEmit",
+    "build": "NODE_ENV=production tsdown",
+    "dev": "NODE_ENV=development tsdown --watch"
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./worker": {
+      "types": "./dist/worker.d.ts",
+      "import": "./dist/worker.js"
+    }
+  },
+  "dependencies": {
+    "@deox/worker-rpc": "^0.0.20",
+    "@shikijs/langs": "^4.0.2",
+    "@shikijs/themes": "^4.0.2",
+    "@shikijs/transformers": "^4.0.2",
+    "@themes/utils": "workspace:*",
+    "shiki": "^4.0.2",
+    "style-to-js": "^1.1.21"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:"
+  }
+}

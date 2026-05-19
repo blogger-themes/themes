@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["**", "!**/node_modules", "!!**/dist", "!!**/.output"]
+    "includes": ["**", "!**/node_modules", "!!**/dist", "!!**/.output", "!!**/.turbo", "!!**/.tailwind-classes.json"]
   },
   "assist": {
     "enabled": true,

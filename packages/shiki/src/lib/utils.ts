@@ -7,7 +7,7 @@ export interface ShikiPreProps {
 }
 
 export interface ShikiHtmlResult {
-  content: string;
+  html: string;
   props: ShikiPreProps;
 }
 
@@ -15,7 +15,7 @@ export function processShikiHtml(html: string): ShikiHtmlResult {
   const matches = html.match(/^<pre([^>]*)><code[^>]*>([\s\S]*?)<\/code><\/pre>$/);
 
   return {
-    content: matches?.[2] ?? html,
+    html: matches?.[2] ?? html,
     props: matches?.[1] ? processAttributes(matches[1]) : {},
   };
 }

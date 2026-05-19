@@ -1,15 +1,11 @@
 import { register } from '@deox/worker-rpc/register';
 import type { CodeToHastOptions } from 'shiki/core';
-import { getHighlighter } from '@/lib/shiki/browser';
-import { transformers } from '@/lib/shiki/transformers';
-import { processShikiHtml, type ShikiHtmlResult } from '@/lib/shiki/utils';
-import type { DistributiveOmit, DistributiveOptional } from '@/types/utils';
+import { getHighlighter } from '../highlighter';
+import { transformers } from '../transformers';
+import type { HighlightOptions, HighlightResult } from './types';
+import { processShikiHtml } from './utils';
 
-export type HighlightOptions = DistributiveOptional<DistributiveOmit<CodeToHastOptions, 'transformers' | 'lang'>, 'theme' | 'themes'>;
-
-export type HighlightResult = ShikiHtmlResult;
-
-export const registered = register(async () => {
+const registered = register(async () => {
   const highlighter = await getHighlighter();
 
   return {
@@ -29,7 +25,7 @@ export const registered = register(async () => {
 
       if (opts.structure === 'inline') {
         return {
-          content: html,
+          html,
           props: {},
         };
       }

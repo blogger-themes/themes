@@ -1,12 +1,12 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@themes/ui/components/breadcrumb';
 import { cn } from '@themes/ui/lib/utils';
-import { HomeIcon, type LucideProps } from 'lucide-react';
-import { type ForwardRefExoticComponent, Fragment, type RefAttributes } from 'react';
+import { HomeIcon } from 'lucide-react';
+import { type ComponentType, Fragment, type SVGProps } from 'react';
 import { Link } from 'react-router';
 
 export interface BreadcrumbItemType {
   label: string;
-  icon?: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
   link?: string;
 }
 

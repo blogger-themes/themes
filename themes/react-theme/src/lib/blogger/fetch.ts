@@ -1,4 +1,4 @@
-import { getDeviceType } from '@/utils/device-type';
+import { getDeviceType } from '@themes/utils/device-type';
 import { parseBloggerData } from './parse';
 import type { BloggerData } from './types';
 
