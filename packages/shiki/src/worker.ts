@@ -5,7 +5,7 @@ import type { Registered } from './lib/worker';
 let worker: Worker<Registered> | undefined;
 export function getWorker(): Worker<Registered> {
   if (!worker) {
-    worker = new Worker<Registered>(new URL('./lib/worker.js', import.meta.url), {
+    worker = new Worker<Registered>(new URL('./lib/worker', import.meta.url), {
       type: 'module',
       name: 'shiki',
     });

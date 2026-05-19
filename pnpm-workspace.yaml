@@ -3,12 +3,16 @@ packages:
   - packages/*
   - scripts
 
-allowBuilds:
-  '@firebase/util': true
-  '@swc/core': true
-  esbuild: true
-  msw: true
-  protobufjs: true
+# engineStrict: true
+# strictPeerDependencies: true
+shellEmulator: true
+preferWorkspacePackages: true
+linkWorkspacePackages: true
+enablePrePostScripts: true
+
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - "@deox/*"
 
 catalog:
   "@tsdown/css": "^0.22.0"
@@ -21,9 +25,9 @@ catalog:
   tsdown: "^0.22.0"
   vite: "^8.0.13"
 
-# engineStrict: true
-# strictPeerDependencies: true
-shellEmulator: true
-preferWorkspacePackages: true
-linkWorkspacePackages: true
-enablePrePostScripts: true
+allowBuilds:
+  "@firebase/util": true
+  "@swc/core": true
+  esbuild: true
+  msw: true
+  protobufjs: true

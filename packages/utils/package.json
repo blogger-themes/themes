@@ -1,6 +1,12 @@
 {
   "name": "@themes/utils",
   "version": "0.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Deo Kumar",
+    "email": "deo@fineshopdesign.com",
+    "url": "https://github.com/kumardeo"
+  },
   "private": true,
   "sideEffects": false,
   "type": "module",

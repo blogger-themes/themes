@@ -177,8 +177,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5
       '@deox/worker-rpc':
-        specifier: ^0.0.19
-        version: 0.0.19
+        specifier: ^0.0.20
+        version: 0.0.20
       '@fontsource-variable/inclusive-sans':
         specifier: ^5.2.8
         version: 5.2.8
@@ -561,9 +561,6 @@ packages:
 
   '@deox/utils@0.0.5':
     resolution: {integrity: sha512-hAHJ2tUkEhpjOplWW4rnG48vOGCT3pI9+ZslshtRHqh5tqluv3Aqzt5KWOhpgLukAH5Zi7oDVnvgukDTGZ/vpg==}
-
-  '@deox/worker-rpc@0.0.19':
-    resolution: {integrity: sha512-enrV70nwO6fUYUrEwVCR14fngAzA4ZPnsPwk1s2ACM2pri6ikijNfoQAq4rDaWKunsKJoCmeHoTklTqa+RKAjQ==}
 
   '@deox/worker-rpc@0.0.20':
     resolution: {integrity: sha512-N2WKxSe5hVMEs6vyQq0K+O1pp5n7kKULCfS6A51pw6QpWYGpsjRu8s4s/o5SwsOBmSgdvcMbi+1YdfXmYMfuHA==}
@@ -4753,10 +4750,6 @@ snapshots:
   '@deox/utils@0.0.5':
     dependencies:
       shade-blend-color: 1.0.0
-
-  '@deox/worker-rpc@0.0.19':
-    dependencies:
-      '@deox/utils': 0.0.5
 
   '@deox/worker-rpc@0.0.20':
     dependencies:

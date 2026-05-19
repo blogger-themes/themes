@@ -6,3 +6,8 @@ The goal of `@themes/react-theme` is to explore how modern frontend technologies
 
 > [!WARNING]
 > This theme is experimental and not yet recommended for production blogs.
+
+**Demo**
+
+- Live demo: https://react-template.blogspot.com
+

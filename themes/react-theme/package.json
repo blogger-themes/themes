@@ -2,6 +2,11 @@
   "name": "@themes/react-theme",
   "version": "0.0.0",
   "license": "MIT",
+  "author": {
+    "name": "Deo Kumar",
+    "email": "deo@fineshopdesign.com",
+    "url": "https://github.com/kumardeo"
+  },
   "engines": {
     "node": ">=22.12.0"
   },
@@ -21,7 +26,7 @@
     "@deox/dom-to-react": "^0.0.5",
     "@deox/google-image": "^0.0.3",
     "@deox/utils": "^0.0.5",
-    "@deox/worker-rpc": "^0.0.19",
+    "@deox/worker-rpc": "^0.0.20",
     "@fontsource-variable/inclusive-sans": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@icons-pack/react-simple-icons": "^13.13.0",
