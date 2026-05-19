@@ -1,3 +1,8 @@
-# React Blogger Template
+## @themes/react-theme
 
-A React.js powered Blogger template for learning and experiments.
+An experimental Blogger theme built with React as part of the `blogger-themes` monorepo.
+
+The goal of `@themes/react-theme` is to explore how modern frontend technologies can improve Blogger theme development while remaining compatible with the Blogger platform.
+
+> [!WARNING]
+> This theme is experimental and not yet recommended for production blogs.

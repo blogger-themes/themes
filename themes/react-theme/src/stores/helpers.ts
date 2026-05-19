@@ -47,7 +47,7 @@ export interface ZStore<T extends ZState> {
   version: number;
 }
 
-export function getZState<T extends ZState = ZState>(key: string, version = 0): T | null {
+export function getZPersistedState<T extends ZState = ZState>(key: string, version = 0): T | null {
   if (typeof window === 'undefined') {
     return null;
   }
@@ -69,12 +69,16 @@ export function getZState<T extends ZState = ZState>(key: string, version = 0): 
   return null;
 }
 
-export function setZState<T extends ZState = ZState>(key: string, state: Partial<T> | ((prevState: T | null) => Partial<T>), version = 0): void {
+export function setZPersistedState<T extends ZState = ZState>(
+  key: string,
+  state: Partial<T> | ((prevState: T | null) => Partial<T>),
+  version = 0,
+): void {
   if (typeof window === 'undefined') {
     return;
   }
 
-  const currentState = getZState<T>(key, version);
+  const currentState = getZPersistedState<T>(key, version);
   const nextStore = {
     state: {
       ...(currentState || {}),

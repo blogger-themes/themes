@@ -1,10 +1,10 @@
 import './styles/critical.css';
 
 import { DEFAULT_THEME, PREFERENCES_KEY, PREFERENCES_VERSION } from '@/constants';
-import { getZState, setZState } from '@/stores/helpers';
+import { getZPersistedState, setZPersistedState } from '@/stores/helpers';
 import type { PreferencesState, Theme } from '@/stores/preferences';
 
-const preferencesState = getZState<Partial<PreferencesState>>(PREFERENCES_KEY, PREFERENCES_VERSION);
+const preferencesState = getZPersistedState<Partial<PreferencesState>>(PREFERENCES_KEY, PREFERENCES_VERSION);
 
 /**
  * Resolve and apply the initial document theme from persisted
@@ -26,7 +26,7 @@ const theme = preferencesState?.theme ?? DEFAULT_THEME;
 updateThemeElement(theme);
 
 if (!preferencesState?.theme) {
-  setZState<PreferencesState>(PREFERENCES_KEY, { theme }, PREFERENCES_VERSION);
+  setZPersistedState<PreferencesState>(PREFERENCES_KEY, { theme }, PREFERENCES_VERSION);
 }
 
 /**
