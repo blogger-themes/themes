@@ -1,0 +1,2 @@
+import{t as e}from"./Breadcrumbs-CAJNA4IA.js";import{C as t,u as n,w as r}from"./template-Bk2L-x0e.js";var i=n(`search`,[[`path`,{d:`m21 21-4.34-4.34`,key:`14j7rj`}],[`circle`,{cx:`11`,cy:`11`,r:`8`,key:`4ej97u`}]]),a=r();function o(){let{data:n}=t(),r=n.view.search;return(0,a.jsxs)(`div`,{className:`flex flex-col gap-5`,children:[(0,a.jsx)(e,{items:[{label:`Search`,icon:i}]}),(0,a.jsxs)(`div`,{children:[`Query: `,r.query]})]})}export{o as default};
+//# sourceMappingURL=SearchPage-DL02eXMU.js.map
