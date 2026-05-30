@@ -34,13 +34,13 @@
     }
   },
   "dependencies": {
-    "@deox/worker-rpc": "^0.0.20",
-    "@shikijs/langs": "^4.0.2",
-    "@shikijs/themes": "^4.0.2",
-    "@shikijs/transformers": "^4.0.2",
+    "@deox/worker-rpc": "^0.0.21",
+    "@shikijs/langs": "^4.1.0",
+    "@shikijs/themes": "^4.1.0",
+    "@shikijs/transformers": "^4.1.0",
     "@themes/utils": "workspace:*",
-    "shiki": "^4.0.2",
-    "style-to-js": "^1.1.21"
+    "shiki": "^4.1.0",
+    "style-to-js": "^2.0.0"
   },
   "devDependencies": {
     "tsdown": "catalog:"

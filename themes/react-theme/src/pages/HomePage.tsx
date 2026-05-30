@@ -1,7 +1,7 @@
-import { GoogleImage } from '@deox/google-image';
 import { Avatar, AvatarFallback, AvatarImage } from '@themes/ui/components/avatar';
 import { Badge } from '@themes/ui/components/badge';
 import { Separator } from '@themes/ui/components/separator';
+import { BloggerImage } from 'blogger-images';
 import { HashIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import StructuredData from '@/components/StructuredData';
@@ -96,7 +96,7 @@ function BlogAuthorCard({ author }: { author: BlogAuthor }) {
 }
 
 function resizeAvatarImage(source: string, size: number) {
-  return new GoogleImage(source, { existing: false, pass: true })
+  return new BloggerImage(source, { existing: false, passThrough: true })
     .size(size)
     .alternateCrop(true)
     .disableAnimation(true)
