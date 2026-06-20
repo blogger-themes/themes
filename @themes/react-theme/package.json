@@ -35,8 +35,8 @@
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.14",
-    "@themes/shiki": "0.0.0",
     "@themes/ui": "0.0.0",
+    "@themes/shiki": "0.0.0",
     "@themes/utils": "0.0.0"
   },
   "devDependencies": {
