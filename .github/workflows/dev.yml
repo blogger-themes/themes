@@ -43,9 +43,9 @@ jobs:
       - name: Publish assets to ${{ env.PUBLISH_REPOSITORY }}@${{ env.PUBLISH_BRANCH }}
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          personal_token: ${{ secrets.AHRIX_BOT_GITHUB_TOKEN }}
+          user_name: ahrixbot
+          user_email: 173301862+ahrixbot@users.noreply.github.com
           external_repository: ${{ case(env.PUBLISH_REPOSITORY != github.repository, env.PUBLISH_REPOSITORY, '') }}
           publish_branch: ${{ env.PUBLISH_BRANCH }}
           full_commit_message: "chore: publish (${{ github.sha }})"

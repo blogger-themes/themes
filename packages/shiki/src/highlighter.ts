@@ -6,15 +6,17 @@ import { themes } from './themes';
 let highlighterPromise: Promise<HighlighterCore> | undefined;
 
 export function getHighlighter(): Promise<HighlighterCore> {
-  if (!highlighterPromise) {
-    const engine = createOnigurumaEngine(fetch(new URL('shiki/onig.wasm', import.meta.url)));
+	if (!highlighterPromise) {
+		const engine = createOnigurumaEngine(
+			fetch(new URL('shiki/onig.wasm', import.meta.url)),
+		);
 
-    highlighterPromise = createHighlighterCore({
-      themes,
-      langs: languages,
-      engine,
-    });
-  }
+		highlighterPromise = createHighlighterCore({
+			themes,
+			langs: languages,
+			engine,
+		});
+	}
 
-  return highlighterPromise;
+	return highlighterPromise;
 }

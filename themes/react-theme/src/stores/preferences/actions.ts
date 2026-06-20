@@ -8,11 +8,11 @@ import { preferencesStore, type Theme } from '.';
 const darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
 
 function updateThemeElement(theme: Theme) {
-  const isDark = theme === 'dark' || (theme === 'system' && darkMQ.matches);
+	const isDark = theme === 'dark' || (theme === 'system' && darkMQ.matches);
 
-  document.documentElement.setAttribute('data-theme', theme);
-  document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-  document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+	document.documentElement.setAttribute('data-theme', theme);
+	document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+	document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
 }
 
 /**
@@ -23,51 +23,53 @@ function updateThemeElement(theme: Theme) {
  * Mount once at app root.
  */
 export function PreferencesThemeAction() {
-  const theme = useStore(preferencesStore, (s) => s.theme);
+	const theme = useStore(preferencesStore, (s) => s.theme);
 
-  useEffect(() => {
-    updateThemeElement(theme);
-  }, [theme]);
+	useEffect(() => {
+		updateThemeElement(theme);
+	}, [theme]);
 
-  useEffect(() => {
-    const listener = () => {
-      if (preferencesStore.getState().theme === 'system') {
-        updateThemeElement('system');
-      }
-    };
+	useEffect(() => {
+		const listener = () => {
+			if (preferencesStore.getState().theme === 'system') {
+				updateThemeElement('system');
+			}
+		};
 
-    darkMQ.addEventListener('change', listener);
+		darkMQ.addEventListener('change', listener);
 
-    return () => {
-      darkMQ.removeEventListener('change', listener);
-    };
-  }, []);
+		return () => {
+			darkMQ.removeEventListener('change', listener);
+		};
+	}, []);
 
-  return null;
+	return null;
 }
 
 const BLOG_ADMIN_CLASS = 'is-blog-admin';
 
 function getAuthorizationCssUrl(blogId: string): string {
-  return `https://www.blogger.com/dyn-css/authorization.css?targetBlogID=${blogId}`;
+	return `https://www.blogger.com/dyn-css/authorization.css?targetBlogID=${blogId}`;
 }
 
 async function detectBlogAdmin(blogId: string): Promise<boolean> {
-  await loadStylesheet(getAuthorizationCssUrl(blogId));
+	await loadStylesheet(getAuthorizationCssUrl(blogId));
 
-  const probeElement = document.createElement('div');
-  probeElement.className = 'hidden blog-admin';
-  document.body.appendChild(probeElement);
+	const probeElement = document.createElement('div');
+	probeElement.className = 'hidden blog-admin';
+	document.body.appendChild(probeElement);
 
-  const isBlogAdmin = getComputedStyle(probeElement).display === 'block';
+	const isBlogAdmin = getComputedStyle(probeElement).display === 'block';
 
-  probeElement.remove();
+	probeElement.remove();
 
-  return isBlogAdmin;
+	return isBlogAdmin;
 }
 
 function updateBlogAdminElement(blogAdmin: boolean) {
-  document.documentElement.classList[blogAdmin ? 'add' : 'remove'](BLOG_ADMIN_CLASS);
+	document.documentElement.classList[blogAdmin ? 'add' : 'remove'](
+		BLOG_ADMIN_CLASS,
+	);
 }
 
 let blogAdminDetectionPromise: Promise<boolean> | undefined;
@@ -80,34 +82,39 @@ let blogAdminDetectionPromise: Promise<boolean> | undefined;
  * Mount once at app root.
  */
 export function PreferencesBlogAdminAction() {
-  const blogAdmin = useStore(preferencesStore, (state) => state.blogAdmin);
-  const setBlogAdmin = useStore(preferencesStore, (state) => state.setBlogAdmin);
+	const blogAdmin = useStore(preferencesStore, (state) => state.blogAdmin);
+	const setBlogAdmin = useStore(
+		preferencesStore,
+		(state) => state.setBlogAdmin,
+	);
 
-  const data = bloggerData.initial;
+	const data = bloggerData.initial;
 
-  useEffect(() => {
-    updateBlogAdminElement(blogAdmin);
-  }, [blogAdmin]);
+	useEffect(() => {
+		updateBlogAdminElement(blogAdmin);
+	}, [blogAdmin]);
 
-  useEffect(() => {
-    if (!import.meta.env.PROD) {
-      return;
-    }
+	useEffect(() => {
+		if (!import.meta.env.PROD) {
+			return;
+		}
 
-    blogAdminDetectionPromise ||= lazy.then(() => detectBlogAdmin(data.blog.blogId));
+		blogAdminDetectionPromise ||= lazy.then(() =>
+			detectBlogAdmin(data.blog.blogId),
+		);
 
-    let cancelled = false;
+		let cancelled = false;
 
-    blogAdminDetectionPromise.then(() => {
-      if (!cancelled) {
-        setBlogAdmin(cancelled);
-      }
-    });
+		blogAdminDetectionPromise.then(() => {
+			if (!cancelled) {
+				setBlogAdmin(cancelled);
+			}
+		});
 
-    return () => {
-      cancelled = true;
-    };
-  }, [setBlogAdmin]);
+		return () => {
+			cancelled = true;
+		};
+	}, [setBlogAdmin]);
 
-  return null;
+	return null;
 }

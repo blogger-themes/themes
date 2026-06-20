@@ -9,7 +9,10 @@ import { RouterProvider } from 'react-router/dom';
 import { z } from 'zod';
 import { bloggerData } from './lib/blogger-data';
 import routes from './routes';
-import { PreferencesBlogAdminAction, PreferencesThemeAction } from './stores/preferences/actions';
+import {
+	PreferencesBlogAdminAction,
+	PreferencesThemeAction,
+} from './stores/preferences/actions';
 
 /**
  * Explicitly configure Zod error locale.
@@ -28,11 +31,11 @@ z.config(z.locales.en());
 const router = createBrowserRouter(routes);
 
 createRoot(document.getElementById('root') as HTMLElement).render(
-  <StrictMode>
-    <PreferencesThemeAction />
-    <PreferencesBlogAdminAction />
-    <RouterProvider router={router} />
-  </StrictMode>,
+	<StrictMode>
+		<PreferencesThemeAction />
+		<PreferencesBlogAdminAction />
+		<RouterProvider router={router} />
+	</StrictMode>,
 );
 
 /**
@@ -40,14 +43,21 @@ createRoot(document.getElementById('root') as HTMLElement).render(
  * is available, the environment supports it, and no manifest link
  * already exists in the document.
  */
-if (bloggerData.initial.manifest?.icons && (import.meta.env.DEV || location.protocol === 'https:') && !document.querySelector('link[rel=manifest]')) {
-  const blob = new Blob([JSON.stringify(bloggerData.initial.manifest, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+if (
+	bloggerData.initial.manifest?.icons &&
+	(import.meta.env.DEV || location.protocol === 'https:') &&
+	!document.querySelector('link[rel=manifest]')
+) {
+	const blob = new Blob(
+		[JSON.stringify(bloggerData.initial.manifest, null, 2)],
+		{ type: 'application/json' },
+	);
+	const url = URL.createObjectURL(blob);
 
-  const element = createElement('link', {
-    rel: 'manifest',
-    href: url,
-  });
+	const element = createElement('link', {
+		rel: 'manifest',
+		href: url,
+	});
 
-  document.head.appendChild(element);
+	document.head.appendChild(element);
 }

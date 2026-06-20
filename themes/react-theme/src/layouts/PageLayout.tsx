@@ -7,15 +7,15 @@ import RootLayout from './RootLayout';
 export interface PageLayoutProps extends PropsWithChildren {}
 
 export default function PageLayout({ children }: PageLayoutProps) {
-  const { data } = useBlogger();
+	const { data } = useBlogger();
 
-  return (
-    <RootLayout>
-      <Header title={data.header.title} />
-      <div className="p-5 max-w-5xl mx-auto">
-        <div>{children}</div>
-      </div>
-      <Footer />
-    </RootLayout>
-  );
+	return (
+		<RootLayout>
+			<Header title={data.header.title} />
+			<div className="p-5 max-w-5xl mx-auto">
+				<div>{children}</div>
+			</div>
+			<Footer />
+		</RootLayout>
+	);
 }

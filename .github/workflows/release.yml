@@ -8,6 +8,9 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
+env:
+  PUBLISH_REPOSITORY: ${{ github.repository }}
+
 jobs:
   release:
     name: Changelog PR or Release
@@ -37,6 +40,10 @@ jobs:
       - name: Create Release Pull Request or Publish
         uses: xarmaan/changesets-gh-publish@patch
         with:
+          github_token: ${{ secrets.AHRIX_BOT_GITHUB_TOKEN }}
+          user_name: ahrixbot
+          user_email: 173301862+ahrixbot@users.noreply.github.com
+          external_repository: ${{ case(env.PUBLISH_REPOSITORY != github.repository, env.PUBLISH_REPOSITORY, '') }}
           publish: github
           commit: "[ci] release"
           title: "[ci] release"

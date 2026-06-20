@@ -6,33 +6,37 @@ import type { HighlightOptions, HighlightResult } from './types';
 import { processShikiHtml } from './utils';
 
 const registered = register(async () => {
-  const highlighter = await getHighlighter();
+	const highlighter = await getHighlighter();
 
-  return {
-    highlight(code: string, lang: string, options: HighlightOptions = {}): HighlightResult {
-      const opts: CodeToHastOptions = {
-        lang,
-        themes: {
-          light: 'github-light',
-          dark: 'github-dark',
-        },
-        defaultColor: false,
-        ...options,
-        transformers,
-      };
+	return {
+		highlight(
+			code: string,
+			lang: string,
+			options: HighlightOptions = {},
+		): HighlightResult {
+			const opts: CodeToHastOptions = {
+				lang,
+				themes: {
+					light: 'github-light',
+					dark: 'github-dark',
+				},
+				defaultColor: false,
+				...options,
+				transformers,
+			};
 
-      const html = highlighter.codeToHtml(code, opts);
+			const html = highlighter.codeToHtml(code, opts);
 
-      if (opts.structure === 'inline') {
-        return {
-          html,
-          props: {},
-        };
-      }
+			if (opts.structure === 'inline') {
+				return {
+					html,
+					props: {},
+				};
+			}
 
-      return processShikiHtml(html);
-    },
-  };
+			return processShikiHtml(html);
+		},
+	};
 });
 
 export type Registered = typeof registered;

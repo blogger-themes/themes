@@ -25,37 +25,37 @@ import yaml from '@shikijs/langs/yaml';
 import type { LanguageInput } from 'shiki/core';
 
 export const languages: LanguageInput[] = [
-  // Systems
-  c,
-  cpp,
-  csharp,
-  go,
-  rust,
-  java,
+	// Systems
+	c,
+	cpp,
+	csharp,
+	go,
+	rust,
+	java,
 
-  // Scripting
-  python,
-  php,
-  shellscript,
+	// Scripting
+	python,
+	php,
+	shellscript,
 
-  // Web
-  html,
-  css,
-  javascript,
-  typescript,
-  jsx,
-  tsx,
-  json,
-  astro,
-  vue,
-  svelte,
+	// Web
+	html,
+	css,
+	javascript,
+	typescript,
+	jsx,
+	tsx,
+	json,
+	astro,
+	vue,
+	svelte,
 
-  // Data / Config
-  yaml,
-  toml,
-  sql,
+	// Data / Config
+	yaml,
+	toml,
+	sql,
 
-  // Markup / Docs
-  markdown,
-  mdx,
+	// Markup / Docs
+	markdown,
+	mdx,
 ];
